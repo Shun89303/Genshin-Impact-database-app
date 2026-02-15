@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 interface Character {
@@ -18,6 +18,7 @@ interface Character {
 export default function Details() {
   const params = useLocalSearchParams();
   const [details, setDetails] = useState<Character>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCharacters();
@@ -33,6 +34,8 @@ export default function Details() {
       setDetails(characterData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -98,7 +101,10 @@ export default function Details() {
   };
   return (
     <SafeAreaProvider>
-      <SafeAreaView>{details && renderDetails(details)}</SafeAreaView>
+      <SafeAreaView>
+        {loading && <ActivityIndicator />}
+        {details && renderDetails(details)}
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 }
