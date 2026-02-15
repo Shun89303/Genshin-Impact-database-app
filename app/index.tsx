@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Platform,
@@ -19,12 +20,13 @@ interface Character {
 
 export default function Home() {
   const [characters, setCharacters] = useState<Character[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCharacters();
+    FetchCharacters();
   }, []);
 
-  async function fetchCharacters() {
+  async function FetchCharacters() {
     try {
       const res = await fetch('https://genshin.jmp.blue/characters/');
       const charactersID = await res.json();
@@ -48,10 +50,31 @@ export default function Home() {
       setCharacters(completeCharacters);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
-  const renderCharacter = ({ id, name, vision, image }: Character) => {
+  function RenderImage({ uri }: { uri: string }) {
+    const [imageLoading, setImageLoading] = useState(true);
+
+    return (
+      <View>
+        {imageLoading && <ActivityIndicator />}
+        <Image
+          style={{
+            width: 150,
+            height: 250,
+          }}
+          resizeMode="contain"
+          source={{ uri }}
+          onLoad={() => setImageLoading(false)}
+        />
+      </View>
+    );
+  }
+
+  const RenderCharacter = ({ id, name, vision, image }: Character) => {
     return (
       <Link href={{ pathname: '/details', params: { id } }} key={id}>
         <View
@@ -69,16 +92,7 @@ export default function Home() {
           >
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.vision}>{vision}</Text>
-            <Image
-              style={{
-                width: 150,
-                height: 250,
-              }}
-              resizeMode="contain"
-              source={{
-                uri: image,
-              }}
-            />
+            <RenderImage uri={image} />
           </View>
         </View>
       </Link>
@@ -88,13 +102,12 @@ export default function Home() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.safeAreaView}>
+        {loading && <ActivityIndicator size="small" />}
         <FlatList
           data={characters}
-          renderItem={({ item }) => renderCharacter(item)}
+          renderItem={({ item }) => <RenderCharacter {...item} />}
           keyExtractor={(cha) => cha.id}
-          contentContainerStyle={{
-            gap: 16,
-          }}
+          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
         />
       </SafeAreaView>
     </SafeAreaProvider>
