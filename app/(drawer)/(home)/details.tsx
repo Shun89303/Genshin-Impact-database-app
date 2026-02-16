@@ -15,7 +15,7 @@ interface Character {
   description?: string | 'unknown';
 }
 
-export default function Details() {
+export default function DetailsScreen() {
   const params = useLocalSearchParams();
   const [details, setDetails] = useState<Character>();
   const [loading, setLoading] = useState(true);
