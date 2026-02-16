@@ -18,7 +18,7 @@ interface Character {
   image: string;
 }
 
-export default function Home() {
+export default function HomeScreen() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,12 +76,16 @@ export default function Home() {
 
   const RenderCharacter = ({ id, name, vision, image }: Character) => {
     return (
-      <Link href={{ pathname: '/details', params: { id } }} key={id}>
-        <View
-          style={{
-            width: '100%',
-          }}
-        >
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '60%',
+          margin: 'auto',
+        }}
+      >
+        <Link href={{ pathname: '/details', params: { id } }} key={id}>
           <View
             style={[
               styles.container,
@@ -94,8 +98,8 @@ export default function Home() {
             <Text style={styles.vision}>{vision}</Text>
             <RenderImage uri={image} />
           </View>
-        </View>
-      </Link>
+        </Link>
+      </View>
     );
   };
 
@@ -121,8 +125,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    width: '60%',
-    marginHorizontal: 'auto',
+    width: '100%',
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
