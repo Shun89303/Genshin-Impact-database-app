@@ -1,3 +1,4 @@
+import { useHomeState } from '@/src/store/useHomeStore';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -25,6 +26,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['40%', '80%'], []);
+  const setSelectedID = useHomeState((state) => state.setSelectedID);
 
   useEffect(() => {
     FetchCharacters();
@@ -89,7 +91,13 @@ export default function HomeScreen() {
           margin: 'auto',
         }}
       >
-        <Pressable onPress={() => sheetRef.current?.expand()} key={id}>
+        <Pressable
+          onPress={() => {
+            setSelectedID(id);
+            sheetRef.current?.expand();
+          }}
+          key={id}
+        >
           <View
             style={[
               styles.container,
@@ -117,7 +125,12 @@ export default function HomeScreen() {
           keyExtractor={(cha) => cha.id}
           ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
         />
-        <BottomSheet ref={sheetRef} snapPoints={snapPoints} index={-1}>
+        <BottomSheet
+          ref={sheetRef}
+          snapPoints={snapPoints}
+          index={-1}
+          enablePanDownToClose
+        >
           <BottomSheetView style={{ flex: 1, alignItems: 'center' }}>
             <DetailsSheet />
           </BottomSheetView>

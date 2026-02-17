@@ -1,33 +1,35 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useHomeState } from '@/src/store/useHomeStore';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 interface Character {
   name: string;
-  title?: string | 'unknown';
-  vision?: string | 'unknown';
-  weapon?: string | 'unknown';
-  gender?: string | 'unknown';
-  nation?: string | 'unknown';
-  affiliation?: string | 'unknown';
-  constellation?: string | 'unknown';
-  description?: string | 'unknown';
+  title?: string | null;
+  vision?: string | null;
+  weapon?: string | null;
+  gender?: string | null;
+  nation?: string | null;
+  affiliation?: string | null;
+  constellation?: string | null;
+  description?: string | null;
 }
 
-export default function DetailsScreen() {
-  const params = useLocalSearchParams();
-  const [details, setDetails] = useState<Character>();
+export default function DetailsSheet() {
+  const [details, setDetails] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
+  const selectedID = useHomeState((state) => state.selectedID);
 
   useEffect(() => {
     fetchCharacters();
-  }, []);
+  }, [selectedID]);
 
   async function fetchCharacters() {
     try {
+      setLoading(true);
+      setDetails(null);
       const res = await fetch(
-        `https://genshin.jmp.blue/characters/${params.id}?lang=en`,
+        `https://genshin.jmp.blue/characters/${selectedID}?lang=en`,
       );
       const characterData = await res.json();
 
@@ -94,7 +96,7 @@ export default function DetailsScreen() {
 
         <View style={styles.column}>
           <Text style={styles.label}>Description</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description}>{description || 'unknown'}</Text>
         </View>
       </View>
     );
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 13,
-    flex: 1,
     textAlign: 'right',
   },
   description: {
