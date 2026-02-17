@@ -1,6 +1,12 @@
 import { useHomeState } from '@/src/store/useHomeStore';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 interface Character {
@@ -56,42 +62,42 @@ export default function DetailsSheet() {
       <View style={styles.container}>
         <View style={styles.row}>
           <Text style={styles.label}>Name</Text>
-          <Text style={styles.value}>{name}</Text>
+          <Text style={styles.value}>{name || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Title</Text>
-          <Text style={styles.value}>{title}</Text>
+          <Text style={styles.value}>{title || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Vision</Text>
-          <Text style={styles.value}>{vision}</Text>
+          <Text style={styles.value}>{vision || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Weapon</Text>
-          <Text style={styles.value}>{weapon}</Text>
+          <Text style={styles.value}>{weapon || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Gender</Text>
-          <Text style={styles.value}>{gender}</Text>
+          <Text style={styles.value}>{gender || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Nation</Text>
-          <Text style={styles.value}>{nation}</Text>
+          <Text style={styles.value}>{nation || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Affiliation</Text>
-          <Text style={styles.value}>{affiliation}</Text>
+          <Text style={styles.value}>{affiliation || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Constellation</Text>
-          <Text style={styles.value}>{constellation}</Text>
+          <Text style={styles.value}>{constellation || 'unknown'}</Text>
         </View>
 
         <View style={styles.column}>
@@ -113,31 +119,39 @@ export default function DetailsSheet() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
-    gap: 12,
-    width: '80%',
-    marginHorizontal: 'auto',
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    width: '100%',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 14,
   },
   column: {
-    marginTop: 8,
+    marginTop: 20,
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'left',
+    ...Platform.select({
+      android: {
+        fontWeight: '900',
+      },
+      ios: {
+        fontWeight: '600',
+      },
+    }),
     width: 120,
   },
   value: {
     fontSize: 13,
     textAlign: 'right',
+    color: '#474747ff',
   },
   description: {
-    marginTop: 4,
-    lineHeight: 20,
+    marginTop: 8,
+    lineHeight: 22,
+    color: 'gray',
   },
 });

@@ -87,8 +87,6 @@ export default function HomeScreen() {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          width: '60%',
-          margin: 'auto',
         }}
       >
         <Pressable
@@ -147,7 +145,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    width: '100%',
+    width: 250,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
