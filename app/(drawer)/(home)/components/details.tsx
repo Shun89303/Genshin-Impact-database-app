@@ -1,33 +1,41 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useHomeState } from '@/src/store/useHomeStore';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 interface Character {
   name: string;
-  title?: string | 'unknown';
-  vision?: string | 'unknown';
-  weapon?: string | 'unknown';
-  gender?: string | 'unknown';
-  nation?: string | 'unknown';
-  affiliation?: string | 'unknown';
-  constellation?: string | 'unknown';
-  description?: string | 'unknown';
+  title?: string | null;
+  vision?: string | null;
+  weapon?: string | null;
+  gender?: string | null;
+  nation?: string | null;
+  affiliation?: string | null;
+  constellation?: string | null;
+  description?: string | null;
 }
 
-export default function DetailsScreen() {
-  const params = useLocalSearchParams();
-  const [details, setDetails] = useState<Character>();
+export default function DetailsSheet() {
+  const [details, setDetails] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
+  const selectedID = useHomeState((state) => state.selectedID);
 
   useEffect(() => {
     fetchCharacters();
-  }, []);
+  }, [selectedID]);
 
   async function fetchCharacters() {
     try {
+      setLoading(true);
+      setDetails(null);
       const res = await fetch(
-        `https://genshin.jmp.blue/characters/${params.id}?lang=en`,
+        `https://genshin.jmp.blue/characters/${selectedID}?lang=en`,
       );
       const characterData = await res.json();
 
@@ -54,47 +62,47 @@ export default function DetailsScreen() {
       <View style={styles.container}>
         <View style={styles.row}>
           <Text style={styles.label}>Name</Text>
-          <Text style={styles.value}>{name}</Text>
+          <Text style={styles.value}>{name || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Title</Text>
-          <Text style={styles.value}>{title}</Text>
+          <Text style={styles.value}>{title || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Vision</Text>
-          <Text style={styles.value}>{vision}</Text>
+          <Text style={styles.value}>{vision || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Weapon</Text>
-          <Text style={styles.value}>{weapon}</Text>
+          <Text style={styles.value}>{weapon || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Gender</Text>
-          <Text style={styles.value}>{gender}</Text>
+          <Text style={styles.value}>{gender || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Nation</Text>
-          <Text style={styles.value}>{nation}</Text>
+          <Text style={styles.value}>{nation || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Affiliation</Text>
-          <Text style={styles.value}>{affiliation}</Text>
+          <Text style={styles.value}>{affiliation || 'unknown'}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Constellation</Text>
-          <Text style={styles.value}>{constellation}</Text>
+          <Text style={styles.value}>{constellation || 'unknown'}</Text>
         </View>
 
         <View style={styles.column}>
           <Text style={styles.label}>Description</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description}>{description || 'unknown'}</Text>
         </View>
       </View>
     );
@@ -111,32 +119,39 @@ export default function DetailsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
-    gap: 12,
-    width: '80%',
-    marginHorizontal: 'auto',
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    width: '100%',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 14,
   },
   column: {
-    marginTop: 8,
+    marginTop: 20,
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'left',
+    ...Platform.select({
+      android: {
+        fontWeight: '900',
+      },
+      ios: {
+        fontWeight: '600',
+      },
+    }),
     width: 120,
   },
   value: {
     fontSize: 13,
-    flex: 1,
     textAlign: 'right',
+    color: '#474747ff',
   },
   description: {
-    marginTop: 4,
-    lineHeight: 20,
+    marginTop: 8,
+    lineHeight: 22,
+    color: 'gray',
   },
 });

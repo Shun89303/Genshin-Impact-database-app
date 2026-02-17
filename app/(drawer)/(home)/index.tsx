@@ -1,15 +1,18 @@
-import { Link } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useHomeState } from '@/src/store/useHomeStore';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Image,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import DetailsSheet from './components/details';
 
 interface Character {
   id: string;
@@ -21,6 +24,9 @@ interface Character {
 export default function HomeScreen() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ['40%', '80%'], []);
+  const setSelectedID = useHomeState((state) => state.setSelectedID);
 
   useEffect(() => {
     FetchCharacters();
@@ -81,11 +87,15 @@ export default function HomeScreen() {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          width: '60%',
-          margin: 'auto',
         }}
       >
-        <Link href={{ pathname: '/details', params: { id } }} key={id}>
+        <Pressable
+          onPress={() => {
+            setSelectedID(id);
+            sheetRef.current?.expand();
+          }}
+          key={id}
+        >
           <View
             style={[
               styles.container,
@@ -98,7 +108,7 @@ export default function HomeScreen() {
             <Text style={styles.vision}>{vision}</Text>
             <RenderImage uri={image} />
           </View>
-        </Link>
+        </Pressable>
       </View>
     );
   };
@@ -113,6 +123,16 @@ export default function HomeScreen() {
           keyExtractor={(cha) => cha.id}
           ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
         />
+        <BottomSheet
+          ref={sheetRef}
+          snapPoints={snapPoints}
+          index={-1}
+          enablePanDownToClose
+        >
+          <BottomSheetView style={{ flex: 1, alignItems: 'center' }}>
+            <DetailsSheet />
+          </BottomSheetView>
+        </BottomSheet>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -125,7 +145,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    width: '100%',
+    width: 250,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
