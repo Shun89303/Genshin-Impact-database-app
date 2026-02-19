@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-export default function Home() {
+export default function ResourcesScreen() {
 	return (
 		<View>
-			<Text>Genshin Impact Database</Text>
+			<Text>Resources</Text>
 		</View>
 	);
 }

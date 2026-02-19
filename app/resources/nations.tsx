@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-export default function Home() {
+export default function Nations() {
 	return (
 		<View>
-			<Text>Genshin Impact Database</Text>
+			<Text>Nations</Text>
 		</View>
 	);
 }
