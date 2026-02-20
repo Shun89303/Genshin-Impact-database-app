@@ -32,9 +32,9 @@ export default function RootLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="artifacts/index"
+				name="artifacts"
 				options={{
-					title: "Artifacts",
+					headerShown: false,
 					tabBarLabel: "Artifacts",
 					tabBarIcon: ({ size, color }) => (
 						<MaterialCommunityIcons name="feather" size={size} color={color} />
