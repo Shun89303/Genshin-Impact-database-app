@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import ArtifactsList from "@/src/components/artifacts/artifactsList";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import styles from "./styles.modules";
 
 export default function ArtifactsScreen() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Artifacts</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({
-						pathname: "/artifacts/[id]",
-						params: { id: 10 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<ArtifactsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }
