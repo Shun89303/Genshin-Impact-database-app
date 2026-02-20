@@ -12,9 +12,9 @@ export default function RootLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="characters/index"
+				name="characters"
 				options={{
-					title: "Characters",
+					headerShown: false,
 					tabBarLabel: "Characters",
 					tabBarIcon: ({ size, color }) => (
 						<AntDesign name="team" size={size} color={color} />
