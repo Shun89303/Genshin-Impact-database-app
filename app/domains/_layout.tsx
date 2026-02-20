@@ -24,6 +24,13 @@ export default function DomainsStack() {
 					headerBackButtonDisplayMode: "minimal",
 				}}
 			/>
+			<Stack.Screen
+				name="bosses/[id]"
+				options={{
+					title: "Details",
+					headerBackButtonDisplayMode: "minimal",
+				}}
+			/>
 		</Stack>
 	);
 }
