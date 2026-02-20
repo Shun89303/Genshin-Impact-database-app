@@ -1,18 +1,18 @@
 import { useRouter } from "expo-router";
 import { Button, Text, View } from "react-native";
 
-export default function BossesScreen() {
+export default function MaterialsScreen() {
 	const router = useRouter();
 
 	return (
 		<View>
-			<Text>Bosses</Text>
+			<Text>Materials</Text>
 			<Button
 				title="Show Details"
 				onPress={() =>
 					router.push({
-						pathname: "/domains/bosses/[id]",
-						params: { id: 5 },
+						pathname: "/resources/materials/[id]",
+						params: { id: 24 },
 					})
 				}
 			/>

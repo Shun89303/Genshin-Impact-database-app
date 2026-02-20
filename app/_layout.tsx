@@ -4,7 +4,11 @@ import { Tabs } from "expo-router";
 
 export default function RootLayout() {
 	return (
-		<Tabs>
+		<Tabs
+			screenOptions={{
+				headerShown: false,
+			}}
+		>
 			<Tabs.Screen
 				name="index"
 				options={{
@@ -12,9 +16,8 @@ export default function RootLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="characters/index"
+				name="characters"
 				options={{
-					title: "Characters",
 					tabBarLabel: "Characters",
 					tabBarIcon: ({ size, color }) => (
 						<AntDesign name="team" size={size} color={color} />
@@ -22,9 +25,8 @@ export default function RootLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="weapons/index"
+				name="weapons"
 				options={{
-					title: "Weapons",
 					tabBarLabel: "Weapons",
 					tabBarIcon: ({ size, color }) => (
 						<MaterialCommunityIcons name="sword" size={size} color={color} />
@@ -32,9 +34,8 @@ export default function RootLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="artifacts/index"
+				name="artifacts"
 				options={{
-					title: "Artifacts",
 					tabBarLabel: "Artifacts",
 					tabBarIcon: ({ size, color }) => (
 						<MaterialCommunityIcons name="feather" size={size} color={color} />
@@ -44,8 +45,6 @@ export default function RootLayout() {
 			<Tabs.Screen
 				name="domains"
 				options={{
-					title: "Domains",
-					headerShown: false,
 					tabBarLabel: "Domains",
 					tabBarIcon: ({ size, color }) => (
 						<AntDesign name="ant-design" size={size} color={color} />
@@ -55,6 +54,7 @@ export default function RootLayout() {
 			<Tabs.Screen
 				name="resources"
 				options={{
+					headerShown: true,
 					title: "Resources",
 					tabBarLabel: "Resources",
 					tabBarIcon: ({ size, color }) => (

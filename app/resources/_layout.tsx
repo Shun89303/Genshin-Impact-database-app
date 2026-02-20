@@ -8,19 +8,18 @@ export default function ResourcesTab() {
 		<Tabs
 			screenOptions={{
 				tabBarPosition: "top",
+				headerShown: false,
 			}}
 		>
 			<Tabs.Screen
 				name="index"
 				options={{
 					href: null,
-					title: "Resources",
 				}}
 			/>
 			<Tabs.Screen
 				name="consumables"
 				options={{
-					title: "Consumables",
 					tabBarLabel: "Consumables",
 					tabBarIcon: ({ size, color }) => (
 						<MaterialCommunityIcons

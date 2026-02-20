@@ -11,9 +11,23 @@ export default function DomainsStack() {
 				}}
 			/>
 			<Stack.Screen
+				name="[id]"
+				options={{
+					title: "Details",
+					headerBackButtonDisplayMode: "minimal",
+				}}
+			/>
+			<Stack.Screen
 				name="bosses/index"
 				options={{
 					title: "Bosses",
+					headerBackButtonDisplayMode: "minimal",
+				}}
+			/>
+			<Stack.Screen
+				name="bosses/[id]"
+				options={{
+					title: "Details",
 					headerBackButtonDisplayMode: "minimal",
 				}}
 			/>
