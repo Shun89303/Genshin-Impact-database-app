@@ -22,9 +22,9 @@ export default function RootLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="weapons/index"
+				name="weapons"
 				options={{
-					title: "Weapons",
+					headerShown: false,
 					tabBarLabel: "Weapons",
 					tabBarIcon: ({ size, color }) => (
 						<MaterialCommunityIcons name="sword" size={size} color={color} />
