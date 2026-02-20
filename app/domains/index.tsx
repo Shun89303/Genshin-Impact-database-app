@@ -6,6 +6,15 @@ export default function DomainsScreen() {
 	return (
 		<View>
 			<Text>Domains</Text>
+			<Button
+				title="Show Details"
+				onPress={() =>
+					router.push({
+						pathname: "/domains/[id]",
+						params: { id: 25 },
+					})
+				}
+			/>
 			<Button title="Boss" onPress={() => router.push("/domains/bosses")} />
 		</View>
 	);

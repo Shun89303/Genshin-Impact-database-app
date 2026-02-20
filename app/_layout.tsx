@@ -44,7 +44,6 @@ export default function RootLayout() {
 			<Tabs.Screen
 				name="domains"
 				options={{
-					title: "Domains",
 					headerShown: false,
 					tabBarLabel: "Domains",
 					tabBarIcon: ({ size, color }) => (
