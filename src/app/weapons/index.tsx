@@ -1,18 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import styles from "@/src/components/styles.modules";
+import WeaponsList from "@/src/components/weapons/weaponsList";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function WeaponsScreen() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Weapons</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({ pathname: "/weapons/[id]", params: { id: 5 } })
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<WeaponsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

@@ -1,9 +1,9 @@
 import ArtifactDetails from "@/src/components/artifacts/artifactDetails";
+import styles from "@/src/components/styles.modules";
 import { useArtifactsStore } from "@/src/store/useArtifactsStore";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
-import styles from "./styles.modules";
 
 export default function ArtifactsDetailsScreen() {
 	const { id } = useLocalSearchParams();
