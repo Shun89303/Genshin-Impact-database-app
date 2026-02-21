@@ -1,30 +1,30 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { useArtifactsStore } from "@/src/store/useArtifactsStore";
+import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import styles from "../styles.modules";
 
-export default function ArtifactImage({ id }: any) {
-	const fetchArtifactImageTypes = useArtifactsStore(
-		(state) => state.fetchArtifactImageTypes
+export default function WeaponImage({ id }: any) {
+	const fetchWeaponImageTypes = useWeaponsStore(
+		(state) => state.fetchWeaponImageTypes
 	);
-	const { error } = useArtifactsStore();
+	const { error } = useWeaponsStore();
 	const [url, setUrl] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
-	const artifacts = endpoints.artifacts;
+	const weapons = endpoints.weapons;
 
 	useEffect(() => {
 		if (!id) return;
 		const load = async () => {
-			const types: string[] = await fetchArtifactImageTypes(id);
-			const imageUrl = `${BASE_URL}${artifacts}/${id}/${types[0]}`;
+			const types: string[] = await fetchWeaponImageTypes(id);
+			const imageUrl = `${BASE_URL}${weapons}/${id}/${types[0]}`;
 			setUrl(imageUrl);
 		};
 		load();
-	}, [fetchArtifactImageTypes, id, artifacts]);
+	}, [fetchWeaponImageTypes, id, weapons]);
 
 	if (error)
 		return (
@@ -44,7 +44,7 @@ export default function ArtifactImage({ id }: any) {
 		<>
 			<Pressable
 				onPress={() =>
-					router.push({ pathname: "/artifacts/[id]", params: { id } })
+					router.push({ pathname: "/weapons/[id]", params: { id } })
 				}
 			>
 				{loading && <ActivityIndicator />}

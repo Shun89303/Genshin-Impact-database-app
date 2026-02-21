@@ -1,15 +1,15 @@
-import { useArtifactsStore } from "@/src/store/useArtifactsStore";
+import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import { ActivityIndicator, Text, View } from "react-native";
 import styles from "../styles.modules";
 
-export default function ArtifactDetails({
+export default function WeaponDetails({
 	field,
 	value,
 }: {
 	field: string;
 	value: any;
 }) {
-	const { error } = useArtifactsStore();
+	const { error } = useWeaponsStore();
 
 	if (error)
 		return (

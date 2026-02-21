@@ -1,16 +1,16 @@
-import { useArtifactsStore } from "@/src/store/useArtifactsStore";
+import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import styles from "../styles.modules";
-import ArtifactImage from "./artifactImage";
+import WeaponImage from "./weaponImage";
 
-export default function ArtifactsList() {
-	const fetchArtifactIds = useArtifactsStore((state) => state.fetchArtifactIds);
-	const { ids, error } = useArtifactsStore();
+export default function WeaponsList() {
+	const fetchWeaponsIds = useWeaponsStore((state) => state.fetchWeaponsIds);
+	const { ids, error } = useWeaponsStore();
 
 	useEffect(() => {
-		fetchArtifactIds();
-	}, [fetchArtifactIds]);
+		fetchWeaponsIds();
+	}, [fetchWeaponsIds]);
 
 	if (error)
 		return (
@@ -31,7 +31,7 @@ export default function ArtifactsList() {
 			<FlatList
 				data={ids}
 				keyExtractor={(id) => id}
-				renderItem={({ item }) => <ArtifactImage id={item} />}
+				renderItem={({ item }) => <WeaponImage id={item} />}
 				numColumns={3}
 			/>
 		</>
