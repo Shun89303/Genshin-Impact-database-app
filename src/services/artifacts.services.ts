@@ -15,20 +15,3 @@ export async function getArtifactDetails(id: string) {
 export async function getArtifactImageTypes(id: string) {
 	return await apiClient(`${artifacts}/${id}${list}`);
 }
-
-export async function getArtifactsWithImages() {
-	const ids = await getArtifactIds();
-
-	const validIds = await Promise.all(
-		ids.map(async (id: any) => {
-			try {
-				await getArtifactImageTypes(id);
-				return id;
-			} catch {
-				return undefined;
-			}
-		})
-	);
-
-	return validIds.filter(Boolean);
-}

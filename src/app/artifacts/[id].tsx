@@ -1,27 +1,38 @@
 import ArtifactDetails from "@/src/components/artifacts/artifactDetails";
 import styles from "@/src/components/styles.modules";
 import { useArtifactsStore } from "@/src/store/useArtifactsStore";
+import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 export default function ArtifactsDetailsScreen() {
-	const { id } = useLocalSearchParams();
+	const { id }: { id: any } = useLocalSearchParams();
 	const fetchArtifactDetails = useArtifactsStore(
 		(state) => state.fetchArtifactDetails
 	);
 	const error = useArtifactsStore((state) => state.error);
-	const [data, setData] = useState<Record<string, unknown> | any>();
+	const cache = useArtifactsStore((state) => state.cache);
+	const loadingId = useArtifactsStore((state) => state.loadingId);
 
-	useEffect(() => {
-		if (!id || Array.isArray(id)) return;
+	useFocusEffect(
+		useCallback(() => {
+			fetchArtifactDetails(id);
+		}, [fetchArtifactDetails, id])
+	);
 
-		const load = async () => {
-			const details = await fetchArtifactDetails(id);
-			setData(details);
-		};
-		load();
-	}, [fetchArtifactDetails, id]);
+	const loading = loadingId === id;
+	const details = cache[id];
+
+	if (loading || !details)
+		return (
+			<>
+				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
+					Loading Item: {id}
+				</Text>
+				<ActivityIndicator />
+			</>
+		);
 
 	if (error)
 		return (
@@ -30,18 +41,11 @@ export default function ArtifactsDetailsScreen() {
 			</View>
 		);
 
-	if (!data)
-		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
-			</View>
-		);
-
 	return (
 		<View>
 			<Text style={{ textAlign: "center" }}>Artifact Details</Text>
 			<FlatList
-				data={Object.entries(data)}
+				data={Object.entries(details)}
 				keyExtractor={([key]) => key}
 				renderItem={({ item: [field, value] }) => (
 					<ArtifactDetails field={field} value={value} />

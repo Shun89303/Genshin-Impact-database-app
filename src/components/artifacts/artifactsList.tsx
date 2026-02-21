@@ -1,16 +1,31 @@
+import { endpoints } from "@/src/api/endpoints";
+import { BASE_URL } from "@/src/config/env";
 import { useArtifactsStore } from "@/src/store/useArtifactsStore";
+import { Image } from "expo-image";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import styles from "../styles.modules";
 import ArtifactImage from "./artifactImage";
 
 export default function ArtifactsList() {
-	const fetchArtifactIds = useArtifactsStore((state) => state.fetchArtifactIds);
+	const fetchArtifactsIds = useArtifactsStore(
+		(state) => state.fetchArtifactsIds
+	);
 	const { ids, error } = useArtifactsStore();
+	const artifacts = endpoints.artifacts;
+	const circletOfLogos = endpoints.circletOfLogos;
 
 	useEffect(() => {
-		fetchArtifactIds();
-	}, [fetchArtifactIds]);
+		if (!ids || ids.length === 0) {
+			fetchArtifactsIds();
+			return;
+		}
+
+		const remainingIds = ids.slice(20);
+		remainingIds.forEach((id) => {
+			Image.prefetch(`${BASE_URL}${artifacts}/${id}${circletOfLogos}`);
+		});
+	}, [fetchArtifactsIds, ids, artifacts, circletOfLogos]);
 
 	if (error)
 		return (
@@ -31,8 +46,11 @@ export default function ArtifactsList() {
 			<FlatList
 				data={ids}
 				keyExtractor={(id) => id}
+				numColumns={4}
+				initialNumToRender={20}
+				windowSize={10}
+				removeClippedSubviews
 				renderItem={({ item }) => <ArtifactImage id={item} />}
-				numColumns={3}
 			/>
 		</>
 	);
