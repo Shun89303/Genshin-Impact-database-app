@@ -3,4 +3,5 @@ export const endpoints = {
 	weapons: "/weapons",
 	list: "/list",
 	icon: "/icon",
+	circletOfLogos: "/circlet-of-logos",
 };
