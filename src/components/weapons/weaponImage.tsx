@@ -1,42 +1,23 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { useWeaponsStore } from "@/src/store/useWeaponsStore";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import styles from "../styles.modules";
 
 export default function WeaponImage({ id }: any) {
-	const fetchWeaponImageTypes = useWeaponsStore(
-		(state) => state.fetchWeaponImageTypes
-	);
 	const { error } = useWeaponsStore();
-	const [url, setUrl] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 	const weapons = endpoints.weapons;
-
-	useEffect(() => {
-		if (!id) return;
-		const load = async () => {
-			const types: string[] = await fetchWeaponImageTypes(id);
-			const imageUrl = `${BASE_URL}${weapons}/${id}/${types[0]}`;
-			setUrl(imageUrl);
-		};
-		load();
-	}, [fetchWeaponImageTypes, id, weapons]);
+	const icon = endpoints.icon;
 
 	if (error)
 		return (
 			<View style={styles.simpleContainer}>
 				<Text>{error}</Text>
-			</View>
-		);
-
-	if (!url)
-		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
 			</View>
 		);
 
@@ -49,8 +30,9 @@ export default function WeaponImage({ id }: any) {
 			>
 				{loading && <ActivityIndicator />}
 				<Image
-					source={{ uri: url }}
-					style={{ width: 100, height: 100 }}
+					source={{ uri: `${BASE_URL}${weapons}/${id}${icon}` }}
+					style={{ width: 80, height: 80, margin: 4 }}
+					cachePolicy="memory-disk"
 					onLoad={() => setLoading(false)}
 				/>
 			</Pressable>
