@@ -10,6 +10,9 @@ export default function ResourcesTab() {
 				tabBarPosition: "top",
 				headerShown: false,
 			}}
+			safeAreaInsets={{
+				top: 10,
+			}}
 		>
 			<Tabs.Screen
 				name="index"
@@ -33,7 +36,6 @@ export default function ResourcesTab() {
 			<Tabs.Screen
 				name="materials"
 				options={{
-					title: "Materials",
 					tabBarLabel: "Materials",
 					tabBarIcon: ({ size, color }) => (
 						<MaterialCommunityIcons
@@ -47,7 +49,6 @@ export default function ResourcesTab() {
 			<Tabs.Screen
 				name="enemies"
 				options={{
-					title: "Enemies",
 					tabBarLabel: "Enemies",
 					tabBarIcon: ({ size, color }) => (
 						<Ionicons name="alert-circle" size={size} color={color} />
@@ -67,7 +68,6 @@ export default function ResourcesTab() {
 			<Tabs.Screen
 				name="elements"
 				options={{
-					title: "Elements",
 					tabBarLabel: "Elements",
 					tabBarIcon: ({ size, color }) => (
 						<FontAwesome6 name="gripfire" size={size} color={color} />
