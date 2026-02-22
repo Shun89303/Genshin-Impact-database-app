@@ -11,7 +11,7 @@ export default function BossesScreen() {
 				title="Show Details"
 				onPress={() =>
 					router.push({
-						pathname: "/domains/bosses/[id]",
+						pathname: "/bosses/[id]",
 						params: { id: 5 },
 					})
 				}

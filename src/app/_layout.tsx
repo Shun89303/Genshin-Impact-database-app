@@ -45,9 +45,9 @@ export default function RootLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="domains"
+				name="bosses"
 				options={{
-					tabBarLabel: "Domains",
+					tabBarLabel: "Bosses",
 					tabBarIcon: ({ size, color }) => (
 						<AntDesign name="ant-design" size={size} color={color} />
 					),
