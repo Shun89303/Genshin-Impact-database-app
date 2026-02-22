@@ -1,7 +1,9 @@
 export const endpoints = {
-	artifacts: "/artifacts",
+	characters: "/characters",
 	weapons: "/weapons",
+	artifacts: "/artifacts",
 	list: "/list",
 	icon: "/icon",
+	card: "/card",
 	circletOfLogos: "/circlet-of-logos",
 };
