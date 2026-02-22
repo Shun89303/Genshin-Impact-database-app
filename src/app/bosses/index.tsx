@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import BossesList from "@/src/components/bosses/bossesList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function BossesScreen() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Bosses</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({
-						pathname: "/bosses/[id]",
-						params: { id: 5 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<BossesList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

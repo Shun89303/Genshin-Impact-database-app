@@ -7,7 +7,7 @@ const list = endpoints.list;
 
 // will return an ARRAY of over 80 Boss id strings
 export async function getBossesIds() {
-	return await apiClient(boss);
+	return await apiClient(`${boss}${weeklyBoss}`);
 }
 
 // will return a huge OBJECT containing all the details of a Boss
