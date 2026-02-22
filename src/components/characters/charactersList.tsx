@@ -1,30 +1,32 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { useWeaponsStore } from "@/src/store/useWeaponsStore";
+import { useCharactersStore } from "@/src/store/useCharactersStore";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import styles from "../styles.modules";
-import WeaponImage from "./weaponImage";
+import CharacterImage from "./characterImage";
 
-export default function WeaponsList() {
-	const fetchWeaponsIds = useWeaponsStore((state) => state.fetchWeaponsIds);
-	const ids = useWeaponsStore((state) => state.ids);
-	const { error } = useWeaponsStore();
-	const weapons = endpoints.weapons;
-	const icon = endpoints.icon;
+export default function CharactersList() {
+	const fetchCharactersIds = useCharactersStore(
+		(state) => state.fetchCharactersIds
+	);
+	const ids = useCharactersStore((state) => state.ids);
+	const { error } = useCharactersStore();
+	const characters = endpoints.characters;
+	const card = endpoints.card;
 
 	useEffect(() => {
 		if (!ids || ids.length === 0) {
-			fetchWeaponsIds();
+			fetchCharactersIds();
 			return;
 		}
 
-		const remainingIds = ids.slice(20);
+		const remainingIds = ids.slice(10);
 		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${weapons}/${id}${icon}`);
+			Image.prefetch(`${BASE_URL}${characters}/${id}${card}`);
 		});
-	}, [fetchWeaponsIds, ids, weapons, icon]);
+	}, [fetchCharactersIds, ids, characters, card]);
 
 	if (error)
 		return (
@@ -45,11 +47,11 @@ export default function WeaponsList() {
 			<FlatList
 				data={ids}
 				keyExtractor={(id) => id}
-				numColumns={4}
-				initialNumToRender={20}
-				windowSize={10}
+				numColumns={3}
+				initialNumToRender={9}
+				windowSize={20}
 				removeClippedSubviews
-				renderItem={({ item }) => <WeaponImage id={item} />}
+				renderItem={({ item }) => <CharacterImage id={item} />}
 			/>
 		</>
 	);

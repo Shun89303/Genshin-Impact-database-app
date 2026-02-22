@@ -1,18 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import CharactersList from "@/src/components/characters/charactersList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function CharactersScreen() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Characters</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({ pathname: "/characters/[id]", params: { id: "3" } })
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<CharactersList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }
