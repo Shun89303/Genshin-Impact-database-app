@@ -12,6 +12,7 @@ export const endpoints = {
 	cookingIngredients: "/cooking-ingredients",
 	localSpecialties: "/local-specialties",
 	characterAscension: "/character-ascension",
+	commonAscension: "/common-ascension",
 	list: "/list",
 	icon: "/icon",
 	card: "/card",
