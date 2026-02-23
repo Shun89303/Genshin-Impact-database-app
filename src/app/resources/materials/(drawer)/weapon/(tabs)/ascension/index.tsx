@@ -1,18 +1,18 @@
 import { useRouter } from "expo-router";
 import { Button, Text, View } from "react-native";
 
-export default function MaterialsScreen() {
+export default function AscensionScreen() {
 	const router = useRouter();
 
 	return (
 		<View>
-			<Text>Materials</Text>
+			<Text>Weapon Ascension Materials</Text>
 			<Button
-				title="Show Details"
+				title="Show details"
 				onPress={() =>
 					router.push({
-						pathname: "/resources/materials/[id]",
-						params: { id: 24 },
+						pathname: "/resources/materials/details/weapon/ascension/[id]",
+						params: { id: 5 },
 					})
 				}
 			/>
