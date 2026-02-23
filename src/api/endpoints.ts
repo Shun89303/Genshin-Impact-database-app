@@ -13,6 +13,7 @@ export const endpoints = {
 	localSpecialties: "/local-specialties",
 	characterAscension: "/character-ascension",
 	commonAscension: "/common-ascension",
+	characterExperience: "/character-experience",
 	list: "/list",
 	icon: "/icon",
 	card: "/card",
