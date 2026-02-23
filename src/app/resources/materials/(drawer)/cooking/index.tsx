@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import MaterialsList from "@/src/components/materials/cooking/materialsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function CookingIngredientsScreen() {
-	const router = useRouter();
-
+export default function CookingMaterials() {
 	return (
-		<View>
-			<Text>Cooking Ingredients Materials</Text>
-			<Button
-				title="Show details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/materials/details/cooking/[id]",
-						params: { id: 18 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<MaterialsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

@@ -1,4 +1,4 @@
-import { useBossMaterialsStore } from "@/src/store/useBossMaterialsStore";
+import { useCookingMaterialsStore } from "@/src/store/useCookingMaterialsStore";
 import { ActivityIndicator, Text, View } from "react-native";
 import styles from "../../styles.modules";
 
@@ -9,7 +9,7 @@ export default function MaterialDetails({
 	field: string;
 	value: any;
 }) {
-	const error = useBossMaterialsStore((state) => state.error);
+	const error = useCookingMaterialsStore((state) => state.error);
 
 	if (error) {
 		return (
