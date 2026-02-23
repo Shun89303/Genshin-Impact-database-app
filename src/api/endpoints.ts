@@ -7,6 +7,8 @@ export const endpoints = {
 	consumables: "/consumables",
 	food: "/food",
 	potions: "/potions",
+	materials: "/materials",
+	bossMaterials: "/boss-material",
 	list: "/list",
 	icon: "/icon",
 	card: "/card",
