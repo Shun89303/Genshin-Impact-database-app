@@ -11,6 +11,7 @@ export const endpoints = {
 	bossMaterials: "/boss-material",
 	cookingIngredients: "/cooking-ingredients",
 	localSpecialties: "/local-specialties",
+	characterAscension: "/character-ascension",
 	list: "/list",
 	icon: "/icon",
 	card: "/card",
