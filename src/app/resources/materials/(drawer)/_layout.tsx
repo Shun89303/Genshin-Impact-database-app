@@ -41,6 +41,12 @@ export default function MaterialsDrawerLayout() {
 					title: "Character",
 				}}
 			/>
+			<Drawer.Screen
+				name="boss/index"
+				options={{
+					title: "Boss",
+				}}
+			/>
 		</Drawer>
 	);
 }
