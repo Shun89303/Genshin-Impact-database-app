@@ -34,6 +34,12 @@ export default function DetailsStack() {
 					title: "Details",
 				}}
 			/>
+			<Stack.Screen
+				name="cooking/[id]"
+				options={{
+					title: "Details",
+				}}
+			/>
 		</Stack>
 	);
 }

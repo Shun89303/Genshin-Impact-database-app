@@ -28,6 +28,19 @@ export default function MaterialsDrawerLayout() {
 					drawerLabel: "Local",
 				}}
 			/>
+			<Drawer.Screen
+				name="cooking/index"
+				options={{
+					title: "Cooking Ingredients",
+					drawerLabel: "Cooking",
+				}}
+			/>
+			<Drawer.Screen
+				name="character/(tabs)"
+				options={{
+					title: "Character",
+				}}
+			/>
 		</Drawer>
 	);
 }
