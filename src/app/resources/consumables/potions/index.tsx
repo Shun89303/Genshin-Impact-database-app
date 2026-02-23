@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import PotionsList from "@/src/components/consumables/potions/potionsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function PotionsScreen() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Potions Screen</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/consumables/potions/[id]",
-						params: { id: 5 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<PotionsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }
