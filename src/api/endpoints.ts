@@ -10,6 +10,7 @@ export const endpoints = {
 	materials: "/materials",
 	bossMaterials: "/boss-material",
 	cookingIngredients: "/cooking-ingredients",
+	localSpecialties: "/local-specialties",
 	list: "/list",
 	icon: "/icon",
 	card: "/card",
