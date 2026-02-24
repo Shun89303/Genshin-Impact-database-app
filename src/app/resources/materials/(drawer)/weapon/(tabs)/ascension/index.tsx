@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import MaterialsList from "@/src/components/materials/weapon/ascension/materialsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function AscensionScreen() {
-	const router = useRouter();
-
+export default function CharacterMaterials() {
 	return (
-		<View>
-			<Text>Weapon Ascension Materials</Text>
-			<Button
-				title="Show details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/materials/details/weapon/ascension/[id]",
-						params: { id: 5 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<MaterialsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }
