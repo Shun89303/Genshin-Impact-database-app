@@ -17,6 +17,7 @@ export const endpoints = {
 	weaponAscension: "/weapon-ascension",
 	weaponExperience: "/weapon-experience",
 	talentBoss: "/talent-boss",
+	talentBook: "/talent-book",
 	list: "/list",
 	icon: "/icon",
 	card: "/card",
