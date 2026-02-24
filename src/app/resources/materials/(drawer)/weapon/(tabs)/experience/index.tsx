@@ -2,7 +2,7 @@ import MaterialsList from "@/src/components/materials/weapon/experience/material
 import styles from "@/src/components/styles.modules";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function CharacterMaterials() {
+export default function WeaponExperienceMaterials() {
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.simpleContainer}>
