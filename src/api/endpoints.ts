@@ -2,6 +2,7 @@ export const endpoints = {
 	characters: "/characters",
 	weapons: "/weapons",
 	artifacts: "/artifacts",
+	nations: "/nations",
 	boss: "/boss",
 	weeklyBoss: "/weekly-boss",
 	consumables: "/consumables",
