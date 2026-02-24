@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/weapon/experience/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/weapon/experience/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useWeaponExperienceMaterialsStore } from "@/src/store/useWeaponExperienceStore";
 

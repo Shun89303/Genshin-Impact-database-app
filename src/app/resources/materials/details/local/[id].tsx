@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/local/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/local/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useLocalMaterialsStore } from "@/src/store/useLocalMaterialsStore";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";

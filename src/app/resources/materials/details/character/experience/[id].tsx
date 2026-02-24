@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/character/experience/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/character/experience/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useCharacterExperienceMaterialsStore } from "@/src/store/useCharacterExperienceStore";
 

@@ -1,8 +1,8 @@
+import styles from "@/src/components/styles.modules";
 import { useConsumablesStore } from "@/src/store/useConsumablesStore";
 import { ActivityIndicator, Text, View } from "react-native";
-import styles from "../../styles.modules";
 
-export default function PotionDetails({
+export default function FoodDetails({
 	field,
 	value,
 }: {

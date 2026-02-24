@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/character/ascension/character/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/character/ascension/character/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useCharacterAscensionMaterialsStore } from "@/src/store/useCharacterAscensionStore";
 

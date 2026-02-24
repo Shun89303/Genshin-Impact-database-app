@@ -1,4 +1,4 @@
-import MaterialsList from "@/src/components/materials/talent/book/materialsList";
+import MaterialsList from "@/src/components/resources/materials/talent/book/materialsList";
 import styles from "@/src/components/styles.modules";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 

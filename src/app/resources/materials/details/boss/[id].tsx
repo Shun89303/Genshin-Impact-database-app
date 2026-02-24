@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/boss/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/boss/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useBossMaterialsStore } from "@/src/store/useBossMaterialsStore";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";

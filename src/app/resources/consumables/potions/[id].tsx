@@ -1,4 +1,4 @@
-import PotionDetails from "@/src/components/consumables/potions/potionDetails";
+import PotionDetails from "@/src/components/resources/consumables/potions/potionDetails";
 import styles from "@/src/components/styles.modules";
 import { useConsumablesStore } from "@/src/store/useConsumablesStore";
 import { useFocusEffect } from "@react-navigation/native";

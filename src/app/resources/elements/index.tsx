@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import ElementsList from "@/src/components/resources/elements/elementsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function ElementsScreen() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Elements</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/elements/[id]",
-						params: { id: 6 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<ElementsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

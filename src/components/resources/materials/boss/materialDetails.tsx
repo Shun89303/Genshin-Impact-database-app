@@ -1,6 +1,6 @@
-import { useLocalMaterialsStore } from "@/src/store/useLocalMaterialsStore";
+import styles from "@/src/components/styles.modules";
+import { useBossMaterialsStore } from "@/src/store/useBossMaterialsStore";
 import { ActivityIndicator, Text, View } from "react-native";
-import styles from "../../styles.modules";
 
 export default function MaterialDetails({
 	field,
@@ -9,7 +9,7 @@ export default function MaterialDetails({
 	field: string;
 	value: any;
 }) {
-	const error = useLocalMaterialsStore((state) => state.error);
+	const error = useBossMaterialsStore((state) => state.error);
 
 	if (error) {
 		return (

@@ -1,4 +1,4 @@
-import NationsList from "@/src/components/nations/nationsList";
+import NationsList from "@/src/components/resources/nations/nationsList";
 import styles from "@/src/components/styles.modules";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
