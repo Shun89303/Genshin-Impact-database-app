@@ -1,6 +1,6 @@
-import { useCookingMaterialsStore } from "@/src/store/useCookingMaterialsStore";
+import styles from "@/src/components/styles.modules";
+import { useLocalMaterialsStore } from "@/src/store/useLocalMaterialsStore";
 import { ActivityIndicator, Text, View } from "react-native";
-import styles from "../../styles.modules";
 
 export default function MaterialDetails({
 	field,
@@ -9,7 +9,7 @@ export default function MaterialDetails({
 	field: string;
 	value: any;
 }) {
-	const error = useCookingMaterialsStore((state) => state.error);
+	const error = useLocalMaterialsStore((state) => state.error);
 
 	if (error) {
 		return (

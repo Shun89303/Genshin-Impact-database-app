@@ -4,7 +4,7 @@ import { useNationsStore } from "@/src/store/useNationsStore";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
-import styles from "../styles.modules";
+import styles from "../../styles.modules";
 import NationImage from "./nationImage";
 
 export default function NationsList() {

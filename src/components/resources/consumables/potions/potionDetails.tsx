@@ -1,15 +1,15 @@
-import { useNationsStore } from "@/src/store/useNationsStore";
+import styles from "@/src/components/styles.modules";
+import { useConsumablesStore } from "@/src/store/useConsumablesStore";
 import { ActivityIndicator, Text, View } from "react-native";
-import styles from "../styles.modules";
 
-export default function NationDetails({
+export default function PotionDetails({
 	field,
 	value,
 }: {
 	field: string;
 	value: any;
 }) {
-	const { error } = useNationsStore();
+	const { error } = useConsumablesStore();
 
 	if (error)
 		return (

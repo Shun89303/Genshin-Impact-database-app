@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/weapon/ascension/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/weapon/ascension/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useWeaponAscensionMaterialsStore } from "@/src/store/useWeaponAscensionStore";
 

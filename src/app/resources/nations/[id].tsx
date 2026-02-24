@@ -1,4 +1,4 @@
-import NationDetails from "@/src/components/nations/nationDetails";
+import NationDetails from "@/src/components/resources/nations/nationDetails";
 import styles from "@/src/components/styles.modules";
 import { useNationsStore } from "@/src/store/useNationsStore";
 import { useFocusEffect } from "@react-navigation/native";

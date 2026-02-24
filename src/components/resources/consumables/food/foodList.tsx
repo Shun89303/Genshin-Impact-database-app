@@ -1,10 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
+import styles from "@/src/components/styles.modules";
 import { BASE_URL } from "@/src/config/env";
 import { useConsumablesStore } from "@/src/store/useConsumablesStore";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
-import styles from "../../styles.modules";
 import FoodImage from "./foodImage";
 
 export default function FoodList() {

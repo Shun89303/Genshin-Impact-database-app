@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/cooking/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/cooking/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useCookingMaterialsStore } from "@/src/store/useCookingMaterialsStore";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";

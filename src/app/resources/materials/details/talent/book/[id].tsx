@@ -1,4 +1,4 @@
-import MaterialDetails from "@/src/components/materials/talent/book/materialDetails";
+import MaterialDetails from "@/src/components/resources/materials/talent/book/materialDetails";
 import styles from "@/src/components/styles.modules";
 import { useTalentBookMaterialsStore } from "@/src/store/useTalentBookStore";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";

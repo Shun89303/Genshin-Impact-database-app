@@ -1,4 +1,4 @@
-import MaterialsList from "@/src/components/materials/weapon/experience/materialsList";
+import MaterialsList from "@/src/components/resources/materials/weapon/experience/materialsList";
 import styles from "@/src/components/styles.modules";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 

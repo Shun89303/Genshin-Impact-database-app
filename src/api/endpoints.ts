@@ -3,6 +3,7 @@ export const endpoints = {
 	weapons: "/weapons",
 	artifacts: "/artifacts",
 	nations: "/nations",
+	elements: "/elements",
 	boss: "/boss",
 	weeklyBoss: "/weekly-boss",
 	consumables: "/consumables",

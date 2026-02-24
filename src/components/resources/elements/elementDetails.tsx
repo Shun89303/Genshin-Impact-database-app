@@ -1,23 +1,22 @@
-import { useBossMaterialsStore } from "@/src/store/useBossMaterialsStore";
+import { useElementsStore } from "@/src/store/useElementsStore";
 import { ActivityIndicator, Text, View } from "react-native";
 import styles from "../../styles.modules";
 
-export default function MaterialDetails({
+export default function ElementDetails({
 	field,
 	value,
 }: {
 	field: string;
 	value: any;
 }) {
-	const error = useBossMaterialsStore((state) => state.error);
+	const { error } = useElementsStore();
 
-	if (error) {
+	if (error)
 		return (
 			<View style={styles.simpleContainer}>
 				<Text>{error}</Text>
 			</View>
 		);
-	}
 
 	if (!field || !value) {
 		return (
@@ -26,6 +25,7 @@ export default function MaterialDetails({
 			</View>
 		);
 	}
+
 	return (
 		<View style={{ width: 250, marginHorizontal: "auto", paddingVertical: 5 }}>
 			<View

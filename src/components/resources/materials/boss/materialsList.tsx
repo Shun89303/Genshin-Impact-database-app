@@ -1,10 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
+import styles from "@/src/components/styles.modules";
 import { BASE_URL } from "@/src/config/env";
 import { useBossMaterialsStore } from "@/src/store/useBossMaterialsStore";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, View } from "react-native";
-import styles from "../../styles.modules";
 import MaterialsImage from "./materialsImage";
 
 export default function MaterialsList() {

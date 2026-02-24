@@ -1,22 +1,23 @@
-import { useConsumablesStore } from "@/src/store/useConsumablesStore";
+import styles from "@/src/components/styles.modules";
+import { useCookingMaterialsStore } from "@/src/store/useCookingMaterialsStore";
 import { ActivityIndicator, Text, View } from "react-native";
-import styles from "../../styles.modules";
 
-export default function FoodDetails({
+export default function MaterialDetails({
 	field,
 	value,
 }: {
 	field: string;
 	value: any;
 }) {
-	const { error } = useConsumablesStore();
+	const error = useCookingMaterialsStore((state) => state.error);
 
-	if (error)
+	if (error) {
 		return (
 			<View style={styles.simpleContainer}>
 				<Text>{error}</Text>
 			</View>
 		);
+	}
 
 	if (!field || !value) {
 		return (
@@ -25,7 +26,6 @@ export default function FoodDetails({
 			</View>
 		);
 	}
-
 	return (
 		<View style={{ width: 250, marginHorizontal: "auto", paddingVertical: 5 }}>
 			<View

@@ -1,4 +1,4 @@
-import FoodList from "@/src/components/consumables/food/foodList";
+import FoodList from "@/src/components/resources/consumables/food/foodList";
 import styles from "@/src/components/styles.modules";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
