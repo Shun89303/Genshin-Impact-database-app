@@ -53,15 +53,6 @@ export default function ResourcesTab() {
 				}}
 			/>
 			<Tabs.Screen
-				name="enemies"
-				options={{
-					tabBarLabel: "Enemies",
-					tabBarIcon: ({ size, color }) => (
-						<Ionicons name="alert-circle" size={size} color={color} />
-					),
-				}}
-			/>
-			<Tabs.Screen
 				name="nations"
 				options={{
 					title: "Nations",
