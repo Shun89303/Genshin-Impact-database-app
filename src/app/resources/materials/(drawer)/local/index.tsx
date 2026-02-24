@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import MaterialsList from "@/src/components/materials/local/materialsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function LocalSpecialties() {
-	const router = useRouter();
-
+export default function LocalMaterials() {
 	return (
-		<View>
-			<Text>Local Specialties Materials</Text>
-			<Button
-				title="Show details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/materials/details/local/[id]",
-						params: { id: 23 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<MaterialsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import MaterialsList from "@/src/components/materials/character/experience/materialsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function CharacterExperienceMaterials() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Character Experience Materials</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/materials/details/character/experience/[id]",
-						params: { id: 13 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<MaterialsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

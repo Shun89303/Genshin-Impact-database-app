@@ -1,22 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import MaterialsList from "@/src/components/materials/character/ascension/common/materialsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function CommonAscensionMaterials() {
-	const router = useRouter();
-
+export default function CommonMaterials() {
 	return (
-		<View>
-			<Text>Common Ascension Materials</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({
-						pathname:
-							"/resources/materials/details/character/ascension/common/[id]",
-						params: { id: 12 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<MaterialsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

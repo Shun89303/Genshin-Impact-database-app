@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import MaterialsList from "@/src/components/materials/talent/book/materialsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function TalentBookScreen() {
-	const router = useRouter();
-
+export default function TalentBookMaterials() {
 	return (
-		<View>
-			<Text>Talent Book Materials</Text>
-			<Button
-				title="Show details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/materials/details/talent/book/[id]",
-						params: { id: 12 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<MaterialsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

@@ -1,21 +1,13 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import MaterialsList from "@/src/components/materials/boss/materialsList";
+import styles from "@/src/components/styles.modules";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function BossMaterials() {
-	const router = useRouter();
-
 	return (
-		<View>
-			<Text>Boss Materials</Text>
-			<Button
-				title="Show Details"
-				onPress={() =>
-					router.push({
-						pathname: "/resources/materials/details/boss/[id]",
-						params: { id: 2 },
-					})
-				}
-			/>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.simpleContainer}>
+				<MaterialsList />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }
