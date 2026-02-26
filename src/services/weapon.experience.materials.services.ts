@@ -6,9 +6,9 @@ const weaponExperience = endpoints.weaponExperience;
 const list = endpoints.list;
 
 export async function getAllWeaponExperienceMaterialsData() {
-	return await apiClient(`${materials}${weaponExperience}`);
+	return apiClient(`${materials}${weaponExperience}`);
 }
 
 export async function getAllWeaponExperienceMaterialImageIds() {
-	return await apiClient(`${materials}${weaponExperience}${list}`);
+	return apiClient(`${materials}${weaponExperience}${list}`);
 }

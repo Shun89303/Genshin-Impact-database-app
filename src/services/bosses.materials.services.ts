@@ -6,9 +6,9 @@ const bossMaterials = endpoints.bossMaterials;
 const list = endpoints.list;
 
 export async function getAllBossMaterialsData() {
-	return await apiClient(`${materials}${bossMaterials}`);
+	return apiClient(`${materials}${bossMaterials}`);
 }
 
 export async function getAllBossMaterialImageIds() {
-	return await apiClient(`${materials}${bossMaterials}${list}`);
+	return apiClient(`${materials}${bossMaterials}${list}`);
 }

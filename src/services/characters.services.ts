@@ -6,15 +6,15 @@ const list = endpoints.list;
 
 // will return an ARRAY of over 80 Character id strings
 export async function getCharactersIds() {
-	return await apiClient(characters);
+	return apiClient(characters);
 }
 
 // will return a huge OBJECT containing all the details of a Character
 export async function getCharacterDetails(id: string) {
-	return await apiClient(`${characters}/${id}`);
+	return apiClient(`${characters}/${id}`);
 }
 
 // will return a small ARRAY containing the types of images the api offers for the selected Character
 export async function getCharacterImageTypes(id: string) {
-	return await apiClient(`${characters}/${id}${list}`);
+	return apiClient(`${characters}/${id}${list}`);
 }

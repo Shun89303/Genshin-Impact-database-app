@@ -6,9 +6,9 @@ const commonAscension = endpoints.commonAscension;
 const list = endpoints.list;
 
 export async function getAllCommonAscensionMaterialsData() {
-	return await apiClient(`${materials}${commonAscension}`);
+	return apiClient(`${materials}${commonAscension}`);
 }
 
 export async function getAllCommonAscensionMaterialImageIds() {
-	return await apiClient(`${materials}${commonAscension}${list}`);
+	return apiClient(`${materials}${commonAscension}${list}`);
 }
