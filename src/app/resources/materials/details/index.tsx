@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import { Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Details() {
 	return (
-		<View>
+		<SafeAreaView>
 			<Text>Materials Main Details Screen</Text>
-		</View>
+		</SafeAreaView>
 	);
 }

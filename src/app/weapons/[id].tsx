@@ -4,7 +4,8 @@ import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WeaponsDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
@@ -26,23 +27,23 @@ export default function WeaponsDetailsScreen() {
 
 	if (loading || !details)
 		return (
-			<>
+			<SafeAreaView>
 				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
 					Loading Item: {id}
 				</Text>
 				<ActivityIndicator />
-			</>
+			</SafeAreaView>
 		);
 
 	if (error)
 		return (
-			<View style={styles.simpleContainer}>
+			<SafeAreaView style={styles.simpleContainer}>
 				<Text>{error}</Text>
-			</View>
+			</SafeAreaView>
 		);
 
 	return (
-		<View>
+		<SafeAreaView>
 			<Text style={{ textAlign: "center" }}>Weapon Details</Text>
 			<FlatList
 				data={Object.entries(details)}
@@ -51,6 +52,6 @@ export default function WeaponsDetailsScreen() {
 					<WeaponDetails field={field} value={value} />
 				)}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }

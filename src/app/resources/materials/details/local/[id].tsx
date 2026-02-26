@@ -3,7 +3,8 @@ import styles from "@/src/components/styles.modules";
 import { useLocalMaterialsStore } from "@/src/store/useLocalMaterialsStore";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LocalMaterialsDetails() {
 	const { id }: { id: any } = useLocalSearchParams();
@@ -25,25 +26,25 @@ export default function LocalMaterialsDetails() {
 
 	if (loading || !details) {
 		return (
-			<>
+			<SafeAreaView>
 				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
 					Loading Item: {id}
 				</Text>
 				<ActivityIndicator />
-			</>
+			</SafeAreaView>
 		);
 	}
 
 	if (error) {
 		return (
-			<View style={styles.simpleContainer}>
+			<SafeAreaView style={styles.simpleContainer}>
 				<Text>{error}</Text>
-			</View>
+			</SafeAreaView>
 		);
 	}
 
 	return (
-		<View>
+		<SafeAreaView>
 			<Text style={{ textAlign: "center" }}>Local Material Details</Text>
 			<FlatList
 				data={Object.entries(details)}
@@ -52,6 +53,6 @@ export default function LocalMaterialsDetails() {
 					<MaterialDetails field={field} value={value} />
 				)}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }
