@@ -5,13 +5,13 @@ const artifacts = endpoints.artifacts;
 const list = endpoints.list;
 
 export async function getArtifactIds() {
-	return await apiClient(artifacts);
+	return apiClient(artifacts);
 }
 
 export async function getArtifactDetails(id: string) {
-	return await apiClient(`${artifacts}/${id}`);
+	return apiClient(`${artifacts}/${id}`);
 }
 
 export async function getArtifactImageTypes(id: string) {
-	return await apiClient(`${artifacts}/${id}${list}`);
+	return apiClient(`${artifacts}/${id}${list}`);
 }

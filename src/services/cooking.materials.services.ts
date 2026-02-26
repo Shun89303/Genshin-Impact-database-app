@@ -6,9 +6,9 @@ const cookingIngredients = endpoints.cookingIngredients;
 const list = endpoints.list;
 
 export async function getAllCookingMaterialsData() {
-	return await apiClient(`${materials}${cookingIngredients}`);
+	return apiClient(`${materials}${cookingIngredients}`);
 }
 
 export async function getAllCookingMaterialImageIds() {
-	return await apiClient(`${materials}${cookingIngredients}${list}`);
+	return apiClient(`${materials}${cookingIngredients}${list}`);
 }

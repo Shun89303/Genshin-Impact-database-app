@@ -6,9 +6,9 @@ const localSpecialties = endpoints.localSpecialties;
 const list = endpoints.list;
 
 export async function getAllLocalMaterialsData() {
-	return await apiClient(`${materials}${localSpecialties}`);
+	return apiClient(`${materials}${localSpecialties}`);
 }
 
 export async function getAllLocalMaterialImageIds() {
-	return await apiClient(`${materials}${localSpecialties}${list}`);
+	return apiClient(`${materials}${localSpecialties}${list}`);
 }

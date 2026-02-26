@@ -6,9 +6,9 @@ const characterExperience = endpoints.characterExperience;
 const list = endpoints.list;
 
 export async function getAllCharacterExperienceMaterialsData() {
-	return await apiClient(`${materials}${characterExperience}`);
+	return apiClient(`${materials}${characterExperience}`);
 }
 
 export async function getAllCharacterExperienceMaterialImageIds() {
-	return await apiClient(`${materials}${characterExperience}${list}`);
+	return apiClient(`${materials}${characterExperience}${list}`);
 }
