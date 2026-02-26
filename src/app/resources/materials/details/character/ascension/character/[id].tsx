@@ -4,7 +4,8 @@ import { useCharacterAscensionMaterialsStore } from "@/src/store/useCharacterAsc
 
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CharacterAscensionMaterialsDetails() {
 	const { id }: { id: any } = useLocalSearchParams();
@@ -28,25 +29,25 @@ export default function CharacterAscensionMaterialsDetails() {
 
 	if (loading || !details) {
 		return (
-			<>
+			<SafeAreaView>
 				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
 					Loading Item: {id}
 				</Text>
 				<ActivityIndicator />
-			</>
+			</SafeAreaView>
 		);
 	}
 
 	if (error) {
 		return (
-			<View style={styles.simpleContainer}>
+			<SafeAreaView style={styles.simpleContainer}>
 				<Text>{error}</Text>
-			</View>
+			</SafeAreaView>
 		);
 	}
 
 	return (
-		<View>
+		<SafeAreaView>
 			<Text style={{ textAlign: "center" }}>
 				Character Ascension Material Details
 			</Text>
@@ -57,6 +58,6 @@ export default function CharacterAscensionMaterialsDetails() {
 					<MaterialDetails field={field} value={value} />
 				)}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }
