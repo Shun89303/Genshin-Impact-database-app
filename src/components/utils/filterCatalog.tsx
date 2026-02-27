@@ -23,6 +23,9 @@ export default function FilterCatalog({ sheetRef }: { sheetRef: any }) {
 				<Pressable onPress={() => setSelectedType("nation", sheetRef)}>
 					<Text>Nation</Text>
 				</Pressable>
+				<Pressable onPress={() => setSelectedType(null, sheetRef)}>
+					<Text>None</Text>
+				</Pressable>
 			</View>
 		</View>
 	);
