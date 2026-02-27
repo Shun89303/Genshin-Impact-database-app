@@ -10,4 +10,6 @@ export const FILTER_CATEGORIES = {
 		"Fontaine",
 		"Natlan",
 	],
+	type: ["Bow", "Sword", "Claymore", "Catalyst", "Polearm"],
+	rarity: [3, 4, 5],
 };

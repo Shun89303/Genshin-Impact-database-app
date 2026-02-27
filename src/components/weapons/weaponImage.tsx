@@ -31,7 +31,7 @@ export default function WeaponImage({ id }: any) {
 				{loading && <ActivityIndicator />}
 				<Image
 					source={{ uri: `${BASE_URL}${weapons}/${id}${icon}` }}
-					style={{ width: 80, height: 80, margin: 4 }}
+					style={{ width: 100, height: 100, margin: 4 }}
 					cachePolicy="memory-disk"
 					onLoad={() => setLoading(false)}
 				/>

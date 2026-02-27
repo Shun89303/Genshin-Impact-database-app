@@ -1,30 +1,63 @@
 import { create } from "zustand";
+import { FILTER_CATEGORIES } from "../config/filterCategories";
 import {
 	getWeaponDetails,
 	getWeaponImageTypes,
 	getWeaponsIds,
 } from "../services/weapons.services";
+import { Weapon } from "../types/weapon";
 
 interface WeaponsState {
-	ids: string[] | null;
 	error: string | null;
+	ids: string[];
+	input: string;
+	details: Weapon[];
+	selectedType: "type" | "rarity" | null;
+	setSelectedType: (type: "type" | "rarity" | null, sheetRef: any) => void;
 	cache: Record<string, unknown>;
 	loadingId: string | null;
 	clearCacheForId?: (id: string) => void;
 	fetchWeaponsIds: () => Promise<void>;
+	setInput: (i: string) => void;
+	fetchAllDetails: () => Promise<void>;
 	fetchWeaponImageTypes: (id: string) => Promise<string[]>;
 	fetchWeaponDetails: (id: any) => Promise<void>;
+	groupByType: (
+		weapons: Weapon[],
+		type: "type" | "rarity"
+	) => { label: string; data: Weapon[] }[];
 }
 
 export const useWeaponsStore = create<WeaponsState>((set, get) => ({
-	ids: null,
 	error: null,
+	ids: [],
+	input: "",
+	details: [],
+	selectedType: null,
+	setSelectedType: (type, sheetRef) => {
+		set({ selectedType: type });
+		sheetRef.current.close();
+	},
+	setInput: (i) => set({ input: i }),
 	cache: {},
 	loadingId: null,
 	fetchWeaponsIds: async () => {
 		try {
 			const ids: string[] = await getWeaponsIds();
 			set({ ids });
+		} catch (error: any) {
+			set({ error: error.message });
+		}
+	},
+	fetchAllDetails: async () => {
+		try {
+			let { ids, fetchWeaponsIds } = get();
+			if (!ids.length) {
+				await fetchWeaponsIds();
+				ids = get().ids;
+			}
+			const details = await Promise.all(ids.map((id) => getWeaponDetails(id)));
+			set({ details });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
@@ -62,4 +95,14 @@ export const useWeaponsStore = create<WeaponsState>((set, get) => ({
 			delete newCache[id];
 			return { cache: newCache };
 		}),
+	groupByType: (weapons, type) => {
+		const options = FILTER_CATEGORIES[type];
+
+		return options
+			.map((option) => ({
+				label: typeof option === "number" ? `${option} stars` : option,
+				data: weapons.filter((wea) => wea[type] === option),
+			}))
+			.filter((group) => group.data.length > 0);
+	},
 }));
