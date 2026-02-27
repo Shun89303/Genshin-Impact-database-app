@@ -10,7 +10,12 @@ export const FILTER_CATEGORIES = {
 		"Fontaine",
 		"Natlan",
 	],
-	type: ["Bow", "Sword", "Claymore", "Catalyst", "Polearm"],
+	type: [
+		"ATK-Boosting Dish",
+		"Recovery Dish",
+		"Adventurer's Dish",
+		"DEF-Boosting Dish",
+	],
 	rarity: [3, 4, 5],
 	max_rarity: [3, 4, 5],
 };
