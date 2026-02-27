@@ -1,8 +1,10 @@
 import { create } from "zustand";
+import { FILTER_CATEGORIES } from "../config/potionCategory/filterCategories";
 import {
 	getAllPotionImageIds,
 	getAllPotionsData,
 } from "../services/consumables.services";
+import { potion } from "../types/potion";
 
 interface Potion {
 	name: string | null;
@@ -12,17 +14,35 @@ interface Potion {
 
 interface PotionState {
 	error: string | null;
+	input: string;
+	details: potion[];
+	selectedType: "rarity" | null;
+	setSelectedType: (type: "rarity" | null, sheetRef: any) => void;
 	cache: Record<string, Potion>;
 	loadingId: string | null;
 	potionsObject: Record<string, Potion>;
-	potionsIds: string[] | null;
+	potionsIds: string[];
+	setInput: (i: string) => void;
+	fetchAllDetails: () => Promise<void>;
 	fetchPotionsObject: () => Promise<void>;
 	fetchPotionImageIds: () => Promise<void>;
 	storePotionDetails: (id: any) => void;
+	groupByType: (
+		foods: potion[],
+		type: "rarity"
+	) => { label: string; data: potion[] }[];
 }
 
 export const usePotionStore = create<PotionState>((set, get) => ({
 	error: null,
+	input: "",
+	details: [],
+	selectedType: null,
+	setSelectedType: (type, sheetRef) => {
+		set({ selectedType: type });
+		sheetRef.current.close();
+	},
+	setInput: (i) => set({ input: i }),
 	cache: {},
 	loadingId: null,
 	potionsObject: {},
@@ -65,5 +85,35 @@ export const usePotionStore = create<PotionState>((set, get) => ({
 			cache: { ...state.cache, [id]: details },
 			loadingId: null,
 		}));
+	},
+	fetchAllDetails: async () => {
+		try {
+			let { potionsIds, details, fetchPotionImageIds } = get();
+			if (!potionsIds?.length) {
+				await fetchPotionImageIds();
+			}
+			if (!details.length) {
+				const apiObject = await getAllPotionsData();
+				const normalizedFoodArray = Object.entries(apiObject).map(
+					([id, value]) => ({
+						id,
+						...value,
+					})
+				);
+				set({ details: normalizedFoodArray });
+			}
+		} catch (error: any) {
+			set({ error: error.message });
+		}
+	},
+	groupByType: (potions, type) => {
+		const options = FILTER_CATEGORIES[type];
+
+		return options
+			.map((option) => ({
+				label: `${option} stars`,
+				data: potions.filter((pot) => pot[type] === option),
+			}))
+			.filter((group) => group.data.length > 0);
 	},
 }));

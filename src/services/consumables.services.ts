@@ -1,6 +1,7 @@
 import apiClient from "../api/client";
 import { endpoints } from "../api/endpoints";
 import { FoodApi } from "../types/food";
+import { PotionApi } from "../types/potion";
 
 const consumables = endpoints.consumables;
 const potions = endpoints.potions;
@@ -8,7 +9,7 @@ const Food = endpoints.food;
 const list = endpoints.list;
 
 // returns a huge object containing key as id and value as the entire details of the id
-export function getAllPotionsData() {
+export function getAllPotionsData(): Promise<Record<string, PotionApi>> {
 	return apiClient(`${consumables}${potions}`);
 }
 
