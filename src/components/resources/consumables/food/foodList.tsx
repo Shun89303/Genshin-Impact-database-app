@@ -1,21 +1,19 @@
 import { endpoints } from "@/src/api/endpoints";
 import styles from "@/src/components/styles.modules";
 import { BASE_URL } from "@/src/config/env";
-import { useConsumablesStore } from "@/src/store/useConsumablesStore";
+import { useFoodStore } from "@/src/store/useFood.consumables.store";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import FoodImage from "./foodImage";
 
 export default function FoodList() {
-	const fetchFoodObject = useConsumablesStore((state) => state.fetchFoodObject);
-	const fetchFoodImageIds = useConsumablesStore(
-		(state) => state.fetchFoodImageIds
-	);
-	const foodIds = useConsumablesStore((state) => state.foodIds);
-	const { error } = useConsumablesStore();
-	const consumables = endpoints.consumables;
+	const fetchFoodObject = useFoodStore((state) => state.fetchFoodObject);
+	const fetchFoodImageIds = useFoodStore((state) => state.fetchFoodImageIds);
+	const foodIds = useFoodStore((state) => state.foodIds);
+	const { error } = useFoodStore();
 	const food = endpoints.food;
+	const consumables = endpoints.consumables;
 
 	useEffect(() => {
 		if (!foodIds?.length) {
