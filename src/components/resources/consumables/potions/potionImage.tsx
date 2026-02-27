@@ -1,14 +1,14 @@
 import { endpoints } from "@/src/api/endpoints";
 import styles from "@/src/components/styles.modules";
 import { BASE_URL } from "@/src/config/env";
-import { useConsumablesStore } from "@/src/store/useConsumablesStore";
+import { usePotionStore } from "@/src/store/usePotion.consumables.store";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 export default function PotionImage({ id }: any) {
-	const { error } = useConsumablesStore();
+	const { error } = usePotionStore();
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 	const consumables = endpoints.consumables;

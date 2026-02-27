@@ -1,21 +1,21 @@
 import { endpoints } from "@/src/api/endpoints";
 import styles from "@/src/components/styles.modules";
 import { BASE_URL } from "@/src/config/env";
-import { useConsumablesStore } from "@/src/store/useConsumablesStore";
+import { usePotionStore } from "@/src/store/usePotion.consumables.store";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import PotionImage from "./potionImage";
 
 export default function PotionsList() {
-	const fetchPotionsObject = useConsumablesStore(
+	const fetchPotionsObject = usePotionStore(
 		(state) => state.fetchPotionsObject
 	);
-	const fetchPotionImageIds = useConsumablesStore(
+	const fetchPotionImageIds = usePotionStore(
 		(state) => state.fetchPotionImageIds
 	);
-	const potionsIds = useConsumablesStore((state) => state.potionsIds);
-	const { error } = useConsumablesStore();
+	const potionsIds = usePotionStore((state) => state.potionsIds);
+	const { error } = usePotionStore();
 	const consumables = endpoints.consumables;
 	const potions = endpoints.potions;
 

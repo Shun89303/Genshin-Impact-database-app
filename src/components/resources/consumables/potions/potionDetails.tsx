@@ -1,5 +1,5 @@
 import styles from "@/src/components/styles.modules";
-import { useConsumablesStore } from "@/src/store/useConsumablesStore";
+import { usePotionStore } from "@/src/store/usePotion.consumables.store";
 import { ActivityIndicator, Text, View } from "react-native";
 
 export default function PotionDetails({
@@ -9,7 +9,7 @@ export default function PotionDetails({
 	field: string;
 	value: any;
 }) {
-	const { error } = useConsumablesStore();
+	const { error } = usePotionStore();
 
 	if (error)
 		return (

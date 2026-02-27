@@ -1,5 +1,6 @@
 import styles from "@/src/components/styles.modules";
-import { useConsumablesStore } from "@/src/store/useConsumablesStore";
+import { useFoodStore } from "@/src/store/useFood.consumables.store";
+
 import { ActivityIndicator, Text, View } from "react-native";
 
 export default function FoodDetails({
@@ -9,7 +10,7 @@ export default function FoodDetails({
 	field: string;
 	value: any;
 }) {
-	const { error } = useConsumablesStore();
+	const { error } = useFoodStore();
 
 	if (error)
 		return (

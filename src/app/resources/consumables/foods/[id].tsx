@@ -1,6 +1,6 @@
 import FoodDetails from "@/src/components/resources/consumables/food/foodDetails";
 import styles from "@/src/components/styles.modules";
-import { useConsumablesStore } from "@/src/store/useConsumablesStore";
+import { useFoodStore } from "@/src/store/useFood.consumables.store";
 import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback } from "react";
@@ -8,12 +8,10 @@ import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 export default function FoodDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const storeFoodDetails = useConsumablesStore(
-		(state) => state.storeFoodDetails
-	);
-	const error = useConsumablesStore((state) => state.error);
-	const cache = useConsumablesStore((state) => state.cache);
-	const loadingId = useConsumablesStore((state) => state.loadingId);
+	const storeFoodDetails = useFoodStore((state) => state.storeFoodDetails);
+	const error = useFoodStore((state) => state.error);
+	const cache = useFoodStore((state) => state.cache);
+	const loadingId = useFoodStore((state) => state.loadingId);
 
 	useFocusEffect(
 		useCallback(() => {
