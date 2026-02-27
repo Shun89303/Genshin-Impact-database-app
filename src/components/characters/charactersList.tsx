@@ -7,8 +7,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import {} from "react-native-safe-area-context";
 import styles from "../styles.modules";
-import FilterCatalog from "../utils/filterCatalog";
-import SearchFilterBar from "../utils/searchFilterBar";
+import FilterCatalog from "../utils/character/filterCatalog";
+import SearchFilterBar from "../utils/character/searchFilterBar";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
@@ -84,7 +84,12 @@ export default function CharactersList() {
 			<>
 				<SearchFilterBar sheetRef={sheetRef} />
 				<SearchList finalData={finalData} />
-				<BottomSheet ref={sheetRef} snapPoints={snapPoints} index={-1}>
+				<BottomSheet
+					ref={sheetRef}
+					snapPoints={snapPoints}
+					index={-1}
+					enablePanDownToClose
+				>
 					<BottomSheetView>
 						<FilterCatalog sheetRef={sheetRef} />
 					</BottomSheetView>
@@ -97,7 +102,12 @@ export default function CharactersList() {
 		<>
 			<SearchFilterBar sheetRef={sheetRef} />
 			<FilterList finalData={finalData} />
-			<BottomSheet ref={sheetRef} snapPoints={snapPoints} index={-1}>
+			<BottomSheet
+				ref={sheetRef}
+				snapPoints={snapPoints}
+				index={-1}
+				enablePanDownToClose
+			>
 				<BottomSheetView>
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
