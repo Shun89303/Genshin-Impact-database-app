@@ -5,10 +5,10 @@ const materials = endpoints.materials;
 const characterExperience = endpoints.characterExperience;
 const list = endpoints.list;
 
-export async function getAllCharacterExperienceMaterialsData() {
+export function getAllCharacterExperienceMaterialsData() {
 	return apiClient(`${materials}${characterExperience}`);
 }
 
-export async function getAllCharacterExperienceMaterialImageIds() {
+export function getAllCharacterExperienceMaterialImageIds() {
 	return apiClient(`${materials}${characterExperience}${list}`);
 }

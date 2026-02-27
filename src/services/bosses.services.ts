@@ -6,16 +6,16 @@ const weeklyBoss = endpoints.weeklyBoss;
 const list = endpoints.list;
 
 // will return an ARRAY of over 80 Boss id strings
-export async function getBossesIds() {
+export function getBossesIds() {
 	return apiClient(`${boss}${weeklyBoss}`);
 }
 
 // will return a huge OBJECT containing all the details of a Boss
-export async function getBossDetails(id: string) {
+export function getBossDetails(id: string) {
 	return apiClient(`${boss}${weeklyBoss}/${id}`);
 }
 
 // will return a small ARRAY containing the types of images the api offers for the selected Boss
-export async function getBossImageTypes(id: string) {
+export function getBossImageTypes(id: string) {
 	return apiClient(`${boss}${weeklyBoss}/${id}${list}`);
 }

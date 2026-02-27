@@ -5,10 +5,10 @@ const materials = endpoints.materials;
 const talentBoss = endpoints.talentBoss;
 const list = endpoints.list;
 
-export async function getAllTalentBossMaterialsData() {
+export function getAllTalentBossMaterialsData() {
 	return apiClient(`${materials}${talentBoss}`);
 }
 
-export async function getAllTalentBossMaterialImageIds() {
+export function getAllTalentBossMaterialImageIds() {
 	return apiClient(`${materials}${talentBoss}${list}`);
 }

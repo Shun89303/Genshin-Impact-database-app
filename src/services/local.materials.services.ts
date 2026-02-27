@@ -5,10 +5,10 @@ const materials = endpoints.materials;
 const localSpecialties = endpoints.localSpecialties;
 const list = endpoints.list;
 
-export async function getAllLocalMaterialsData() {
+export function getAllLocalMaterialsData() {
 	return apiClient(`${materials}${localSpecialties}`);
 }
 
-export async function getAllLocalMaterialImageIds() {
+export function getAllLocalMaterialImageIds() {
 	return apiClient(`${materials}${localSpecialties}${list}`);
 }

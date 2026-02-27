@@ -5,10 +5,10 @@ const materials = endpoints.materials;
 const weaponAscension = endpoints.weaponAscension;
 const list = endpoints.list;
 
-export async function getAllWeaponAscensionMaterialsData() {
+export function getAllWeaponAscensionMaterialsData() {
 	return apiClient(`${materials}${weaponAscension}`);
 }
 
-export async function getAllWeaponAscensionMaterialImageIds() {
+export function getAllWeaponAscensionMaterialImageIds() {
 	return apiClient(`${materials}${weaponAscension}${list}`);
 }

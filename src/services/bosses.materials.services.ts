@@ -5,10 +5,10 @@ const materials = endpoints.materials;
 const bossMaterials = endpoints.bossMaterials;
 const list = endpoints.list;
 
-export async function getAllBossMaterialsData() {
+export function getAllBossMaterialsData() {
 	return apiClient(`${materials}${bossMaterials}`);
 }
 
-export async function getAllBossMaterialImageIds() {
+export function getAllBossMaterialImageIds() {
 	return apiClient(`${materials}${bossMaterials}${list}`);
 }
