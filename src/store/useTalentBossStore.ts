@@ -3,13 +3,18 @@ import {
 	getAllTalentBossMaterialImageIds,
 	getAllTalentBossMaterialsData,
 } from "../services/talent.boss.materials.services";
+import { TalentBoss } from "../types/talent.boss";
 
 interface TalentBossMaterialsState {
 	error: string | null;
+	input: string;
+	details: TalentBoss[];
 	cache: Record<string, unknown>;
 	loadingId: string | null;
 	materialsObject: Record<string, unknown>;
-	materialIds: string[] | null;
+	materialIds: string[];
+	setInput: (i: string) => void;
+	fetchAllDetails: () => Promise<void>;
 	fetchMaterialsObject: () => Promise<void>;
 	fetchMaterialIds: () => Promise<void>;
 	storeMaterialDetails: (id: string) => void;
@@ -18,6 +23,9 @@ interface TalentBossMaterialsState {
 export const useTalentBossMaterialsStore = create<TalentBossMaterialsState>(
 	(set, get) => ({
 		error: null,
+		input: "",
+		details: [],
+		setInput: (i) => set({ input: i }),
 		cache: {},
 		loadingId: null,
 		materialsObject: {},
@@ -60,6 +68,19 @@ export const useTalentBossMaterialsStore = create<TalentBossMaterialsState>(
 				cache: { ...state.cache, [id]: details },
 				loadingId: null,
 			}));
+		},
+		fetchAllDetails: async () => {
+			try {
+				let { details } = get();
+				if (!details.length) {
+					const apiObject = await getAllTalentBossMaterialsData();
+					const { id, ...cleanedObject } = apiObject;
+					const talentBossArray: TalentBoss[] = Object.values(cleanedObject);
+					set({ details: talentBossArray });
+				}
+			} catch (error: any) {
+				set({ error: error.message });
+			}
 		},
 	})
 );

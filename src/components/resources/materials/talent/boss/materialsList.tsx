@@ -1,70 +1,80 @@
 import { endpoints } from "@/src/api/endpoints";
 import styles from "@/src/components/styles.modules";
+import SearchBar from "@/src/components/utils/talentBoss/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { useTalentBossMaterialsStore } from "@/src/store/useTalentBossStore";
 import { Image } from "expo-image";
-import { useEffect } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import { useEffect, useMemo, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const materials = endpoints.materials;
-	const talentBoss = endpoints.talentBoss;
-
-	const fetchMaterialsObject = useTalentBossMaterialsStore(
-		(state) => state.fetchMaterialsObject
+	const fetchAllDetails = useTalentBossMaterialsStore(
+		(state) => state.fetchAllDetails
 	);
-	const fetchMaterialIds = useTalentBossMaterialsStore(
-		(state) => state.fetchMaterialIds
-	);
+	const details = useTalentBossMaterialsStore((state) => state.details);
+	const input = useTalentBossMaterialsStore((state) => state.input);
 	const materialIds = useTalentBossMaterialsStore((state) => state.materialIds);
 	const error = useTalentBossMaterialsStore((state) => state.error);
 
+	const materials = endpoints.materials;
+	const talentBoss = endpoints.talentBoss;
+
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
-		if (!materialIds?.length) {
-			fetchMaterialsObject();
-			fetchMaterialIds();
-			return;
+		const load = async () => {
+			setLoading(true);
+			try {
+				await fetchAllDetails();
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (!details.length) {
+			load();
+		} else {
+			// PREFETCH IMAGES
+			materialIds.forEach((id) => {
+				Image.prefetch(`${BASE_URL}${materials}${talentBoss}/${id}`);
+			});
+			setLoading(false);
+		}
+	}, [fetchAllDetails, materials, details, materialIds, talentBoss]);
+
+	const finalData = useMemo(() => {
+		let result = details;
+
+		if (input.trim().length > 0) {
+			const lower = input.toLowerCase();
+			result = result.filter(
+				(boss) =>
+					boss.id.toLowerCase().includes(lower) ||
+					boss.name.toLowerCase().includes(lower)
+			);
 		}
 
-		const remainingIds = materialIds.slice(15);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${talentBoss}/${id}`);
-		});
-	}, [
-		materials,
-		talentBoss,
-		fetchMaterialIds,
-		fetchMaterialsObject,
-		materialIds,
-	]);
+		return result;
+	}, [details, input]);
 
 	if (error) {
 		return (
 			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+				<Text>{error}</Text>
 			</View>
 		);
 	}
 
-	if (!materialIds?.length) {
-		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
-			</View>
-		);
-	}
 	return (
 		<>
-			<FlatList
-				data={materialIds}
-				keyExtractor={(id) => id}
-				numColumns={3}
-				initialNumToRender={15}
-				windowSize={20}
-				removeClippedSubviews
-				renderItem={({ item }) => <MaterialsImage id={item} />}
-			/>
+			{loading && (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" />
+				</View>
+			)}
+			<SearchBar />
+			<SearchList finalData={finalData} />
 		</>
 	);
 }
