@@ -28,8 +28,8 @@ export const useWeaponAscensionMaterialsStore =
 			try {
 				const allMaterials = await getAllWeaponAscensionMaterialsData();
 				const allMaterialsArray = Object.entries(allMaterials);
-				const withoutListItem = allMaterialsArray.slice(0, -1);
-				const materialsObject = Object.fromEntries(withoutListItem);
+				const withoutLastItem = allMaterialsArray.slice(0, -1);
+				const materialsObject = Object.fromEntries(withoutLastItem);
 				set({ materialsObject });
 			} catch (error: any) {
 				set({ error: error.message });

@@ -94,13 +94,15 @@ export const usePotionStore = create<PotionState>((set, get) => ({
 			}
 			if (!details.length) {
 				const apiObject = await getAllPotionsData();
-				const normalizedFoodArray = Object.entries(apiObject).map(
+				const apiArray = Object.entries(apiObject);
+				const apiArrayWithoutLastItem = apiArray.slice(0, -1);
+				const normalizedPotionArray = apiArrayWithoutLastItem.map(
 					([id, value]) => ({
 						id,
 						...value,
 					})
 				);
-				set({ details: normalizedFoodArray });
+				set({ details: normalizedPotionArray });
 			}
 		} catch (error: any) {
 			set({ error: error.message });

@@ -93,7 +93,9 @@ export const useFoodStore = create<FoodState>((set, get) => ({
 			}
 			if (!details.length) {
 				const apiObject = await getAllFoodData();
-				const normalizedFoodArray = Object.entries(apiObject).map(
+				const apiArray = Object.entries(apiObject);
+				const apiArrayWithoutLastItem = apiArray.slice(0, -1);
+				const normalizedFoodArray = apiArrayWithoutLastItem.map(
 					([id, value]) => ({
 						id,
 						...value,
