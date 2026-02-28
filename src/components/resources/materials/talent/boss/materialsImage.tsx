@@ -11,6 +11,10 @@ export default function MaterialsImage({ id }: any) {
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 
+	function toImageId(detailId: string) {
+		return detailId.replace(/'/g, "-");
+	}
+
 	return (
 		<>
 			<Pressable
@@ -23,7 +27,9 @@ export default function MaterialsImage({ id }: any) {
 			>
 				{loading && <ActivityIndicator />}
 				<Image
-					source={{ uri: `${BASE_URL}${materials}${talentBoss}/${id}` }}
+					source={{
+						uri: `${BASE_URL}${materials}${talentBoss}/${toImageId(id)}`,
+					}}
 					style={{ width: 100, height: 100, margin: 4 }}
 					cachePolicy="memory-disk"
 					onLoad={() => setLoading(false)}
