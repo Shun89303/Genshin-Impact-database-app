@@ -5,7 +5,7 @@ const materials = endpoints.materials;
 const localSpecialties = endpoints.localSpecialties;
 const list = endpoints.list;
 
-export function getAllLocalMaterialsData() {
+export function getAllLocalMaterialsData(): Promise<Record<string, any>> {
 	return apiClient(`${materials}${localSpecialties}`);
 }
 
