@@ -1,70 +1,129 @@
 import { endpoints } from "@/src/api/endpoints";
 import styles from "@/src/components/styles.modules";
+import FilterCatalog from "@/src/components/utils/talentBook/filterCatalog";
+import SearchFilterBar from "@/src/components/utils/talentBook/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
 import { useTalentBookMaterialsStore } from "@/src/store/useTalentBookStore";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useEffect } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+import FilterList from "./filterList";
+import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const materials = endpoints.materials;
-	const talentBook = endpoints.talentBook;
+	const fetchAllDetails = useTalentBookMaterialsStore(
+		(state) => state.fetchAllDetails
+	);
+	const details = useTalentBookMaterialsStore((state) => state.details);
+	const input = useTalentBookMaterialsStore((state) => state.input);
+	const selectedType = useTalentBookMaterialsStore(
+		(state) => state.selectedType
+	);
+	const groupByType = useTalentBookMaterialsStore((state) => state.groupByType);
 
-	const fetchMaterialsObject = useTalentBookMaterialsStore(
-		(state) => state.fetchMaterialsObject
-	);
-	const fetchMaterialIds = useTalentBookMaterialsStore(
-		(state) => state.fetchMaterialIds
-	);
 	const materialIds = useTalentBookMaterialsStore((state) => state.materialIds);
 	const error = useTalentBookMaterialsStore((state) => state.error);
 
+	const materials = endpoints.materials;
+	const talentBook = endpoints.talentBook;
+
+	const sheetRef = useRef<BottomSheet>(null);
+	const snapPoints = useMemo(() => ["40%"], []);
+
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
-		if (!materialIds?.length) {
-			fetchMaterialsObject();
-			fetchMaterialIds();
-			return;
+		const load = async () => {
+			setLoading(true);
+			try {
+				await fetchAllDetails();
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (!details.length) {
+			load();
+		} else {
+			// PREFETCH IMAGES
+			details.forEach((talBook) =>
+				talBook.items.forEach((book) => {
+					Image.prefetch(`${BASE_URL}${materials}${talentBook}/${book.id}`);
+				})
+			);
+			setLoading(false);
+		}
+	}, [fetchAllDetails, materials, details, materialIds, talentBook]);
+
+	const finalData = useMemo(() => {
+		let result = details;
+
+		if (input.trim().length > 0) {
+			const lower = input.toLowerCase();
+			result = result.filter((talentBook) =>
+				talentBook.items.some((book) => book.name.toLowerCase().includes(lower))
+			);
 		}
 
-		const remainingIds = materialIds.slice(15);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${talentBook}/${id}`);
-		});
-	}, [
-		materials,
-		talentBook,
-		fetchMaterialIds,
-		fetchMaterialsObject,
-		materialIds,
-	]);
+		if (selectedType) {
+			return groupByType(result, selectedType);
+		}
+
+		return result;
+	}, [details, groupByType, input, selectedType]);
 
 	if (error) {
 		return (
 			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+				<Text>{error}</Text>
 			</View>
 		);
 	}
 
-	if (!materialIds?.length) {
+	if (!selectedType) {
 		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
-			</View>
+			<>
+				{loading && (
+					<View style={styles.loadingContainer}>
+						<ActivityIndicator size="large" />
+					</View>
+				)}
+				<SearchFilterBar sheetRef={sheetRef} />
+				<SearchList finalData={finalData} />
+				<BottomSheet
+					ref={sheetRef}
+					snapPoints={snapPoints}
+					index={-1}
+					enablePanDownToClose
+				>
+					<BottomSheetView>
+						<FilterCatalog sheetRef={sheetRef} />
+					</BottomSheetView>
+				</BottomSheet>
+			</>
 		);
 	}
+
 	return (
 		<>
-			<FlatList
-				data={materialIds}
-				keyExtractor={(id) => id}
-				numColumns={3}
-				initialNumToRender={15}
-				windowSize={20}
-				removeClippedSubviews
-				renderItem={({ item }) => <MaterialsImage id={item} />}
-			/>
+			{loading && (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" />
+				</View>
+			)}
+			<SearchFilterBar sheetRef={sheetRef} />
+			<FilterList finalData={finalData} />
+			<BottomSheet
+				ref={sheetRef}
+				snapPoints={snapPoints}
+				index={-1}
+				enablePanDownToClose
+			>
+				<BottomSheetView>
+					<FilterCatalog sheetRef={sheetRef} />
+				</BottomSheetView>
+			</BottomSheet>
 		</>
 	);
 }

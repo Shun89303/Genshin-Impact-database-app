@@ -7,7 +7,7 @@ import { useWeaponAscensionMaterialsStore } from "@/src/store/useWeaponAscension
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
@@ -77,7 +77,7 @@ export default function MaterialsList() {
 	if (error) {
 		return (
 			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+				<Text>{error}</Text>
 			</View>
 		);
 	}
