@@ -63,7 +63,7 @@ export default function MaterialsList() {
 		if (input.trim().length > 0) {
 			const lower = input.toLowerCase();
 			result = result.filter((wam) =>
-				(wam.name ?? "").toLowerCase().includes(lower)
+				wam.items.some((item) => item.name.toLowerCase().includes(lower))
 			);
 		}
 

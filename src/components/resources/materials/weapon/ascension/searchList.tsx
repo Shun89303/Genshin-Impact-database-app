@@ -11,14 +11,27 @@ export default function SearchList({
 		<View style={{ alignItems: "center" }}>
 			<FlatList
 				data={finalData as wam[]}
+				keyExtractor={(item) => item.id}
 				initialNumToRender={6}
 				windowSize={21}
 				removeClippedSubviews
-				numColumns={3}
 				renderItem={({ item }) => (
-					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
-						<MaterialsImage id={item.name} />
-					</View>
+					<FlatList
+						data={item.items}
+						keyExtractor={(item) => item.id}
+						numColumns={4}
+						initialNumToRender={8}
+						windowSize={21}
+						removeClippedSubviews
+						renderItem={({ item }) => (
+							<View
+								key={item.id}
+								style={{ justifyContent: "space-evenly", padding: 10 }}
+							>
+								<MaterialsImage id={item.id} />
+							</View>
+						)}
+					/>
 				)}
 			/>
 		</View>

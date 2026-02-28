@@ -34,8 +34,19 @@ export default function FilterList({
 						<FlatList
 							horizontal
 							data={item.data}
-							keyExtractor={(wam) => wam.name}
-							renderItem={({ item }) => <MaterialsImage id={item.name} />}
+							keyExtractor={(item) => item.id}
+							renderItem={({ item }) => (
+								<>
+									{item.items.map((materialItem) => (
+										<View
+											key={materialItem.id}
+											style={{ justifyContent: "space-evenly", padding: 10 }}
+										>
+											<MaterialsImage id={materialItem.id} />
+										</View>
+									))}
+								</>
+							)}
 						/>
 					</View>
 				)}
