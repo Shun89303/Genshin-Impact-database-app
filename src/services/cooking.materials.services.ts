@@ -5,7 +5,7 @@ const materials = endpoints.materials;
 const cookingIngredients = endpoints.cookingIngredients;
 const list = endpoints.list;
 
-export function getAllCookingMaterialsData() {
+export function getAllCookingMaterialsData(): Promise<Record<string, any>> {
 	return apiClient(`${materials}${cookingIngredients}`);
 }
 
