@@ -28,8 +28,8 @@ export default function MaterialsImage({ id }: { id: any }) {
 						width: 70,
 						height: 70,
 						margin: 4,
-						resizeMode: "contain",
 					}}
+					contentFit="contain"
 					cachePolicy="memory-disk"
 					onLoad={() => setLoading(false)}
 				/>
