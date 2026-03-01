@@ -1,6 +1,6 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { NormalizedCommonAscensionMaterialGroup } from "@/src/types/common.ascension.material";
+import { NormalizedBossMaterialGroup } from "@/src/types/boss.material";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
@@ -10,26 +10,22 @@ export default function SearchList({
 	finalData,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
-	finalData: NormalizedCommonAscensionMaterialGroup[];
+	finalData: NormalizedBossMaterialGroup[];
 }) {
 	const materials = endpoints.materials;
-	const commonAscension = endpoints.commonAscension;
+	const bossMaterials = endpoints.bossMaterials;
 
 	useEffect(() => {
-		const urls = finalData.flatMap((group) =>
-			group.items.map(
-				(item) => `${BASE_URL}${materials}${commonAscension}/${item.id}`
-			)
+		const urls = finalData.flatMap(
+			(item) => `${BASE_URL}${materials}${bossMaterials}/${item.id}`
 		);
 		Promise.all(urls.map((url) => Image.prefetch(url)));
-	}, [commonAscension, finalData, materials]);
-
-	const flatItems = finalData.flatMap((group) => group.items);
+	}, [bossMaterials, finalData, materials]);
 
 	return (
 		<View style={{ alignItems: "center" }}>
 			<FlatList
-				data={flatItems}
+				data={finalData}
 				keyExtractor={(item) => item.id}
 				numColumns={3}
 				columnWrapperStyle={{

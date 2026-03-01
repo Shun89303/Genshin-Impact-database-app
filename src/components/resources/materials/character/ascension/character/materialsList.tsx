@@ -23,12 +23,6 @@ export default function MaterialsList() {
 	const groupByType = useCharacterAscensionMaterialsStore(
 		(state) => state.groupByType
 	);
-	const fetchMaterialsObject = useCharacterAscensionMaterialsStore(
-		(state) => state.fetchMaterialsObject
-	);
-	const fetchMaterialIds = useCharacterAscensionMaterialsStore(
-		(state) => state.fetchMaterialIds
-	);
 	const materialIds = useCharacterAscensionMaterialsStore(
 		(state) => state.materialIds
 	);
