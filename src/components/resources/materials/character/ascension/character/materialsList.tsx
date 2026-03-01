@@ -1,16 +1,28 @@
 import { endpoints } from "@/src/api/endpoints";
 import styles from "@/src/components/styles.modules";
+import FilterCatalog from "@/src/components/utils/cam/filterCatalog";
+import SearchFilterBar from "@/src/components/utils/cam/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
 import { useCharacterAscensionMaterialsStore } from "@/src/store/useCharacterAscensionStore";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useEffect } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+import FilterList from "./filterList";
+import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const materials = endpoints.materials;
-	const characterAscension = endpoints.characterAscension;
-
+	const fetchAllDetails = useCharacterAscensionMaterialsStore(
+		(state) => state.fetchAllDetails
+	);
+	const details = useCharacterAscensionMaterialsStore((state) => state.details);
+	const input = useCharacterAscensionMaterialsStore((state) => state.input);
+	const selectedType = useCharacterAscensionMaterialsStore(
+		(state) => state.selectedType
+	);
+	const groupByType = useCharacterAscensionMaterialsStore(
+		(state) => state.groupByType
+	);
 	const fetchMaterialsObject = useCharacterAscensionMaterialsStore(
 		(state) => state.fetchMaterialsObject
 	);
@@ -22,51 +34,101 @@ export default function MaterialsList() {
 	);
 	const error = useCharacterAscensionMaterialsStore((state) => state.error);
 
+	const materials = endpoints.materials;
+	const characterAscension = endpoints.characterAscension;
+
+	const sheetRef = useRef<BottomSheet>(null);
+	const snapPoints = useMemo(() => ["40%"], []);
+
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
-		if (!materialIds?.length) {
-			fetchMaterialsObject();
-			fetchMaterialIds();
-			return;
+		const load = async () => {
+			setLoading(true);
+			try {
+				await fetchAllDetails();
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (!details.length) {
+			load();
+		} else {
+			// PREFETCH IMAGES
+			materialIds.forEach((id) => {
+				Image.prefetch(`${BASE_URL}${materials}${characterAscension}/${id}`);
+			});
+			setLoading(false);
+		}
+	}, [characterAscension, details, fetchAllDetails, materialIds, materials]);
+
+	const finalData = useMemo(() => {
+		let result = details;
+
+		if (input.trim().length > 0) {
+			const lower = input.toLowerCase();
+			result = result.filter((cam) => cam.name.toLowerCase().includes(lower));
 		}
 
-		const remainingIds = materialIds.slice(15);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${characterAscension}/${id}`);
-		});
-	}, [
-		materials,
-		characterAscension,
-		fetchMaterialIds,
-		fetchMaterialsObject,
-		materialIds,
-	]);
+		if (selectedType) {
+			return groupByType(result, selectedType);
+		}
+
+		return result;
+	}, [details, groupByType, input, selectedType]);
 
 	if (error) {
 		return (
 			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+				<Text>{error}</Text>
 			</View>
 		);
 	}
 
-	if (!materialIds?.length) {
+	if (!selectedType) {
 		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
-			</View>
+			<>
+				{loading && (
+					<View style={styles.loadingContainer}>
+						<ActivityIndicator size="large" />
+					</View>
+				)}
+				<SearchFilterBar sheetRef={sheetRef} />
+				<SearchList finalData={finalData} />
+				<BottomSheet
+					ref={sheetRef}
+					snapPoints={snapPoints}
+					index={-1}
+					enablePanDownToClose
+				>
+					<BottomSheetView>
+						<FilterCatalog sheetRef={sheetRef} />
+					</BottomSheetView>
+				</BottomSheet>
+			</>
 		);
 	}
+
 	return (
 		<>
-			<FlatList
-				data={materialIds}
-				keyExtractor={(id) => id}
-				numColumns={3}
-				initialNumToRender={15}
-				windowSize={20}
-				removeClippedSubviews
-				renderItem={({ item }) => <MaterialsImage id={item} />}
-			/>
+			{loading && (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" />
+				</View>
+			)}
+			<SearchFilterBar sheetRef={sheetRef} />
+			<FilterList finalData={finalData} />
+			<BottomSheet
+				ref={sheetRef}
+				snapPoints={snapPoints}
+				index={-1}
+				enablePanDownToClose
+			>
+				<BottomSheetView>
+					<FilterCatalog sheetRef={sheetRef} />
+				</BottomSheetView>
+			</BottomSheet>
 		</>
 	);
 }
