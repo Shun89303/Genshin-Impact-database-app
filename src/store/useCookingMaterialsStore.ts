@@ -3,13 +3,18 @@ import {
 	getAllCookingMaterialImageIds,
 	getAllCookingMaterialsData,
 } from "../services/cooking.materials.services";
+import { cookingIngredients } from "../types/cooking.material";
 
 interface CookingMaterialsState {
 	error: string | null;
+	input: string;
+	details: cookingIngredients[];
 	cache: Record<string, unknown>;
 	loadingId: string | null;
 	materialsObject: Record<string, unknown>;
-	materialIds: string[] | null;
+	materialIds: string[];
+	setInput: (i: string) => void;
+	fetchAllDetails: () => Promise<void>;
 	fetchMaterialsObject: () => Promise<void>;
 	fetchMaterialIds: () => Promise<void>;
 	storeMaterialDetails: (id: string) => void;
@@ -18,6 +23,9 @@ interface CookingMaterialsState {
 export const useCookingMaterialsStore = create<CookingMaterialsState>(
 	(set, get) => ({
 		error: null,
+		input: "",
+		details: [],
+		setInput: (i) => set({ input: i }),
 		cache: {},
 		loadingId: null,
 		materialsObject: {},
@@ -60,6 +68,24 @@ export const useCookingMaterialsStore = create<CookingMaterialsState>(
 				cache: { ...state.cache, [id]: details },
 				loadingId: null,
 			}));
+		},
+		fetchAllDetails: async () => {
+			try {
+				let { details } = get();
+				if (!details.length) {
+					const apiObject = await getAllCookingMaterialsData();
+					const { id: _ignored, ...ingredientsOnly } = apiObject;
+					const normalizedIngredients: cookingIngredients[] = Object.entries(
+						ingredientsOnly
+					).map(([key, value]) => ({
+						id: key,
+						...value,
+					}));
+					set({ details: normalizedIngredients });
+				}
+			} catch (error: any) {
+				set({ error: error.message });
+			}
 		},
 	})
 );
