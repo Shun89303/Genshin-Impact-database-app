@@ -1,72 +1,90 @@
 import { endpoints } from "@/src/api/endpoints";
 import styles from "@/src/components/styles.modules";
+import SearchBar from "@/src/components/utils/commonMaterial/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { useCommonAscensionMaterialsStore } from "@/src/store/useCommonAscensionStore";
 import { Image } from "expo-image";
-import { useEffect } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import { useEffect, useMemo, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const materials = endpoints.materials;
-	const commonAscension = endpoints.commonAscension;
-
-	const fetchMaterialsObject = useCommonAscensionMaterialsStore(
-		(state) => state.fetchMaterialsObject
+	const fetchAllDetails = useCommonAscensionMaterialsStore(
+		(state) => state.fetchAllDetails
 	);
-	const fetchMaterialIds = useCommonAscensionMaterialsStore(
-		(state) => state.fetchMaterialIds
-	);
+	const details = useCommonAscensionMaterialsStore((state) => state.details);
+	const input = useCommonAscensionMaterialsStore((state) => state.input);
 	const materialIds = useCommonAscensionMaterialsStore(
 		(state) => state.materialIds
 	);
 	const error = useCommonAscensionMaterialsStore((state) => state.error);
 
+	const materials = endpoints.materials;
+	const commonAscension = endpoints.commonAscension;
+
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
-		if (!materialIds?.length) {
-			fetchMaterialsObject();
-			fetchMaterialIds();
-			return;
+		const load = async () => {
+			setLoading(true);
+			try {
+				await fetchAllDetails();
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (!details.length) {
+			load();
+		} else {
+			// PREFETCH IMAGES
+			materialIds.forEach((id) => {
+				Image.prefetch(`${BASE_URL}${materials}${commonAscension}/${id}`);
+			});
+		}
+	}, [fetchAllDetails, details, materialIds, materials, commonAscension]);
+
+	const finalData = useMemo(() => {
+		let result = details;
+
+		if (input.trim().length > 0) {
+			const lower = input.toLowerCase();
+			result = result
+				.map((group) => {
+					const filteredItems = group.items.filter((item) =>
+						item.name.toLowerCase().includes(lower)
+					);
+
+					if (filteredItems.length === 0) return null;
+
+					return {
+						...group,
+						items: filteredItems,
+					};
+				})
+				.filter((group) => group !== null);
 		}
 
-		const remainingIds = materialIds.slice(15);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${commonAscension}/${id}`);
-		});
-	}, [
-		materials,
-		commonAscension,
-		fetchMaterialIds,
-		fetchMaterialsObject,
-		materialIds,
-	]);
+		return result;
+	}, [details, input]);
 
 	if (error) {
 		return (
 			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+				<Text>{error}</Text>
 			</View>
 		);
 	}
 
-	if (!materialIds?.length) {
-		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
-			</View>
-		);
-	}
 	return (
 		<>
-			<FlatList
-				data={materialIds}
-				keyExtractor={(id) => id}
-				numColumns={3}
-				initialNumToRender={15}
-				windowSize={20}
-				removeClippedSubviews
-				renderItem={({ item }) => <MaterialsImage id={item} />}
-			/>
+			{loading && (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" />
+				</View>
+			)}
+			<SearchBar />
+			<SearchList finalData={finalData} />
 		</>
 	);
 }
