@@ -3,7 +3,7 @@ import { BASE_URL } from "@/src/config/env";
 import { useCharactersStore } from "@/src/store/useCharactersStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import {} from "react-native-safe-area-context";
 import styles from "../styles.modules";
@@ -22,32 +22,42 @@ export default function CharactersList() {
 	const groupByType = useCharactersStore((state) => state.groupByType);
 
 	const characters = endpoints.characters;
+	const card = endpoints.card;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
 	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-	useEffect(() => {
-		const load = async () => {
-			setLoading(true);
-			try {
-				await fetchAllDetails();
-			} finally {
-				setLoading(false);
-			}
-		};
+	const loadCharacters = useCallback(async () => {
+		setLoading(true);
 
-		if (!details.length) {
-			load();
-		} else {
-			// PREFETCH IMAGES
-			ids.forEach((id) => {
-				Image.prefetch(`${BASE_URL}${characters}/${id}/card`);
-			});
+		try {
+			await fetchAllDetails();
+		} finally {
 			setLoading(false);
 		}
-	}, [fetchAllDetails, ids, characters, details]);
+	}, [fetchAllDetails]);
+
+	useEffect(() => {
+		loadCharacters();
+	}, [loadCharacters]);
+
+	useEffect(() => {
+		if (!ids.length) return;
+
+		const remainingIds = ids.slice(9);
+		remainingIds.forEach((id) => {
+			Image.prefetch(`${BASE_URL}${characters}/${id}${card}`);
+		});
+	}, [ids, characters, card]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadCharacters();
+		setRefreshing(false);
+	}, [loadCharacters]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -79,29 +89,16 @@ export default function CharactersList() {
 		);
 	}
 
-	if (!selectedType) {
-		return (
-			<>
-				<SearchFilterBar sheetRef={sheetRef} />
-				<SearchList finalData={finalData} />
-				<BottomSheet
-					ref={sheetRef}
-					snapPoints={snapPoints}
-					index={-1}
-					enablePanDownToClose
-				>
-					<BottomSheetView>
-						<FilterCatalog sheetRef={sheetRef} />
-					</BottomSheetView>
-				</BottomSheet>
-			</>
-		);
-	}
+	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
 		<>
 			<SearchFilterBar sheetRef={sheetRef} />
-			<FilterList finalData={finalData} />
+			<ListComponent
+				finalData={finalData}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
+			/>
 			<BottomSheet
 				ref={sheetRef}
 				snapPoints={snapPoints}

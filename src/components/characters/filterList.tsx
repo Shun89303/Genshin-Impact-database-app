@@ -4,17 +4,23 @@ import CharacterImage from "./characterImage";
 
 export default function FilterList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	finalData: Character[] | { label: string; data: Character[] }[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	return (
 		<View>
 			<FlatList
 				data={finalData as { label: string; data: Character[] }[]}
 				keyExtractor={(item) => item.label}
-				initialNumToRender={6}
+				initialNumToRender={9}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<View
 						style={{
