@@ -6,7 +6,7 @@ import {
 } from "../services/nations.services";
 
 interface NationsState {
-	ids: string[] | null;
+	ids: string[];
 	error: string | null;
 	cache: Record<string, unknown>;
 	loadingId: string | null;
@@ -17,13 +17,15 @@ interface NationsState {
 }
 
 export const useNationsStore = create<NationsState>((set, get) => ({
-	ids: null,
+	ids: [],
 	error: null,
 	cache: {},
 	loadingId: null,
 	fetchNationsIds: async () => {
+		const { ids } = get();
+		if (ids.length) return;
 		try {
-			const ids: string[] = await getNationsIds();
+			const ids = await getNationsIds();
 			set({ ids });
 		} catch (error: any) {
 			set({ error: error.message });
