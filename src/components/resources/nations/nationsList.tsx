@@ -2,7 +2,7 @@ import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { useNationsStore } from "@/src/store/useNationsStore";
 import { Image } from "expo-image";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import styles from "../../styles.modules";
 import NationImage from "./nationImage";
@@ -11,20 +11,40 @@ export default function NationsList() {
 	const fetchNationsIds = useNationsStore((state) => state.fetchNationsIds);
 	const ids = useNationsStore((state) => state.ids);
 	const { error } = useNationsStore();
+
 	const nations = endpoints.nations;
 	const icon = endpoints.icon;
 
-	useEffect(() => {
-		if (!ids || ids.length === 0) {
-			fetchNationsIds();
-			return;
-		}
+	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-		const remainingIds = ids.slice(10);
-		remainingIds.forEach((id) => {
+	const loadMaterials = useCallback(async () => {
+		setLoading(true);
+
+		try {
+			await fetchNationsIds();
+		} finally {
+			setLoading(false);
+		}
+	}, [fetchNationsIds]);
+
+	useEffect(() => {
+		loadMaterials();
+	}, [loadMaterials]);
+
+	useEffect(() => {
+		if (!ids.length) return;
+
+		ids.forEach((id) => {
 			Image.prefetch(`${BASE_URL}${nations}/${id}${icon}`);
 		});
-	}, [fetchNationsIds, ids, nations, icon]);
+	}, [ids, nations, icon]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadMaterials();
+		setRefreshing(false);
+	}, [loadMaterials]);
 
 	if (error)
 		return (
@@ -33,12 +53,22 @@ export default function NationsList() {
 			</View>
 		);
 
-	if (!ids?.length)
+	if (loading) {
 		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+			<View>
+				<ActivityIndicator
+					size="large"
+					style={{
+						position: "absolute",
+						top: 30,
+						left: 0,
+						right: 0,
+						bottom: 0,
+					}}
+				/>
 			</View>
 		);
+	}
 
 	return (
 		<>
@@ -46,9 +76,9 @@ export default function NationsList() {
 				data={ids}
 				keyExtractor={(id) => id}
 				numColumns={3}
-				initialNumToRender={9}
-				windowSize={20}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => <NationImage id={item} />}
 			/>
 		</>
