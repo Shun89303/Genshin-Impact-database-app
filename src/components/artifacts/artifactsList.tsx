@@ -3,7 +3,7 @@ import { BASE_URL } from "@/src/config/env";
 import { useArtifactsStore } from "@/src/store/useArtifactsStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import styles from "../styles.modules";
 import FilterCatalog from "../utils/artifact/filterCatalog";
@@ -27,27 +27,36 @@ export default function ArtifactsList() {
 	const snapPoints = useMemo(() => ["40%"], []);
 
 	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-	useEffect(() => {
-		const load = async () => {
-			setLoading(true);
-			try {
-				await fetchAllDetails();
-			} finally {
-				setLoading(false);
-			}
-		};
+	const loadArtifacts = useCallback(async () => {
+		setLoading(true);
 
-		if (!details.length) {
-			load();
-		} else {
-			// PREFETCH IMAGES
-			ids.forEach((id) => {
-				Image.prefetch(`${BASE_URL}${artifacts}/${id}${circletOfLogos}`);
-			});
+		try {
+			await fetchAllDetails();
+		} finally {
 			setLoading(false);
 		}
-	}, [fetchAllDetails, ids, artifacts, details, circletOfLogos]);
+	}, [fetchAllDetails]);
+
+	useEffect(() => {
+		loadArtifacts();
+	}, [loadArtifacts]);
+
+	useEffect(() => {
+		if (!ids.length) return;
+
+		const remainingIds = ids.slice(15);
+		remainingIds.forEach((id) => {
+			Image.prefetch(`${BASE_URL}${artifacts}/${id}${circletOfLogos}`);
+		});
+	}, [ids, artifacts, circletOfLogos]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadArtifacts();
+		setRefreshing(false);
+	}, [loadArtifacts]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -79,29 +88,16 @@ export default function ArtifactsList() {
 		);
 	}
 
-	if (!selectedType) {
-		return (
-			<>
-				<SearchFilterBar sheetRef={sheetRef} />
-				<SearchList finalData={finalData} />
-				<BottomSheet
-					ref={sheetRef}
-					snapPoints={snapPoints}
-					index={-1}
-					enablePanDownToClose
-				>
-					<BottomSheetView>
-						<FilterCatalog sheetRef={sheetRef} />
-					</BottomSheetView>
-				</BottomSheet>
-			</>
-		);
-	}
+	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
 		<>
 			<SearchFilterBar sheetRef={sheetRef} />
-			<FilterList finalData={finalData} />
+			<ListComponent
+				finalData={finalData}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
+			/>
 			<BottomSheet
 				ref={sheetRef}
 				snapPoints={snapPoints}

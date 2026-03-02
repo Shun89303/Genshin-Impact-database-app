@@ -54,15 +54,18 @@ export const useArtifactsStore = create<ArtifactsState>((set, get) => ({
 	},
 	fetchAllDetails: async () => {
 		try {
-			let { ids, fetchArtifactsIds } = get();
+			let { ids, fetchArtifactsIds, details } = get();
 			if (!ids.length) {
 				await fetchArtifactsIds();
 				ids = get().ids;
 			}
-			const details = await Promise.all(
+			if (details.length) {
+				return;
+			}
+			const fetchedDetails = await Promise.all(
 				ids.map((id) => getArtifactDetails(id))
 			);
-			set({ details });
+			set({ details: fetchedDetails });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
