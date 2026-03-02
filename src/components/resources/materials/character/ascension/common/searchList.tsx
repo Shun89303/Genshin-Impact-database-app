@@ -8,9 +8,13 @@ import MaterialsImage from "./materialsImage";
 
 export default function SearchList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
 	finalData: NormalizedCommonAscensionMaterialGroup[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	const materials = endpoints.materials;
 	const commonAscension = endpoints.commonAscension;
@@ -32,10 +36,13 @@ export default function SearchList({
 				data={flatItems}
 				keyExtractor={(item) => item.id}
 				numColumns={3}
+				initialNumToRender={12}
 				columnWrapperStyle={{
 					justifyContent: "space-between",
 					marginBottom: 10,
 				}}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => <MaterialsImage id={item.id} />}
 			/>
 		</View>

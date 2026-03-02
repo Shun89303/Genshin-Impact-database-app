@@ -36,11 +36,11 @@ export default function SearchList({
 				initialNumToRender={9}
 				windowSize={21}
 				removeClippedSubviews
-				refreshing={refreshing}
-				onRefresh={onRefresh}
 				contentContainerStyle={{
 					gap: 10,
 				}}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<MaterialContainer id={item.id} characters={item.characters} />
 				)}
