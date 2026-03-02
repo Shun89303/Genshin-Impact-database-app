@@ -4,17 +4,23 @@ import FoodImage from "./foodImage";
 
 export default function FilterList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	finalData: food[] | { label: string; data: food[] }[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	return (
 		<View>
 			<FlatList
 				data={finalData as { label: string; data: food[] }[]}
 				keyExtractor={(item) => item.label}
-				initialNumToRender={6}
+				initialNumToRender={12}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<View
 						style={{

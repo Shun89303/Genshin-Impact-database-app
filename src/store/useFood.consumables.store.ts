@@ -88,7 +88,7 @@ export const useFoodStore = create<FoodState>((set, get) => ({
 	fetchAllDetails: async () => {
 		try {
 			let { foodIds, details, fetchFoodImageIds } = get();
-			if (!foodIds?.length) {
+			if (!foodIds.length) {
 				await fetchFoodImageIds();
 			}
 			if (!details.length) {
