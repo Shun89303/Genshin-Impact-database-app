@@ -6,8 +6,8 @@ import {
 } from "../services/bosses.services";
 
 interface BossesState {
-	ids: string[] | null;
 	error: string | null;
+	ids: string[];
 	cache: Record<string, unknown>;
 	loadingId: string | null;
 	clearCacheForId?: (id: string) => void;
@@ -17,13 +17,17 @@ interface BossesState {
 }
 
 export const useBossesStore = create<BossesState>((set, get) => ({
-	ids: null,
+	ids: [],
 	error: null,
 	cache: {},
 	loadingId: null,
 	fetchBossesIds: async () => {
+		const { ids } = get();
+		if (ids.length) {
+			return;
+		}
 		try {
-			const ids: string[] = await getBossesIds();
+			const ids = await getBossesIds();
 			set({ ids });
 		} catch (error: any) {
 			set({ error: error.message });

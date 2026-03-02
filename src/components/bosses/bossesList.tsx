@@ -2,7 +2,7 @@ import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { useBossesStore } from "@/src/store/useBossesStore";
 import { Image } from "expo-image";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import styles from "../styles.modules";
 import BossImage from "./bossImage";
@@ -11,21 +11,42 @@ export default function BossesList() {
 	const fetchBosssesIds = useBossesStore((state) => state.fetchBossesIds);
 	const ids = useBossesStore((state) => state.ids);
 	const { error } = useBossesStore();
+
 	const boss = endpoints.boss;
 	const weeklyBoss = endpoints.weeklyBoss;
 	const icon = endpoints.icon;
 
-	useEffect(() => {
-		if (!ids || ids.length === 0) {
-			fetchBosssesIds();
-			return;
-		}
+	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-		const remainingIds = ids.slice(5);
+	const loadBosses = useCallback(async () => {
+		setLoading(true);
+
+		try {
+			await fetchBosssesIds();
+		} finally {
+			setLoading(false);
+		}
+	}, [fetchBosssesIds]);
+
+	useEffect(() => {
+		loadBosses();
+	}, [loadBosses]);
+
+	useEffect(() => {
+		if (!ids.length) return;
+
+		const remainingIds = ids.slice(3);
 		remainingIds.forEach((id) => {
 			Image.prefetch(`${BASE_URL}${boss}${weeklyBoss}/${id}${icon}`);
 		});
-	}, [fetchBosssesIds, boss, weeklyBoss, icon, ids]);
+	}, [ids, boss, weeklyBoss, icon]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadBosses();
+		setRefreshing(false);
+	}, [loadBosses]);
 
 	if (error)
 		return (
@@ -34,24 +55,27 @@ export default function BossesList() {
 			</View>
 		);
 
-	if (!ids?.length)
+	if (loading) {
 		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<ActivityIndicator size="large" />
 			</View>
 		);
+	}
 
 	return (
-		<>
+		<View style={{ alignItems: "center" }}>
 			<FlatList
 				data={ids}
 				keyExtractor={(id) => id}
 				numColumns={3}
-				initialNumToRender={5}
-				windowSize={5}
+				initialNumToRender={3}
+				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => <BossImage id={item} />}
 			/>
-		</>
+		</View>
 	);
 }
