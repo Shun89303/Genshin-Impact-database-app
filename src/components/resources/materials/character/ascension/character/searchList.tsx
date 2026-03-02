@@ -4,8 +4,12 @@ import MaterialsImage from "./materialsImage";
 
 export default function SearchList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	finalData: MaterialTier[] | { label: string; data: MaterialTier[] }[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	return (
 		<View style={{ alignItems: "center" }}>
@@ -13,9 +17,11 @@ export default function SearchList({
 				data={finalData as MaterialTier[]}
 				keyExtractor={(item) => item.id}
 				numColumns={4}
-				initialNumToRender={6}
+				initialNumToRender={20}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<View
 						key={item.id}
