@@ -4,8 +4,12 @@ import MaterialsImage from "./materialsImage";
 
 export default function FilterList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	finalData: wam[] | { label: string; data: wam[] }[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	return (
 		<View>
@@ -15,6 +19,8 @@ export default function FilterList({
 				initialNumToRender={6}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<View
 						style={{
