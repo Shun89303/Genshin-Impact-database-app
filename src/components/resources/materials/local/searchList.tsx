@@ -4,18 +4,24 @@ import MaterialsImage from "./materialsImage";
 
 export default function SearchList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	finalData: LocalSpecialties[] | { label: string; data: LocalSpecialties[] }[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	return (
 		<View style={{ alignItems: "center" }}>
 			<FlatList
 				data={finalData as LocalSpecialties[]}
 				keyExtractor={(item) => item.id}
-				initialNumToRender={6}
+				initialNumToRender={12}
 				windowSize={21}
 				removeClippedSubviews
 				numColumns={3}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<View
 						key={item.id}
