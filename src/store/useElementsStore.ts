@@ -6,7 +6,7 @@ import {
 } from "../services/elements.services";
 
 interface ElementsState {
-	ids: string[] | null;
+	ids: string[];
 	error: string | null;
 	cache: Record<string, unknown>;
 	loadingId: string | null;
@@ -17,11 +17,13 @@ interface ElementsState {
 }
 
 export const useElementsStore = create<ElementsState>((set, get) => ({
-	ids: null,
+	ids: [],
 	error: null,
 	cache: {},
 	loadingId: null,
 	fetchElementsIds: async () => {
+		const { ids } = get();
+		if (ids.length) return;
 		try {
 			const ids: string[] = await getElementsIds();
 			set({ ids });

@@ -31,7 +31,7 @@ export default function ElementImage({ id }: any) {
 				{loading && <ActivityIndicator />}
 				<Image
 					source={{ uri: `${BASE_URL}${elements}/${id}${icon}` }}
-					style={{ width: 100, height: 100, margin: 4 }}
+					style={{ width: 45, height: 45, margin: 4 }}
 					cachePolicy="memory-disk"
 					onLoad={() => setLoading(false)}
 				/>
