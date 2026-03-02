@@ -4,7 +4,7 @@ import SearchBar from "@/src/components/utils/talentBoss/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { useTalentBossMaterialsStore } from "@/src/store/useTalentBossStore";
 import { Image } from "expo-image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import SearchList from "./searchList";
 
@@ -21,27 +21,36 @@ export default function MaterialsList() {
 	const talentBoss = endpoints.talentBoss;
 
 	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-	useEffect(() => {
-		const load = async () => {
-			setLoading(true);
-			try {
-				await fetchAllDetails();
-			} finally {
-				setLoading(false);
-			}
-		};
+	const loadMaterials = useCallback(async () => {
+		setLoading(true);
 
-		if (!details.length) {
-			load();
-		} else {
-			// PREFETCH IMAGES
-			materialIds.forEach((id) => {
-				Image.prefetch(`${BASE_URL}${materials}${talentBoss}/${id}`);
-			});
+		try {
+			await fetchAllDetails();
+		} finally {
 			setLoading(false);
 		}
-	}, [fetchAllDetails, materials, details, materialIds, talentBoss]);
+	}, [fetchAllDetails]);
+
+	useEffect(() => {
+		loadMaterials();
+	}, [loadMaterials]);
+
+	useEffect(() => {
+		if (!materialIds.length) return;
+
+		const remainingIds = materialIds.slice(9);
+		remainingIds.forEach((id) => {
+			Image.prefetch(`${BASE_URL}${materials}${talentBoss}/${id}`);
+		});
+	}, [materialIds, materials, talentBoss]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadMaterials();
+		setRefreshing(false);
+	}, [loadMaterials]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -66,6 +75,23 @@ export default function MaterialsList() {
 		);
 	}
 
+	if (loading) {
+		return (
+			<View>
+				<ActivityIndicator
+					size="large"
+					style={{
+						position: "absolute",
+						top: 30,
+						left: 0,
+						right: 0,
+						bottom: 0,
+					}}
+				/>
+			</View>
+		);
+	}
+
 	return (
 		<>
 			{loading && (
@@ -74,7 +100,11 @@ export default function MaterialsList() {
 				</View>
 			)}
 			<SearchBar />
-			<SearchList finalData={finalData} />
+			<SearchList
+				finalData={finalData}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
+			/>
 		</>
 	);
 }
