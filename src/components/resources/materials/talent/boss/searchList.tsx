@@ -8,9 +8,13 @@ import MaterialContainer from "./materialContainer";
 
 export default function SearchList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
 	finalData: TalentBoss[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	const characters = endpoints.characters;
 	const gachaCard = endpoints.gachaCard;
@@ -29,9 +33,11 @@ export default function SearchList({
 				data={finalData}
 				keyExtractor={(item) => item.id}
 				numColumns={3}
-				initialNumToRender={6}
+				initialNumToRender={9}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				contentContainerStyle={{
 					gap: 10,
 				}}
