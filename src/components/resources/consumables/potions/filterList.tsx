@@ -4,17 +4,22 @@ import PotionImage from "./potionImage";
 
 export default function FilterList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	finalData: potion[] | { label: string; data: potion[] }[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	return (
 		<View>
 			<FlatList
 				data={finalData as { label: string; data: potion[] }[]}
 				keyExtractor={(item) => item.label}
-				initialNumToRender={6}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<View
 						style={{
