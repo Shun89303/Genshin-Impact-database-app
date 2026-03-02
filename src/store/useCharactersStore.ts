@@ -54,15 +54,18 @@ export const useCharactersStore = create<CharactersState>((set, get) => ({
 	},
 	fetchAllDetails: async () => {
 		try {
-			let { ids, fetchCharactersIds } = get();
+			let { ids, fetchCharactersIds, details } = get();
 			if (!ids.length) {
 				await fetchCharactersIds();
 				ids = get().ids;
 			}
-			const details = await Promise.all(
+			if (details.length) {
+				return;
+			}
+			const fetchedDetails = await Promise.all(
 				ids.map((id) => getCharacterDetails(id))
 			);
-			set({ details });
+			set({ details: fetchedDetails });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
