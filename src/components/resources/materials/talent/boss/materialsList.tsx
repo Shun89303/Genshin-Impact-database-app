@@ -94,11 +94,6 @@ export default function MaterialsList() {
 
 	return (
 		<>
-			{loading && (
-				<View style={styles.loadingContainer}>
-					<ActivityIndicator size="large" />
-				</View>
-			)}
 			<SearchBar />
 			<SearchList
 				finalData={finalData}

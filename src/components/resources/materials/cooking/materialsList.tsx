@@ -4,7 +4,7 @@ import SearchBar from "@/src/components/utils/cim/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { useCookingMaterialsStore } from "@/src/store/useCookingMaterialsStore";
 import { Image } from "expo-image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import SearchList from "./searchList";
 
@@ -21,27 +21,36 @@ export default function MaterialsList() {
 	const cookingIngredients = endpoints.cookingIngredients;
 
 	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-	useEffect(() => {
-		const load = async () => {
-			setLoading(true);
-			try {
-				await fetchAllDetails();
-			} finally {
-				setLoading(false);
-			}
-		};
+	const loadMaterials = useCallback(async () => {
+		setLoading(true);
 
-		if (!details.length) {
-			load();
-		} else {
-			// PREFETCH IMAGES
-			materialIds.forEach((id) => {
-				Image.prefetch(`${BASE_URL}${materials}${cookingIngredients}/${id}`);
-			});
+		try {
+			await fetchAllDetails();
+		} finally {
 			setLoading(false);
 		}
-	}, [materials, cookingIngredients, fetchAllDetails, materialIds, details]);
+	}, [fetchAllDetails]);
+
+	useEffect(() => {
+		loadMaterials();
+	}, [loadMaterials]);
+
+	useEffect(() => {
+		if (!materialIds.length) return;
+
+		const remainingIds = materialIds.slice(15);
+		remainingIds.forEach((id) => {
+			Image.prefetch(`${BASE_URL}${materials}${cookingIngredients}/${id}`);
+		});
+	}, [materialIds, materials, cookingIngredients]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadMaterials();
+		setRefreshing(false);
+	}, [loadMaterials]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -64,15 +73,31 @@ export default function MaterialsList() {
 		);
 	}
 
+	if (loading) {
+		return (
+			<View>
+				<ActivityIndicator
+					size="large"
+					style={{
+						position: "absolute",
+						top: 30,
+						left: 0,
+						right: 0,
+						bottom: 0,
+					}}
+				/>
+			</View>
+		);
+	}
+
 	return (
 		<>
-			{loading && (
-				<View style={styles.loadingContainer}>
-					<ActivityIndicator size="large" />
-				</View>
-			)}
 			<SearchBar />
-			<SearchList finalData={finalData} />
+			<SearchList
+				finalData={finalData}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
+			/>
 		</>
 	);
 }
