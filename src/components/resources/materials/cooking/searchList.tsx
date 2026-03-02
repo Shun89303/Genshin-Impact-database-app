@@ -8,9 +8,13 @@ import MaterialsImage from "./materialsImage";
 
 export default function SearchList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
 	finalData: cookingIngredients[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	const materials = endpoints.materials;
 	const cookingIngredients = endpoints.cookingIngredients;
@@ -28,13 +32,15 @@ export default function SearchList({
 			<FlatList
 				data={finalData}
 				keyExtractor={(item) => item.id}
-				initialNumToRender={6}
+				initialNumToRender={15}
 				numColumns={3}
 				contentContainerStyle={{
 					gap: 10,
 				}}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => <MaterialsImage id={item.id} />}
 			/>
 		</View>
