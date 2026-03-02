@@ -75,10 +75,13 @@ export default function NationsList() {
 			<FlatList
 				data={ids}
 				keyExtractor={(id) => id}
-				numColumns={3}
+				horizontal
 				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
+				contentContainerStyle={{
+					marginTop: 20,
+				}}
 				renderItem={({ item }) => <NationImage id={item} />}
 			/>
 		</>

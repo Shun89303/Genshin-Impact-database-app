@@ -2,7 +2,7 @@ import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { useElementsStore } from "@/src/store/useElementsStore";
 import { Image } from "expo-image";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import styles from "../../styles.modules";
 import ElementImage from "./elementImage";
@@ -11,20 +11,40 @@ export default function ElementsList() {
 	const fetchElementsIds = useElementsStore((state) => state.fetchElementsIds);
 	const ids = useElementsStore((state) => state.ids);
 	const { error } = useElementsStore();
+
 	const elements = endpoints.elements;
 	const icon = endpoints.icon;
 
-	useEffect(() => {
-		if (!ids || ids.length === 0) {
-			fetchElementsIds();
-			return;
-		}
+	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-		const remainingIds = ids.slice(10);
-		remainingIds.forEach((id) => {
+	const loadMaterials = useCallback(async () => {
+		setLoading(true);
+
+		try {
+			await fetchElementsIds();
+		} finally {
+			setLoading(false);
+		}
+	}, [fetchElementsIds]);
+
+	useEffect(() => {
+		loadMaterials();
+	}, [loadMaterials]);
+
+	useEffect(() => {
+		if (!ids.length) return;
+
+		ids.forEach((id) => {
 			Image.prefetch(`${BASE_URL}${elements}/${id}${icon}`);
 		});
-	}, [fetchElementsIds, ids, elements, icon]);
+	}, [ids, elements, icon]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadMaterials();
+		setRefreshing(false);
+	}, [loadMaterials]);
 
 	if (error)
 		return (
@@ -33,22 +53,35 @@ export default function ElementsList() {
 			</View>
 		);
 
-	if (!ids?.length)
+	if (loading) {
 		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
+			<View>
+				<ActivityIndicator
+					size="large"
+					style={{
+						position: "absolute",
+						top: 30,
+						left: 0,
+						right: 0,
+						bottom: 0,
+					}}
+				/>
 			</View>
 		);
+	}
 
 	return (
 		<>
 			<FlatList
 				data={ids}
 				keyExtractor={(id) => id}
-				numColumns={3}
-				initialNumToRender={9}
-				windowSize={20}
+				horizontal
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
+				contentContainerStyle={{
+					marginTop: 20,
+				}}
 				renderItem={({ item }) => <ElementImage id={item} />}
 			/>
 		</>
