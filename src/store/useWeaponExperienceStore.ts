@@ -9,7 +9,7 @@ interface WeaponExperienceMaterialsState {
 	cache: Record<string, unknown>;
 	loadingId: string | null;
 	materialsObject: Record<string, unknown>;
-	materialIds: string[] | null;
+	materialIds: string[];
 	fetchMaterialsObject: () => Promise<void>;
 	fetchMaterialIds: () => Promise<void>;
 	storeMaterialDetails: (id: string) => void;
@@ -39,7 +39,7 @@ export const useWeaponExperienceMaterialsStore =
 			try {
 				const { materialIds } = get();
 
-				if (!materialIds?.length) {
+				if (!materialIds.length) {
 					const materialIds = await getAllWeaponExperienceMaterialImageIds();
 					set({ materialIds });
 				}
