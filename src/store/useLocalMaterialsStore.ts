@@ -15,7 +15,7 @@ interface LocalMaterialsState {
 	cache: Record<string, unknown>;
 	loadingId: string | null;
 	materialsObject: Record<string, unknown>;
-	materialIds: string[] | null;
+	materialIds: string[];
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
 	fetchMaterialsObject: () => Promise<void>;
@@ -59,7 +59,7 @@ export const useLocalMaterialsStore = create<LocalMaterialsState>(
 			try {
 				const { materialIds } = get();
 
-				if (!materialIds?.length) {
+				if (!materialIds.length) {
 					const materialIds = await getAllLocalMaterialImageIds();
 					set({ materialIds });
 				}
