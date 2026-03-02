@@ -4,17 +4,23 @@ import WeaponImage from "./weaponImage";
 
 export default function FilterList({
 	finalData,
+	refreshing,
+	onRefresh,
 }: {
 	finalData: Weapon[] | { label: string; data: Weapon[] }[];
+	refreshing: boolean;
+	onRefresh: any;
 }) {
 	return (
 		<View>
 			<FlatList
 				data={finalData as { label: string; data: Weapon[] }[]}
 				keyExtractor={(item) => item.label}
-				initialNumToRender={6}
+				initialNumToRender={15}
 				windowSize={21}
 				removeClippedSubviews
+				refreshing={refreshing}
+				onRefresh={onRefresh}
 				renderItem={({ item }) => (
 					<View
 						style={{

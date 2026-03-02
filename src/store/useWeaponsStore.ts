@@ -51,13 +51,18 @@ export const useWeaponsStore = create<WeaponsState>((set, get) => ({
 	},
 	fetchAllDetails: async () => {
 		try {
-			let { ids, fetchWeaponsIds } = get();
+			let { ids, fetchWeaponsIds, details } = get();
 			if (!ids.length) {
 				await fetchWeaponsIds();
 				ids = get().ids;
 			}
-			const details = await Promise.all(ids.map((id) => getWeaponDetails(id)));
-			set({ details });
+			if (details.length) {
+				return;
+			}
+			const fetchedDetails = await Promise.all(
+				ids.map((id) => getWeaponDetails(id))
+			);
+			set({ details: fetchedDetails });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
