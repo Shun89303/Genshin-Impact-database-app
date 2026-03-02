@@ -4,7 +4,7 @@ import SearchBar from "@/src/components/utils/bossMaterial/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { useBossMaterialsStore } from "@/src/store/useBossMaterialsStore";
 import { Image } from "expo-image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import SearchList from "./searchList";
 
@@ -21,25 +21,36 @@ export default function MaterialsList() {
 	const bossMaterials = endpoints.bossMaterials;
 
 	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
+
+	const loadMaterials = useCallback(async () => {
+		setLoading(true);
+
+		try {
+			await fetchAllDetails();
+		} finally {
+			setLoading(false);
+		}
+	}, [fetchAllDetails]);
 
 	useEffect(() => {
-		const load = async () => {
-			setLoading(true);
-			try {
-				await fetchAllDetails();
-			} finally {
-				setLoading(false);
-			}
-		};
+		loadMaterials();
+	}, [loadMaterials]);
 
-		if (!details.length) {
-			load();
-		} else {
-			materialIds.forEach((id) => {
-				Image.prefetch(`${BASE_URL}${materials}${bossMaterials}/${id}`);
-			});
-		}
-	}, [materials, bossMaterials, fetchAllDetails, materialIds, details]);
+	useEffect(() => {
+		if (!materialIds.length) return;
+
+		const remainingIds = materialIds.slice(15);
+		remainingIds.forEach((id) => {
+			Image.prefetch(`${BASE_URL}${materials}${bossMaterials}/${id}`);
+		});
+	}, [materialIds, materials, bossMaterials]);
+
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await loadMaterials();
+		setRefreshing(false);
+	}, [loadMaterials]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -61,15 +72,31 @@ export default function MaterialsList() {
 		);
 	}
 
+	if (loading) {
+		return (
+			<View>
+				<ActivityIndicator
+					size="large"
+					style={{
+						position: "absolute",
+						top: 30,
+						left: 0,
+						right: 0,
+						bottom: 0,
+					}}
+				/>
+			</View>
+		);
+	}
+
 	return (
 		<>
-			{loading && (
-				<View style={styles.loadingContainer}>
-					<ActivityIndicator size="large" />
-				</View>
-			)}
 			<SearchBar />
-			<SearchList finalData={finalData} />
+			<SearchList
+				finalData={finalData}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
+			/>
 		</>
 	);
 }
