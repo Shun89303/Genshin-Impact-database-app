@@ -46,7 +46,9 @@ export default function MaterialsList() {
 		if (input.trim().length > 0) {
 			const lower = input.toLowerCase();
 			result = result.filter((talentBook) =>
-				talentBook.items.some((book) => book.name.toLowerCase().includes(lower))
+				talentBook.items?.some((book) =>
+					book.name.toLowerCase().includes(lower)
+				)
 			);
 		}
 

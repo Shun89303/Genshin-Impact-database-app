@@ -4,12 +4,12 @@ import {
 	getAllTalentBookMaterialImageIds,
 	getAllTalentBookMaterialsData,
 } from "../services/talent.book.materials.services";
-import { TalentBook } from "../types/talent.book";
+import { Normalized } from "../types/talent.book";
 
 interface TalentBookMaterialsState {
 	error: string | null;
 	input: string;
-	details: TalentBook[];
+	details: Normalized[];
 	selectedType: "availability" | "rarity" | null;
 	setSelectedType: (
 		type: "availability" | "rarity" | null,
@@ -17,17 +17,14 @@ interface TalentBookMaterialsState {
 	) => void;
 	cache: Record<string, unknown>;
 	loadingId: string | null;
-	materialsObject: Record<string, unknown>;
 	materialIds: string[];
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchMaterialsObject: () => Promise<void>;
 	fetchMaterialIds: () => Promise<void>;
-	storeMaterialDetails: (id: string) => void;
 	groupByType: (
-		books: TalentBook[],
+		books: Normalized[],
 		type: "availability" | "rarity"
-	) => { label: string; data: TalentBook[] }[];
+	) => { label: string; data: Normalized[] }[];
 }
 
 export const useTalentBookMaterialsStore = create<TalentBookMaterialsState>(
@@ -43,21 +40,7 @@ export const useTalentBookMaterialsStore = create<TalentBookMaterialsState>(
 		setInput: (i) => set({ input: i }),
 		cache: {},
 		loadingId: null,
-		materialsObject: {},
 		materialIds: [],
-		fetchMaterialsObject: async () => {
-			const { materialsObject } = get();
-			if (Object.keys(materialsObject).length > 0) return;
-			try {
-				const allMaterials = await getAllTalentBookMaterialsData();
-				const allMaterialsArray = Object.entries(allMaterials);
-				const withoutListItem = allMaterialsArray.slice(0, -1);
-				const materialsObject = Object.fromEntries(withoutListItem);
-				set({ materialsObject });
-			} catch (error: any) {
-				set({ error: error.message });
-			}
-		},
 		fetchMaterialIds: async () => {
 			try {
 				const { materialIds } = get();
@@ -70,26 +53,12 @@ export const useTalentBookMaterialsStore = create<TalentBookMaterialsState>(
 				set({ error: error.message });
 			}
 		},
-		storeMaterialDetails: (id) => {
-			const { materialsObject, cache } = get();
-			if (cache[id]) {
-				set({ loadingId: null });
-				return;
-			}
-
-			set({ loadingId: id });
-			const details = materialsObject[id];
-			set((state) => ({
-				cache: { ...state.cache, [id]: details },
-				loadingId: null,
-			}));
-		},
 		fetchAllDetails: async () => {
 			try {
 				let { details } = get();
 				if (!details.length) {
 					const apiObject = await getAllTalentBookMaterialsData();
-					const { id: _ignored, ...booksOnly } = apiObject;
+					const { id, ...booksOnly } = apiObject;
 					const normalizedBooks = Object.entries(booksOnly).map(
 						([key, value]) => ({
 							id: key,
@@ -110,12 +79,12 @@ export const useTalentBookMaterialsStore = create<TalentBookMaterialsState>(
 					const filteredBooks = books
 						.map((book) => {
 							if (type === "availability" && typeof option === "string") {
-								return book.availability.includes(option) ? book : null;
+								return book.availability?.includes(option) ? book : null;
 							} else {
-								const filteredItems = book.items.filter(
+								const filteredItems = book.items?.filter(
 									(item) => item.rarity === option
 								);
-								if (filteredItems.length === 0) return null;
+								if (filteredItems?.length === 0) return null;
 
 								return {
 									...book,
@@ -127,7 +96,7 @@ export const useTalentBookMaterialsStore = create<TalentBookMaterialsState>(
 
 					return {
 						label: typeof option === "number" ? `${option} stars` : option,
-						data: filteredBooks as TalentBook[],
+						data: filteredBooks as Normalized[],
 					};
 				})
 				.filter((group) => group.data.length > 0);
