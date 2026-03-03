@@ -1,21 +1,20 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
+import { useArtifacts } from "@/src/hooks/useArtifacts";
 import { useArtifactsStore } from "@/src/store/useArtifactsStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
-import styles from "../../styles.modules";
+import { useEffect, useMemo, useRef } from "react";
+import EmptyState from "../../ui/EmptyState";
+import ErrorState from "../../ui/ErrorState";
+import ScreenLoader from "../../ui/ScreenLoader";
 import FilterCatalog from "../../utils/filter/artifact/filterCatalog";
 import SearchFilterBar from "../../utils/filter/artifact/searchFilterBar";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function ArtifactsList() {
-	const fetchAllDetails = useArtifactsStore((state) => state.fetchAllDetails);
 	const ids = useArtifactsStore((state) => state.ids);
-	const error = useArtifactsStore((state) => state.error);
-	const details = useArtifactsStore((state) => state.details);
 	const input = useArtifactsStore((state) => state.input);
 	const selectedType = useArtifactsStore((state) => state.selectedType);
 	const groupByType = useArtifactsStore((state) => state.groupByType);
@@ -26,22 +25,7 @@ export default function ArtifactsList() {
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadArtifacts = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchAllDetails();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchAllDetails]);
-
-	useEffect(() => {
-		loadArtifacts();
-	}, [loadArtifacts]);
+	const { details, error, isLoading, isRefreshing, refetch } = useArtifacts();
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -51,12 +35,6 @@ export default function ArtifactsList() {
 			Image.prefetch(`${BASE_URL}${artifacts}/${id}${circletOfLogos}`);
 		});
 	}, [ids, artifacts, circletOfLogos]);
-
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadArtifacts();
-		setRefreshing(false);
-	}, [loadArtifacts]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -73,20 +51,10 @@ export default function ArtifactsList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-
-	if (loading) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<ActivityIndicator size="large" />
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No characters found"} onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
@@ -95,8 +63,8 @@ export default function ArtifactsList() {
 			<SearchFilterBar sheetRef={sheetRef} />
 			<ListComponent
 				finalData={finalData}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
 			<BottomSheet
 				ref={sheetRef}
