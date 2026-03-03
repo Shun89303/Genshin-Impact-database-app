@@ -1,4 +1,4 @@
-import CharacterDetails from "@/src/components/characters/characterDetails";
+import CharacterDetails from "@/src/components/screens/characters/characterDetails";
 import styles from "@/src/components/styles.modules";
 import { useCharactersStore } from "@/src/store/useCharactersStore";
 import { useFocusEffect } from "@react-navigation/native";

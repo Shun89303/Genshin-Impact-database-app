@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FILTER_CATEGORIES } from "../config/wamCategory/filterCategories";
+import { FILTER_CATEGORIES } from "../config/category/wamCategory/filterCategories";
 import {
 	getAllWeaponAscensionMaterialImageIds,
 	getAllWeaponAscensionMaterialsData,

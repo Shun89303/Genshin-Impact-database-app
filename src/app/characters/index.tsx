@@ -1,4 +1,4 @@
-import CharactersList from "@/src/components/characters/charactersList";
+import CharactersList from "@/src/components/screens/characters/charactersList";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CharactersScreen() {

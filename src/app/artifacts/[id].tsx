@@ -1,4 +1,4 @@
-import ArtifactDetails from "@/src/components/artifacts/artifactDetails";
+import ArtifactDetails from "@/src/components/screens/artifacts/artifactDetails";
 import styles from "@/src/components/styles.modules";
 import { useArtifactsStore } from "@/src/store/useArtifactsStore";
 import { useFocusEffect } from "@react-navigation/native";

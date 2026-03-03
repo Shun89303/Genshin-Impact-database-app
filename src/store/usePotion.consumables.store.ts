@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FILTER_CATEGORIES } from "../config/potionCategory/filterCategories";
+import { FILTER_CATEGORIES } from "../config/category/potionCategory/filterCategories";
 import {
 	getAllPotionImageIds,
 	getAllPotionsData,

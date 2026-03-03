@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FILTER_CATEGORIES } from "../config/camCategory/filterCategories";
+import { FILTER_CATEGORIES } from "../config/category/camCategory/filterCategories";
 import {
 	getAllCharacterAscensionMaterialImageIds,
 	getAllCharacterAscensionMaterialsData,

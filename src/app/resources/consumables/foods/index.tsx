@@ -1,4 +1,4 @@
-import FoodList from "@/src/components/resources/consumables/food/foodList";
+import FoodList from "@/src/components/screens/resources/consumables/food/foodList";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodScreen() {
