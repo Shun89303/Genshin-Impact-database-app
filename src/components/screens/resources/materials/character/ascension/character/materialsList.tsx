@@ -1,21 +1,19 @@
 import { endpoints } from "@/src/api/endpoints";
-import styles from "@/src/components/styles.modules";
+import EmptyState from "@/src/components/ui/EmptyState";
+import ErrorState from "@/src/components/ui/ErrorState";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import FilterCatalog from "@/src/components/utils/filter/cam/filterCatalog";
 import SearchFilterBar from "@/src/components/utils/filter/cam/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
+import { useCharacterAscensionMaterials } from "@/src/hooks/useMaterials.character.ascension.character";
 import { useCharacterAscensionMaterialsStore } from "@/src/store/useCharacterAscensionStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useEffect, useMemo, useRef } from "react";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const fetchAllDetails = useCharacterAscensionMaterialsStore(
-		(state) => state.fetchAllDetails
-	);
-	const details = useCharacterAscensionMaterialsStore((state) => state.details);
 	const input = useCharacterAscensionMaterialsStore((state) => state.input);
 	const selectedType = useCharacterAscensionMaterialsStore(
 		(state) => state.selectedType
@@ -26,30 +24,15 @@ export default function MaterialsList() {
 	const materialIds = useCharacterAscensionMaterialsStore(
 		(state) => state.materialIds
 	);
-	const error = useCharacterAscensionMaterialsStore((state) => state.error);
 
 	const materials = endpoints.materials;
 	const characterAscension = endpoints.characterAscension;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%"], []);
+	const snapPoints = useMemo(() => ["40%", "80%"], []);
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadMaterials = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchAllDetails();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchAllDetails]);
-
-	useEffect(() => {
-		loadMaterials();
-	}, [loadMaterials]);
+	const { details, error, isLoading, isRefreshing, refetch } =
+		useCharacterAscensionMaterials();
 
 	useEffect(() => {
 		if (!materialIds.length) return;
@@ -59,12 +42,6 @@ export default function MaterialsList() {
 			Image.prefetch(`${BASE_URL}${materials}${characterAscension}/${id}`);
 		});
 	}, [materialIds, materials, characterAscension]);
-
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadMaterials();
-		setRefreshing(false);
-	}, [loadMaterials]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -81,30 +58,10 @@ export default function MaterialsList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (error) {
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-	}
-
-	if (loading) {
-		return (
-			<View>
-				<ActivityIndicator
-					size="large"
-					style={{
-						position: "absolute",
-						top: 30,
-						left: 0,
-						right: 0,
-						bottom: 0,
-					}}
-				/>
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No potions found"} onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
@@ -113,8 +70,8 @@ export default function MaterialsList() {
 			<SearchFilterBar sheetRef={sheetRef} />
 			<ListComponent
 				finalData={finalData}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
 			<BottomSheet
 				ref={sheetRef}
