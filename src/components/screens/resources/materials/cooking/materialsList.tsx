@@ -1,41 +1,24 @@
 import { endpoints } from "@/src/api/endpoints";
-import styles from "@/src/components/styles.modules";
+import EmptyState from "@/src/components/ui/EmptyState";
+import ErrorState from "@/src/components/ui/ErrorState";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import SearchBar from "@/src/components/utils/filter/cim/searchBar";
 import { BASE_URL } from "@/src/config/env";
+import { useCookingMaterials } from "@/src/hooks/useMaterials.cooking";
 import { useCookingMaterialsStore } from "@/src/store/useCookingMaterialsStore";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useEffect, useMemo } from "react";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const fetchAllDetails = useCookingMaterialsStore(
-		(state) => state.fetchAllDetails
-	);
-	const details = useCookingMaterialsStore((state) => state.details);
 	const input = useCookingMaterialsStore((state) => state.input);
 	const materialIds = useCookingMaterialsStore((state) => state.materialIds);
-	const error = useCookingMaterialsStore((state) => state.error);
 
 	const materials = endpoints.materials;
 	const cookingIngredients = endpoints.cookingIngredients;
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadMaterials = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchAllDetails();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchAllDetails]);
-
-	useEffect(() => {
-		loadMaterials();
-	}, [loadMaterials]);
+	const { details, error, isLoading, isRefreshing, refetch } =
+		useCookingMaterials();
 
 	useEffect(() => {
 		if (!materialIds.length) return;
@@ -45,12 +28,6 @@ export default function MaterialsList() {
 			Image.prefetch(`${BASE_URL}${materials}${cookingIngredients}/${id}`);
 		});
 	}, [materialIds, materials, cookingIngredients]);
-
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadMaterials();
-		setRefreshing(false);
-	}, [loadMaterials]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -65,38 +42,18 @@ export default function MaterialsList() {
 		return result;
 	}, [details, input]);
 
-	if (error) {
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-	}
-
-	if (loading) {
-		return (
-			<View>
-				<ActivityIndicator
-					size="large"
-					style={{
-						position: "absolute",
-						top: 30,
-						left: 0,
-						right: 0,
-						bottom: 0,
-					}}
-				/>
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No materials found"} onRetry={refetch} />;
 
 	return (
 		<>
 			<SearchBar />
 			<SearchList
 				finalData={finalData}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
 		</>
 	);
