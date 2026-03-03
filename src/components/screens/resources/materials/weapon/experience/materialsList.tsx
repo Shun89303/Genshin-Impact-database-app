@@ -1,40 +1,20 @@
 import { endpoints } from "@/src/api/endpoints";
-import styles from "@/src/components/styles.modules";
+import EmptyState from "@/src/components/ui/EmptyState";
+import ErrorState from "@/src/components/ui/ErrorState";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import { BASE_URL } from "@/src/config/env";
-import { useWeaponExperienceMaterialsStore } from "@/src/store/useWeaponExperienceStore";
+import { useExperienceWeaponMaterials } from "@/src/hooks/useMaterials.weapon.experience";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
+import { useEffect } from "react";
+import { FlatList, View } from "react-native";
 import MaterialsImage from "./materialsImage";
 
 export default function MaterialsList() {
-	const fetchMaterialIds = useWeaponExperienceMaterialsStore(
-		(state) => state.fetchMaterialIds
-	);
-	const materialIds = useWeaponExperienceMaterialsStore(
-		(state) => state.materialIds
-	);
-	const error = useWeaponExperienceMaterialsStore((state) => state.error);
-
 	const materials = endpoints.materials;
 	const weaponExperience = endpoints.weaponExperience;
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadMaterials = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchMaterialIds();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchMaterialIds]);
-
-	useEffect(() => {
-		loadMaterials();
-	}, [loadMaterials]);
+	const { materialIds, error, isLoading, isRefreshing, refetch } =
+		useExperienceWeaponMaterials();
 
 	useEffect(() => {
 		if (!materialIds.length) return;
@@ -44,36 +24,10 @@ export default function MaterialsList() {
 		});
 	}, [materialIds, materials, weaponExperience]);
 
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadMaterials();
-		setRefreshing(false);
-	}, [loadMaterials]);
-
-	if (error) {
-		return (
-			<View style={styles.simpleContainer}>
-				<ActivityIndicator />
-			</View>
-		);
-	}
-
-	if (loading) {
-		return (
-			<View>
-				<ActivityIndicator
-					size="large"
-					style={{
-						position: "absolute",
-						top: 30,
-						left: 0,
-						right: 0,
-						bottom: 0,
-					}}
-				/>
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (materialIds.length === 0)
+		return <EmptyState message={"No materials found"} onRetry={refetch} />;
 
 	return (
 		<View style={{ alignItems: "center" }}>
@@ -81,8 +35,8 @@ export default function MaterialsList() {
 				data={materialIds}
 				keyExtractor={(id) => id}
 				numColumns={3}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 				renderItem={({ item }) => <MaterialsImage id={item} />}
 			/>
 		</View>
