@@ -1,11 +1,18 @@
-export type Book = {
+export type Api = Record<string, ApiObject>;
+
+export type ApiObject = {
+	characters?: string[];
+	availability?: string[];
+	source?: string;
+	items?: ApiItem[];
+};
+
+export type ApiItem = {
 	id: string;
 	name: string;
 	rarity: number;
 };
 
-export type TalentBook = {
+export type Normalized = ApiObject & {
 	id: string;
-	availability: string[];
-	items: Book[];
 };

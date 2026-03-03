@@ -1,20 +1,20 @@
-import { TalentBook } from "@/src/types/talent.book";
+import { Normalized } from "@/src/types/talent.book";
 import { FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import MaterialCard from "./materialCard";
 
 export default function SearchList({
 	finalData,
 	refreshing,
 	onRefresh,
 }: {
-	finalData: TalentBook[] | { label: string; data: TalentBook[] }[];
+	finalData: Normalized[] | { label: string; data: Normalized[] }[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
 		<View style={{ alignItems: "center" }}>
 			<FlatList
-				data={finalData as TalentBook[]}
+				data={finalData as Normalized[]}
 				keyExtractor={(item) => item.id}
 				initialNumToRender={12}
 				windowSize={21}
@@ -22,21 +22,12 @@ export default function SearchList({
 				refreshing={refreshing}
 				onRefresh={onRefresh}
 				renderItem={({ item }) => (
-					<FlatList
-						data={item.items}
-						keyExtractor={(item) => item.id}
-						numColumns={4}
-						initialNumToRender={8}
-						windowSize={21}
-						removeClippedSubviews
-						renderItem={({ item }) => (
-							<View
-								key={item.id}
-								style={{ justifyContent: "space-evenly", padding: 10 }}
-							>
-								<MaterialsImage id={item.id} />
-							</View>
-						)}
+					<MaterialCard
+						materialName={item.id}
+						items={item.items ?? []}
+						charactersArray={item.characters ?? []}
+						availability={item.availability ?? []}
+						source={item.source ?? ""}
 					/>
 				)}
 			/>
