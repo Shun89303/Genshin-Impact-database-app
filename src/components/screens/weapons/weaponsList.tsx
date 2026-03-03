@@ -1,21 +1,20 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
+import { useWeapons } from "@/src/hooks/useWeapons";
 import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
-import styles from "../../styles.modules";
+import { useEffect, useMemo, useRef } from "react";
+import EmptyState from "../../ui/EmptyState";
+import ErrorState from "../../ui/ErrorState";
+import ScreenLoader from "../../ui/ScreenLoader";
 import FilterCatalog from "../../utils/filter/weapon/filterCatalog";
 import SearchFilterBar from "../../utils/filter/weapon/searchFilterBar";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function WeaponsList() {
-	const fetchAllDetails = useWeaponsStore((state) => state.fetchAllDetails);
 	const ids = useWeaponsStore((state) => state.ids);
-	const { error } = useWeaponsStore();
-	const details = useWeaponsStore((state) => state.details);
 	const input = useWeaponsStore((state) => state.input);
 	const selectedType = useWeaponsStore((state) => state.selectedType);
 	const groupByType = useWeaponsStore((state) => state.groupByType);
@@ -24,24 +23,9 @@ export default function WeaponsList() {
 	const icon = endpoints.icon;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%"], []);
+	const snapPoints = useMemo(() => ["40%", "80%"], []);
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadWeapons = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchAllDetails();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchAllDetails]);
-
-	useEffect(() => {
-		loadWeapons();
-	}, [loadWeapons]);
+	const { details, error, isLoading, isRefreshing, refetch } = useWeapons();
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -51,12 +35,6 @@ export default function WeaponsList() {
 			Image.prefetch(`${BASE_URL}${weapons}/${id}${icon}`);
 		});
 	}, [ids, weapons, icon]);
-
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadWeapons();
-		setRefreshing(false);
-	}, [loadWeapons]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -73,20 +51,10 @@ export default function WeaponsList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-
-	if (loading) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<ActivityIndicator size="large" />
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No characters found"} onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
@@ -95,8 +63,8 @@ export default function WeaponsList() {
 			<SearchFilterBar sheetRef={sheetRef} />
 			<ListComponent
 				finalData={finalData}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
 			<BottomSheet
 				ref={sheetRef}
