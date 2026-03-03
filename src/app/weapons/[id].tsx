@@ -1,5 +1,5 @@
+import WeaponDetails from "@/src/components/screens/weapons/weaponDetails";
 import styles from "@/src/components/styles.modules";
-import WeaponDetails from "@/src/components/weapons/weaponDetails";
 import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";

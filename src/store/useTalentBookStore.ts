@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FILTER_CATEGORIES } from "../config/talentBookCategory/filterCategories";
+import { FILTER_CATEGORIES } from "../config/category/talentBookCategory/filterCategories";
 import {
 	getAllTalentBookMaterialImageIds,
 	getAllTalentBookMaterialsData,

@@ -1,4 +1,4 @@
-import FoodDetails from "@/src/components/resources/consumables/food/foodDetails";
+import FoodDetails from "@/src/components/screens/resources/consumables/food/foodDetails";
 import styles from "@/src/components/styles.modules";
 import { useFoodStore } from "@/src/store/useFood.consumables.store";
 import { useFocusEffect } from "@react-navigation/native";

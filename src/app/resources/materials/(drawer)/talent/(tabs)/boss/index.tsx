@@ -1,4 +1,4 @@
-import MaterialsList from "@/src/components/resources/materials/talent/boss/materialsList";
+import MaterialsList from "@/src/components/screens/resources/materials/talent/boss/materialsList";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TalentBossMaterials() {

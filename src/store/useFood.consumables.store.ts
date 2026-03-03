@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FILTER_CATEGORIES } from "../config/foodCategory/filterCategories";
+import { FILTER_CATEGORIES } from "../config/category/foodCategory/filterCategories";
 import {
 	getAllFoodData,
 	getAllFoodImageIds,

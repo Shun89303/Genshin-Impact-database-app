@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FILTER_CATEGORIES } from "../config/weaponCategory/filterCategories";
+import { FILTER_CATEGORIES } from "../config/category/weaponCategory/filterCategories";
 import {
 	getWeaponDetails,
 	getWeaponImageTypes,

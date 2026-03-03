@@ -1,4 +1,4 @@
-import ElementsList from "@/src/components/resources/elements/elementsList";
+import ElementsList from "@/src/components/screens/resources/elements/elementsList";
 import styles from "@/src/components/styles.modules";
 import { SafeAreaView } from "react-native-safe-area-context";
 

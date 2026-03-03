@@ -1,4 +1,4 @@
-import BossDetails from "@/src/components/bosses/bossDetails";
+import BossDetails from "@/src/components/screens/bosses/bossDetails";
 import styles from "@/src/components/styles.modules";
 import { useBossesStore } from "@/src/store/useBossesStore";
 import { useFocusEffect } from "@react-navigation/native";

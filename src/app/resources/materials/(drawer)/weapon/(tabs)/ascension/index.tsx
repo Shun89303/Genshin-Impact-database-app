@@ -1,4 +1,4 @@
-import MaterialsList from "@/src/components/resources/materials/weapon/ascension/materialsList";
+import MaterialsList from "@/src/components/screens/resources/materials/weapon/ascension/materialsList";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WeaponAscensionMaterials() {

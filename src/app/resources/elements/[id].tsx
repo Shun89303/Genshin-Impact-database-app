@@ -1,4 +1,4 @@
-import ElementDetails from "@/src/components/resources/elements/elementDetails";
+import ElementDetails from "@/src/components/screens/resources/elements/elementDetails";
 import styles from "@/src/components/styles.modules";
 import { useElementsStore } from "@/src/store/useElementsStore";
 import { useFocusEffect } from "@react-navigation/native";
