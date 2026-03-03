@@ -1,10 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { TalentBoss } from "@/src/types/talent.boss";
+import { ApiObject } from "@/src/types/talent.boss";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
-import MaterialContainer from "./materialContainer";
+import MaterialCard from "./materialCard";
 
 export default function SearchList({
 	finalData,
@@ -12,7 +12,7 @@ export default function SearchList({
 	onRefresh,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
-	finalData: TalentBoss[];
+	finalData: ApiObject[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
@@ -21,18 +21,17 @@ export default function SearchList({
 
 	useEffect(() => {
 		finalData.forEach((boss) => {
-			boss.characters.forEach((charId) => {
+			boss.characters?.forEach((charId) => {
 				Image.prefetch(`${BASE_URL}${characters}/${charId}${gachaCard}`);
 			});
 		});
 	}, [finalData, characters, gachaCard]);
 
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View>
 			<FlatList
 				data={finalData}
 				keyExtractor={(item) => item.id}
-				numColumns={3}
 				initialNumToRender={9}
 				windowSize={21}
 				removeClippedSubviews
@@ -42,7 +41,11 @@ export default function SearchList({
 				refreshing={refreshing}
 				onRefresh={onRefresh}
 				renderItem={({ item }) => (
-					<MaterialContainer id={item.id} characters={item.characters} />
+					<MaterialCard
+						materialName={item.name}
+						materialId={item.id}
+						charactersArray={item.characters ?? []}
+					/>
 				)}
 			/>
 		</View>
