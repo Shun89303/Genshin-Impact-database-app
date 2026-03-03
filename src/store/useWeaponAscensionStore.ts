@@ -4,27 +4,24 @@ import {
 	getAllWeaponAscensionMaterialImageIds,
 	getAllWeaponAscensionMaterialsData,
 } from "../services/weapon.ascension.materials.services";
-import { wam } from "../types/weapon.ascension.material";
+import { Normalized } from "../types/weapon.ascension.material";
 
 interface WeaponAscensionMaterialsState {
 	error: string | null;
 	input: string;
-	details: wam[];
+	details: Normalized[];
 	selectedType: "availability" | null;
 	setSelectedType: (type: "availability" | null, sheetRef: any) => void;
 	cache: Record<string, unknown>;
 	loadingId: string | null;
-	materialsObject: Record<string, unknown>;
 	materialIds: string[];
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchMaterialsObject: () => Promise<void>;
 	fetchMaterialIds: () => Promise<void>;
-	storeMaterialDetails: (id: string) => void;
 	groupByType: (
-		wams: wam[],
+		materials: Normalized[],
 		type: "availability"
-	) => { label: string; data: wam[] }[];
+	) => { label: string; data: Normalized[] }[];
 }
 
 export const useWeaponAscensionMaterialsStore =
@@ -40,21 +37,7 @@ export const useWeaponAscensionMaterialsStore =
 		setInput: (i) => set({ input: i }),
 		cache: {},
 		loadingId: null,
-		materialsObject: {},
 		materialIds: [],
-		fetchMaterialsObject: async () => {
-			const { materialsObject } = get();
-			if (Object.keys(materialsObject).length > 0) return;
-			try {
-				const allMaterials = await getAllWeaponAscensionMaterialsData();
-				const allMaterialsArray = Object.entries(allMaterials);
-				const withoutLastItem = allMaterialsArray.slice(0, -1);
-				const materialsObject = Object.fromEntries(withoutLastItem);
-				set({ materialsObject });
-			} catch (error: any) {
-				set({ error: error.message });
-			}
-		},
 		fetchMaterialIds: async () => {
 			try {
 				const { materialIds } = get();
@@ -67,20 +50,6 @@ export const useWeaponAscensionMaterialsStore =
 				set({ error: error.message });
 			}
 		},
-		storeMaterialDetails: (id) => {
-			const { materialsObject, cache } = get();
-			if (cache[id]) {
-				set({ loadingId: null });
-				return;
-			}
-
-			set({ loadingId: id });
-			const details = materialsObject[id];
-			set((state) => ({
-				cache: { ...state.cache, [id]: details },
-				loadingId: null,
-			}));
-		},
 		fetchAllDetails: async () => {
 			try {
 				let { details } = get();
@@ -88,14 +57,13 @@ export const useWeaponAscensionMaterialsStore =
 					const apiObject = await getAllWeaponAscensionMaterialsData();
 					const apiArray = Object.entries(apiObject);
 					const apiArrayWithoutLastItem = apiArray.slice(0, -1);
-					const normalizedWAMArray = apiArrayWithoutLastItem.map(
+					const normalizedArray = apiArrayWithoutLastItem.map(
 						([key, value]) => ({
 							id: key,
-							availability: value.availability,
-							items: value.items,
+							...value,
 						})
 					);
-					set({ details: normalizedWAMArray });
+					set({ details: normalizedArray });
 				}
 			} catch (error: any) {
 				set({ error: error.message });

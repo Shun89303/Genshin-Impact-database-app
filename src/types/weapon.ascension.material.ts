@@ -1,16 +1,18 @@
-// wam = Weapon Ascension Material
+export type Api = Record<string, ApiObject>;
 
-export type WAMItem = {
+export type ApiObject = {
+	weapons?: string[];
+	availability?: string[];
+	source?: string;
+	items?: ApiItem[];
+};
+
+export type ApiItem = {
 	id: string;
 	name: string;
 	rarity: number;
 };
 
-export type wamApi = {
-	availability: string[];
-	items: WAMItem[];
-};
-
-export type wam = wamApi & {
+export type Normalized = ApiObject & {
 	id: string;
 };

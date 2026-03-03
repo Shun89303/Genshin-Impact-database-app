@@ -2,26 +2,16 @@ import MaterialDetails from "@/src/components/screens/resources/materials/weapon
 import styles from "@/src/components/styles.modules";
 import { useWeaponAscensionMaterialsStore } from "@/src/store/useWeaponAscensionStore";
 
-import { useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
+import { useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, FlatList, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WeaponAscensionMaterialsDetails() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const storeMaterialDetails = useWeaponAscensionMaterialsStore(
-		(state) => state.storeMaterialDetails
-	);
 	const error = useWeaponAscensionMaterialsStore((state) => state.error);
 	const cache = useWeaponAscensionMaterialsStore((state) => state.cache);
 	const loadingId = useWeaponAscensionMaterialsStore(
 		(state) => state.loadingId
-	);
-
-	useFocusEffect(
-		useCallback(() => {
-			storeMaterialDetails(id);
-		}, [storeMaterialDetails, id])
 	);
 
 	const loading = loadingId === id;
