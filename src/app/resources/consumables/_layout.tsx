@@ -11,9 +11,7 @@ export default function ConsumablesStack() {
 					tabBarPosition: "top",
 					headerShown: false,
 				}}
-				safeAreaInsets={{
-					top: 5,
-				}}
+				safeAreaInsets={{ top: 5 }}
 			>
 				<Tabs.Screen
 					name="index"
