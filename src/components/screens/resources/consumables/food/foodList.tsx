@@ -1,47 +1,32 @@
 import { endpoints } from "@/src/api/endpoints";
-import styles from "@/src/components/styles.modules";
+import EmptyState from "@/src/components/ui/EmptyState";
+import ErrorState from "@/src/components/ui/ErrorState";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import FilterCatalog from "@/src/components/utils/filter/food/filterCatalog";
 import SearchFilterBar from "@/src/components/utils/filter/food/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
+import { useFoodConsumables } from "@/src/hooks/useConsumables.food";
 import { useFoodStore } from "@/src/store/useFood.consumables.store";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useEffect, useMemo, useRef } from "react";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function FoodList() {
-	const fetchAllDetails = useFoodStore((state) => state.fetchAllDetails);
-	const details = useFoodStore((state) => state.details);
 	const input = useFoodStore((state) => state.input);
 	const selectedType = useFoodStore((state) => state.selectedType);
 	const groupByType = useFoodStore((state) => state.groupByType);
 	const foodIds = useFoodStore((state) => state.foodIds);
-	const { error } = useFoodStore();
 
 	const food = endpoints.food;
 	const consumables = endpoints.consumables;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%"], []);
+	const snapPoints = useMemo(() => ["40%", "80%"], []);
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadFoods = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchAllDetails();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchAllDetails]);
-
-	useEffect(() => {
-		loadFoods();
-	}, [loadFoods]);
+	const { details, error, isLoading, isRefreshing, refetch } =
+		useFoodConsumables();
 
 	useEffect(() => {
 		if (!foodIds.length) return;
@@ -51,12 +36,6 @@ export default function FoodList() {
 			Image.prefetch(`${BASE_URL}${consumables}${food}/${id}`);
 		});
 	}, [foodIds, consumables, food]);
-
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadFoods();
-		setRefreshing(false);
-	}, [loadFoods]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -75,20 +54,10 @@ export default function FoodList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-
-	if (loading) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<ActivityIndicator size="large" />
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No characters found"} onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
@@ -97,8 +66,8 @@ export default function FoodList() {
 			<SearchFilterBar sheetRef={sheetRef} />
 			<ListComponent
 				finalData={finalData}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
 			<BottomSheet
 				ref={sheetRef}
