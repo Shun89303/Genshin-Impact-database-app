@@ -1,36 +1,19 @@
 import { endpoints } from "@/src/api/endpoints";
-import styles from "@/src/components/styles.modules";
+import EmptyState from "@/src/components/ui/EmptyState";
+import ErrorState from "@/src/components/ui/ErrorState";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import { BASE_URL } from "@/src/config/env";
-import { useNationsStore } from "@/src/store/useNationsStore";
+import { useNations } from "@/src/hooks/useNations";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { useEffect } from "react";
+import { FlatList, View } from "react-native";
 import NationImage from "./nationImage";
 
 export default function NationsList() {
-	const fetchNationsIds = useNationsStore((state) => state.fetchNationsIds);
-	const ids = useNationsStore((state) => state.ids);
-	const { error } = useNationsStore();
-
 	const nations = endpoints.nations;
 	const icon = endpoints.icon;
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadMaterials = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchNationsIds();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchNationsIds]);
-
-	useEffect(() => {
-		loadMaterials();
-	}, [loadMaterials]);
+	const { ids, error, isLoading, isRefreshing, refetch } = useNations();
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -40,50 +23,25 @@ export default function NationsList() {
 		});
 	}, [ids, nations, icon]);
 
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadMaterials();
-		setRefreshing(false);
-	}, [loadMaterials]);
-
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-
-	if (loading) {
-		return (
-			<View>
-				<ActivityIndicator
-					size="large"
-					style={{
-						position: "absolute",
-						top: 30,
-						left: 0,
-						right: 0,
-						bottom: 0,
-					}}
-				/>
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (ids.length === 0)
+		return <EmptyState message={"No weapons found"} onRetry={refetch} />;
 
 	return (
-		<>
+		<View style={{ alignItems: "center" }}>
 			<FlatList
 				data={ids}
 				keyExtractor={(id) => id}
 				horizontal
 				removeClippedSubviews
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 				contentContainerStyle={{
 					marginTop: 20,
 				}}
 				renderItem={({ item }) => <NationImage id={item} />}
 			/>
-		</>
+		</View>
 	);
 }
