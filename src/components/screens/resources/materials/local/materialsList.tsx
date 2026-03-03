@@ -42,10 +42,12 @@ export default function MaterialsList() {
 
 		if (input.trim().length > 0) {
 			const lower = input.toLowerCase();
-			result = result.filter(
-				(mat) =>
-					mat.name.toLowerCase().includes(lower) ||
-					mat.id.toLowerCase().includes(lower)
+			result = result.filter((mat) =>
+				mat.items.some(
+					(item) =>
+						item.id.toLowerCase().includes(lower) ||
+						item.name.toLowerCase().includes(lower)
+				)
 			);
 		}
 
