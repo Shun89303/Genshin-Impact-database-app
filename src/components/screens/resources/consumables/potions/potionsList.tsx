@@ -1,47 +1,32 @@
 import { endpoints } from "@/src/api/endpoints";
-import styles from "@/src/components/styles.modules";
+import EmptyState from "@/src/components/ui/EmptyState";
+import ErrorState from "@/src/components/ui/ErrorState";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import FilterCatalog from "@/src/components/utils/filter/potion/filterCatalog";
 import SearchFilterBar from "@/src/components/utils/filter/potion/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
+import { usePotionConsumables } from "@/src/hooks/useConsumables.potion";
 import { usePotionStore } from "@/src/store/usePotion.consumables.store";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useEffect, useMemo, useRef } from "react";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function PotionsList() {
-	const fetchAllDetails = usePotionStore((state) => state.fetchAllDetails);
-	const details = usePotionStore((state) => state.details);
 	const input = usePotionStore((state) => state.input);
 	const selectedType = usePotionStore((state) => state.selectedType);
 	const groupByType = usePotionStore((state) => state.groupByType);
 	const potionsIds = usePotionStore((state) => state.potionsIds);
-	const { error } = usePotionStore();
 
 	const consumables = endpoints.consumables;
 	const potions = endpoints.potions;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%"], []);
+	const snapPoints = useMemo(() => ["40%", "80%"], []);
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadPotions = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchAllDetails();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchAllDetails]);
-
-	useEffect(() => {
-		loadPotions();
-	}, [loadPotions]);
+	const { details, error, isLoading, isRefreshing, refetch } =
+		usePotionConsumables();
 
 	useEffect(() => {
 		if (!potionsIds.length) return;
@@ -50,12 +35,6 @@ export default function PotionsList() {
 			Image.prefetch(`${BASE_URL}${consumables}${potions}/${id}`);
 		});
 	}, [potionsIds, consumables, potions]);
-
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadPotions();
-		setRefreshing(false);
-	}, [loadPotions]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -74,20 +53,10 @@ export default function PotionsList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-
-	if (loading) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<ActivityIndicator size="large" />
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No potions found"} onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
@@ -96,8 +65,8 @@ export default function PotionsList() {
 			<SearchFilterBar sheetRef={sheetRef} />
 			<ListComponent
 				finalData={finalData}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
 			<BottomSheet
 				ref={sheetRef}

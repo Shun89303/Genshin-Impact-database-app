@@ -28,7 +28,7 @@ export default function BossesList() {
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (ids.length === 0)
-		return <EmptyState message={"No characters found"} onRetry={refetch} />;
+		return <EmptyState message={"No bosses found"} onRetry={refetch} />;
 
 	return (
 		<View style={{ alignItems: "center" }}>

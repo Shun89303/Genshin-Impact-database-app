@@ -57,7 +57,7 @@ export default function FoodList() {
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (details.length === 0)
-		return <EmptyState message={"No characters found"} onRetry={refetch} />;
+		return <EmptyState message={"No foods found"} onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
