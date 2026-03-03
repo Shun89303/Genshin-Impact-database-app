@@ -1,43 +1,26 @@
 import { endpoints } from "@/src/api/endpoints";
-import styles from "@/src/components/styles.modules";
+import EmptyState from "@/src/components/ui/EmptyState";
+import ErrorState from "@/src/components/ui/ErrorState";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import SearchBar from "@/src/components/utils/filter/commonMaterial/searchBar";
 import { BASE_URL } from "@/src/config/env";
+import { useCommonAscensionMaterials } from "@/src/hooks/useMaterials.character.ascension.common";
 import { useCommonAscensionMaterialsStore } from "@/src/store/useCommonAscensionStore";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useEffect, useMemo } from "react";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const fetchAllDetails = useCommonAscensionMaterialsStore(
-		(state) => state.fetchAllDetails
-	);
-	const details = useCommonAscensionMaterialsStore((state) => state.details);
 	const input = useCommonAscensionMaterialsStore((state) => state.input);
 	const materialIds = useCommonAscensionMaterialsStore(
 		(state) => state.materialIds
 	);
-	const error = useCommonAscensionMaterialsStore((state) => state.error);
 
 	const materials = endpoints.materials;
 	const commonAscension = endpoints.commonAscension;
 
-	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
-
-	const loadMaterials = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			await fetchAllDetails();
-		} finally {
-			setLoading(false);
-		}
-	}, [fetchAllDetails]);
-
-	useEffect(() => {
-		loadMaterials();
-	}, [loadMaterials]);
+	const { details, error, isLoading, isRefreshing, refetch } =
+		useCommonAscensionMaterials();
 
 	useEffect(() => {
 		if (!materialIds.length) return;
@@ -47,12 +30,6 @@ export default function MaterialsList() {
 			Image.prefetch(`${BASE_URL}${materials}${commonAscension}/${id}`);
 		});
 	}, [materialIds, materials, commonAscension]);
-
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		await loadMaterials();
-		setRefreshing(false);
-	}, [loadMaterials]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -78,38 +55,18 @@ export default function MaterialsList() {
 		return result;
 	}, [details, input]);
 
-	if (error) {
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-	}
-
-	if (loading) {
-		return (
-			<View>
-				<ActivityIndicator
-					size="large"
-					style={{
-						position: "absolute",
-						top: 30,
-						left: 0,
-						right: 0,
-						bottom: 0,
-					}}
-				/>
-			</View>
-		);
-	}
+	if (isLoading) return <ScreenLoader />;
+	if (error) return <ErrorState message={error} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No potions found"} onRetry={refetch} />;
 
 	return (
 		<>
 			<SearchBar />
 			<SearchList
 				finalData={finalData}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
 		</>
 	);
