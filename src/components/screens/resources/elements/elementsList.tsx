@@ -7,40 +7,42 @@ import { useElements } from "@/src/hooks/useElements";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
-import ElementImage from "./elementImage";
+import ElementCard from "./elementCard";
 
 export default function ElementsList() {
 	const elements = endpoints.elements;
 	const icon = endpoints.icon;
 
-	const { ids, error, isLoading, isRefreshing, refetch } = useElements();
+	const { details, error, isLoading, isRefreshing, refetch } = useElements();
 
 	useEffect(() => {
-		if (!ids.length) return;
+		if (!details.length) return;
 
-		ids.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${elements}/${id}${icon}`);
+		details.forEach((element) => {
+			Image.prefetch(`${BASE_URL}${elements}/${element.id}${icon}`);
 		});
-	}, [ids, elements, icon]);
+	}, [details, elements, icon]);
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
-	if (ids.length === 0)
+	if (details.length === 0)
 		return <EmptyState message={"No potions found"} onRetry={refetch} />;
 
 	return (
 		<View style={{ alignItems: "center" }}>
 			<FlatList
-				data={ids}
-				keyExtractor={(id) => id}
-				horizontal
+				data={details}
+				keyExtractor={(element) => element.id}
 				removeClippedSubviews
 				refreshing={isRefreshing}
 				onRefresh={refetch}
-				contentContainerStyle={{
-					marginTop: 20,
-				}}
-				renderItem={({ item }) => <ElementImage id={item} />}
+				renderItem={({ item }) => (
+					<ElementCard
+						name={item.name}
+						reactions={item.reactions ?? []}
+						id={item.id}
+					/>
+				)}
 			/>
 		</View>
 	);
