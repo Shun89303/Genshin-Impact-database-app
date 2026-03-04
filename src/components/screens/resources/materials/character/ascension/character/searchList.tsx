@@ -1,34 +1,35 @@
-import { MaterialTier } from "@/src/types/character.ascension.material";
+import { Normalized } from "@/src/types/character.ascension.material";
 import { FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import MaterialCard from "./materialCard";
 
 export default function SearchList({
 	finalData,
 	refreshing,
 	onRefresh,
 }: {
-	finalData: MaterialTier[] | { label: string; data: MaterialTier[] }[];
+	finalData: Normalized[] | { label: string; data: Normalized[] }[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View>
 			<FlatList
-				data={finalData as MaterialTier[]}
+				data={finalData as Normalized[]}
 				keyExtractor={(item) => item.id}
-				numColumns={4}
-				initialNumToRender={20}
+				initialNumToRender={5}
 				windowSize={21}
 				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
 				renderItem={({ item }) => (
-					<View
-						key={item.id}
-						style={{ justifyContent: "space-evenly", padding: 10 }}
-					>
-						<MaterialsImage id={item.id} />
-					</View>
+					<MaterialCard
+						id={item.id}
+						name={item.name}
+						sources={item.sources ?? []}
+						rarity={item.rarity ?? 0}
+						element={item.element}
+						title={item.title}
+					/>
 				)}
 			/>
 		</View>
