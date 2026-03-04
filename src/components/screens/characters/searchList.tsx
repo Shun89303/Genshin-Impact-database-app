@@ -1,6 +1,7 @@
 import { Character } from "@/src/types/character";
 import { FlatList, View } from "react-native";
 import CharacterImage from "./characterImage";
+import styles from "./searchList.styles";
 
 export default function SearchList({
 	finalData,
@@ -12,17 +13,21 @@ export default function SearchList({
 	onRefresh: any;
 }) {
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View style={styles.container}>
 			<FlatList
 				data={finalData as Character[]}
-				initialNumToRender={9}
-				windowSize={21}
-				removeClippedSubviews
+				keyExtractor={(item) => item.id}
 				numColumns={3}
+				initialNumToRender={9}
+				windowSize={15}
+				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
+				showsVerticalScrollIndicator={false}
+				columnWrapperStyle={styles.row}
+				contentContainerStyle={styles.content}
 				renderItem={({ item }) => (
-					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
+					<View style={styles.item}>
 						<CharacterImage id={item.id} />
 					</View>
 				)}

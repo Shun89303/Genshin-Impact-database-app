@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 export function useCharacters() {
 	const fetchAllDetails = useCharactersStore((s) => s.fetchAllDetails);
 	const details = useCharactersStore((s) => s.details);
+	const detailsById = useCharactersStore((s) => s.detailsById);
 	const error = useCharactersStore((s) => s.error);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +34,7 @@ export function useCharacters() {
 
 	return {
 		details,
+		detailsById,
 		error,
 		isLoading,
 		isRefreshing,

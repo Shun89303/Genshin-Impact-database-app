@@ -23,7 +23,7 @@ export default function ArtifactsList() {
 	const circletOfLogos = endpoints.circletOfLogos;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%", "80%"], []);
+	const snapPoints = useMemo(() => ["40%"], []);
 
 	const { details, error, isLoading, isRefreshing, refetch } = useArtifacts();
 

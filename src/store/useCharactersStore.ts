@@ -2,16 +2,16 @@ import { create } from "zustand";
 import { FILTER_CATEGORIES } from "../config/category/filterCategories";
 import {
 	getCharacterDetails,
-	getCharacterImageTypes,
 	getCharactersIds,
 } from "../services/characters.services";
-import { Character } from "../types/character";
+import { Character, CharacterImageAssets } from "../types/character";
 
 interface CharactersState {
 	error: string | null;
 	ids: string[];
 	input: string;
 	details: Character[];
+	detailsById: Record<string, Character>;
 	selectedType: "vision" | "weapon" | "nation" | null;
 	setSelectedType: (
 		type: "vision" | "weapon" | "nation" | null,
@@ -23,7 +23,6 @@ interface CharactersState {
 	fetchCharactersIds: () => Promise<void>;
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchCharacterImageTypes: (id: string) => Promise<string[]>;
 	fetchCharacterDetails: (id: any) => Promise<void>;
 	groupByType: (
 		characters: Character[],
@@ -36,6 +35,7 @@ export const useCharactersStore = create<CharactersState>((set, get) => ({
 	ids: [],
 	input: "",
 	details: [],
+	detailsById: {},
 	selectedType: null,
 	setSelectedType: (type, sheetRef) => {
 		set({ selectedType: type });
@@ -54,28 +54,53 @@ export const useCharactersStore = create<CharactersState>((set, get) => ({
 	},
 	fetchAllDetails: async () => {
 		try {
-			let { ids, fetchCharactersIds, details } = get();
+			let { ids, fetchCharactersIds, details, detailsById } = get();
 			if (!ids.length) {
 				await fetchCharactersIds();
 				ids = get().ids;
 			}
-			if (details.length) {
+			if (details.length && Object.keys(detailsById).length) {
 				return;
 			}
 			const fetchedDetails = await Promise.all(
 				ids.map((id) => getCharacterDetails(id))
 			);
+			const normalized: Record<string, Character> = {};
+			fetchedDetails.forEach((char) => {
+				const images: CharacterImageAssets = {
+					card: "card",
+					constellation: "constellation",
+					constellation1: "constellation-1",
+					constellation2: "constellation-2",
+					constellation3: "constellation-3",
+					constellation4: "constellation-4",
+					constellation5: "constellation-5",
+					constellation6: "constellation-6",
+					constellationShape: "constellation-shape",
+					gachaCard: "gacha-card",
+					gachaSplash: "gacha-splash",
+					icon: "icon",
+					iconBig: "icon-big",
+					iconSide: "icon-side",
+					namecardBackground: "namecard-background",
+					portrait: "portrait",
+					talentBurst: "talent-burst",
+					talentNa: "talent-na",
+					talentPassive0: "talent-passive-0",
+					talentPassive1: "talent-passive-1",
+					talentPassive2: "talent-passive-2",
+					talentSkill: "talent-skill",
+				};
+
+				normalized[char.id] = {
+					...char,
+					images,
+				};
+			});
 			set({ details: fetchedDetails });
+			set({ detailsById: normalized });
 		} catch (error: any) {
 			set({ error: error.message });
-		}
-	},
-	fetchCharacterImageTypes: async (id) => {
-		try {
-			return await getCharacterImageTypes(id);
-		} catch (error: any) {
-			set({ error: error.message });
-			return null;
 		}
 	},
 	fetchCharacterDetails: async (id) => {
