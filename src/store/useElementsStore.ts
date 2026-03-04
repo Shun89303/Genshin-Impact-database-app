@@ -4,23 +4,21 @@ import {
 	getElementImageTypes,
 	getElementsIds,
 } from "../services/elements.services";
+import { Normalized } from "../types/element";
 
 interface ElementsState {
 	ids: string[];
+	details: Normalized[];
 	error: string | null;
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	clearCacheForId?: (id: string) => void;
 	fetchElementsIds: () => Promise<void>;
 	fetchElementImageTypes: (id: string) => Promise<string[]>;
-	fetchElementDetails: (id: any) => Promise<void>;
+	fetchAllDetails: () => Promise<void>;
 }
 
 export const useElementsStore = create<ElementsState>((set, get) => ({
 	ids: [],
+	details: [],
 	error: null,
-	cache: {},
-	loadingId: null,
 	fetchElementsIds: async () => {
 		const { ids } = get();
 		if (ids.length) return;
@@ -39,29 +37,20 @@ export const useElementsStore = create<ElementsState>((set, get) => ({
 			return null;
 		}
 	},
-	fetchElementDetails: async (id) => {
-		const { cache } = get();
-
-		if (cache[id]) {
-			set({ loadingId: null });
-			return;
-		}
-
+	fetchAllDetails: async () => {
 		try {
-			set({ loadingId: id });
-			const data = await getElementDetails(id);
-			set((state) => ({
-				cache: { ...state.cache, [id]: data },
-				loadingId: null,
-			}));
+			let { ids, fetchElementsIds } = get();
+			if (!ids.length) {
+				await fetchElementsIds();
+				ids = get().ids;
+			}
+
+			const detailedObject = await Promise.all(
+				ids.map((id) => getElementDetails(id))
+			);
+			set({ details: detailedObject });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
 	},
-	clearCacheForId: (id: string) =>
-		set((state) => {
-			const newCache = { ...state.cache };
-			delete newCache[id];
-			return { cache: newCache };
-		}),
 }));

@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useElementsStore } from "../store/useElementsStore";
 
 export function useElements() {
-	const fetchElementsIds = useElementsStore((s) => s.fetchElementsIds);
-	const ids = useElementsStore((s) => s.ids);
+	const fetchAllDetails = useElementsStore((s) => s.fetchAllDetails);
+	const details = useElementsStore((s) => s.details);
 	const error = useElementsStore((s) => s.error);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -18,13 +18,13 @@ export function useElements() {
 					setIsLoading(true);
 				}
 
-				await fetchElementsIds();
+				await fetchAllDetails();
 			} finally {
 				setIsLoading(false);
 				setIsRefreshing(false);
 			}
 		},
-		[fetchElementsIds]
+		[fetchAllDetails]
 	);
 
 	useEffect(() => {
@@ -32,7 +32,7 @@ export function useElements() {
 	}, [fetchData]);
 
 	return {
-		ids,
+		details,
 		error,
 		isLoading,
 		isRefreshing,
