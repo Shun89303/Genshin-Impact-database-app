@@ -1,10 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { cookingIngredients } from "@/src/types/cooking.material";
+import { Normalized } from "@/src/types/cooking.material";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import MaterialCard from "./materialCard";
 
 export default function SearchList({
 	finalData,
@@ -12,7 +12,7 @@ export default function SearchList({
 	onRefresh,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
-	finalData: cookingIngredients[];
+	finalData: Normalized[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
@@ -28,20 +28,24 @@ export default function SearchList({
 	}, [cookingIngredients, finalData, materials]);
 
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View>
 			<FlatList
 				data={finalData}
 				keyExtractor={(item) => item.id}
 				initialNumToRender={15}
-				numColumns={3}
-				contentContainerStyle={{
-					gap: 10,
-				}}
 				windowSize={21}
 				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				renderItem={({ item }) => <MaterialsImage id={item.id} />}
+				renderItem={({ item }) => (
+					<MaterialCard
+						id={item.id}
+						name={item.name}
+						description={item.description ?? "unavailable"}
+						rarity={item.rarity ?? 0}
+						sources={item.sources ?? []}
+					/>
+				)}
 			/>
 		</View>
 	);
