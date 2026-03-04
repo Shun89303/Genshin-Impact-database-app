@@ -1,4 +1,4 @@
-import { LocalSpecialties } from "@/src/types/local.material";
+import { Normalized } from "@/src/types/local.material";
 import { FlatList, Text, View } from "react-native";
 import MaterialsImage from "./materialsImage";
 
@@ -7,14 +7,14 @@ export default function FilterList({
 	refreshing,
 	onRefresh,
 }: {
-	finalData: LocalSpecialties[] | { label: string; data: LocalSpecialties[] }[];
+	finalData: Normalized[] | { label: string; data: Normalized[] }[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
 		<View>
 			<FlatList
-				data={finalData as { label: string; data: LocalSpecialties[] }[]}
+				data={finalData as { label: string; data: Normalized[] }[]}
 				keyExtractor={(item) => item.label}
 				initialNumToRender={12}
 				windowSize={21}
@@ -39,16 +39,9 @@ export default function FilterList({
 						</Text>
 						<FlatList
 							horizontal
-							data={item.data}
+							data={item.data.flatMap((d) => d.items)}
 							keyExtractor={(item) => item.id}
-							renderItem={({ item }) => (
-								<View
-									key={item.id}
-									style={{ justifyContent: "space-evenly", padding: 10 }}
-								>
-									<MaterialsImage id={item.id} />
-								</View>
-							)}
+							renderItem={({ item }) => <MaterialsImage id={item.id} />}
 						/>
 					</View>
 				)}
