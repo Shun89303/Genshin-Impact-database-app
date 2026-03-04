@@ -23,7 +23,7 @@ export default function FoodList() {
 	const consumables = endpoints.consumables;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%", "80%"], []);
+	const snapPoints = useMemo(() => ["40%"], []);
 
 	const { details, error, isLoading, isRefreshing, refetch } =
 		useFoodConsumables();

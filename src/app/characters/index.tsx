@@ -1,10 +1,10 @@
 import CharactersList from "@/src/components/screens/characters/charactersList";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function CharactersScreen() {
 	return (
-		<SafeAreaView>
+		<View style={{ flex: 1 }}>
 			<CharactersList />
-		</SafeAreaView>
+		</View>
 	);
 }

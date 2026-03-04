@@ -23,7 +23,7 @@ export default function MaterialsList() {
 	const localSpecialties = endpoints.localSpecialties;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%", "80%"], []);
+	const snapPoints = useMemo(() => ["40%"], []);
 
 	const { details, error, isLoading, isRefreshing, refetch } =
 		useLocalMaterials();

@@ -5,12 +5,15 @@ import { useCharactersStore } from "@/src/store/useCharactersStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
-import {} from "react-native-safe-area-context";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import EmptyState from "../../ui/EmptyState";
 import ErrorState from "../../ui/ErrorState";
 import ScreenLoader from "../../ui/ScreenLoader";
 import FilterCatalog from "../../utils/filter/character/filterCatalog";
 import SearchFilterBar from "../../utils/filter/character/searchFilterBar";
+import styles from "./charactersList.styles";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
@@ -20,15 +23,12 @@ export default function CharactersList() {
 	const selectedType = useCharactersStore((state) => state.selectedType);
 	const groupByType = useCharactersStore((state) => state.groupByType);
 
-	// Endpoints
 	const characters = endpoints.characters;
 	const card = endpoints.card;
 
-	// Filter Category Bottom Sheet
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%", "80%"], []);
+	const snapPoints = useMemo(() => ["40%"], []);
 
-	// States + Fetch hook
 	const { details, error, isLoading, isRefreshing, refetch } = useCharacters();
 
 	useEffect(() => {
@@ -38,7 +38,7 @@ export default function CharactersList() {
 		remainingIds.forEach((id) => {
 			Image.prefetch(`${BASE_URL}${characters}/${id}${card}`);
 		});
-	}, [ids, characters, card]);
+	}, [ids, card, characters]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -57,29 +57,39 @@ export default function CharactersList() {
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
-	if (details.length === 0)
-		return <EmptyState message={"No characters found"} onRetry={refetch} />;
+	if (!details.length)
+		return <EmptyState message="No characters found" onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<>
-			<SearchFilterBar sheetRef={sheetRef} />
-			<ListComponent
-				finalData={finalData}
-				refreshing={isRefreshing}
-				onRefresh={refetch}
-			/>
+		<SafeAreaView style={styles.safeArea}>
+			<View style={styles.container}>
+				<View style={styles.header}>
+					<SearchFilterBar sheetRef={sheetRef} />
+				</View>
+
+				<View style={styles.list}>
+					<ListComponent
+						finalData={finalData}
+						refreshing={isRefreshing}
+						onRefresh={refetch}
+					/>
+				</View>
+			</View>
+
 			<BottomSheet
 				ref={sheetRef}
 				snapPoints={snapPoints}
 				index={-1}
 				enablePanDownToClose
+				backgroundStyle={styles.sheetBackground}
+				handleIndicatorStyle={styles.sheetIndicator}
 			>
-				<BottomSheetView>
+				<BottomSheetView style={styles.sheetContent}>
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</>
+		</SafeAreaView>
 	);
 }

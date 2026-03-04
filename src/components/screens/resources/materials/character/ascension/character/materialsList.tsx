@@ -29,7 +29,7 @@ export default function MaterialsList() {
 	const characterAscension = endpoints.characterAscension;
 
 	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%", "80%"], []);
+	const snapPoints = useMemo(() => ["40%"], []);
 
 	const { details, error, isLoading, isRefreshing, refetch } =
 		useCharacterAscensionMaterials();
