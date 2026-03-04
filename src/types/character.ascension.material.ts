@@ -1,16 +1,15 @@
-export type MaterialTier = {
-	element: string;
+export type Api = Record<string, ApiObject>;
+
+export type ApiObject = Record<string, ApiItem>;
+
+export type ApiItem = {
 	id: string;
 	name: string;
+	sources?: string[];
+	rarity?: number;
 };
 
-export type ElementTiers = {
-	sliver: MaterialTier;
-	fragment: MaterialTier;
-	chunk: MaterialTier;
-	gemstone: MaterialTier;
-};
-
-export type CharacterAscensionApi = {
-	[element: string]: ElementTiers;
+export type Normalized = ApiItem & {
+	element: string;
+	title: string;
 };
