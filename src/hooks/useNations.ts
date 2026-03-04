@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useNationsStore } from "../store/useNationsStore";
 
 export function useNations() {
-	const fetchNationsIds = useNationsStore((s) => s.fetchNationsIds);
-	const ids = useNationsStore((s) => s.ids);
+	const fetchAllDetails = useNationsStore((s) => s.fetchAllDetails);
+	const details = useNationsStore((s) => s.details);
 	const error = useNationsStore((s) => s.error);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -18,13 +18,13 @@ export function useNations() {
 					setIsLoading(true);
 				}
 
-				await fetchNationsIds();
+				await fetchAllDetails();
 			} finally {
 				setIsLoading(false);
 				setIsRefreshing(false);
 			}
 		},
-		[fetchNationsIds]
+		[fetchAllDetails]
 	);
 
 	useEffect(() => {
@@ -32,7 +32,7 @@ export function useNations() {
 	}, [fetchData]);
 
 	return {
-		ids,
+		details,
 		error,
 		isLoading,
 		isRefreshing,

@@ -7,40 +7,44 @@ import { useNations } from "@/src/hooks/useNations";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
-import NationImage from "./nationImage";
+import NationCard from "./nationCard";
 
 export default function NationsList() {
 	const nations = endpoints.nations;
 	const icon = endpoints.icon;
 
-	const { ids, error, isLoading, isRefreshing, refetch } = useNations();
+	const { details, error, isLoading, isRefreshing, refetch } = useNations();
 
 	useEffect(() => {
-		if (!ids.length) return;
+		if (!details.length) return;
 
-		ids.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${nations}/${id}${icon}`);
+		details.forEach((nation) => {
+			Image.prefetch(`${BASE_URL}${nations}/${nation.id}${icon}`);
 		});
-	}, [ids, nations, icon]);
+	}, [details, nations, icon]);
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
-	if (ids.length === 0)
-		return <EmptyState message={"No weapons found"} onRetry={refetch} />;
+	if (details.length === 0)
+		return <EmptyState message={"No nations found"} onRetry={refetch} />;
 
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View>
 			<FlatList
-				data={ids}
-				keyExtractor={(id) => id}
-				horizontal
+				data={details}
+				keyExtractor={(nation) => nation.id}
 				removeClippedSubviews
 				refreshing={isRefreshing}
 				onRefresh={refetch}
-				contentContainerStyle={{
-					marginTop: 20,
-				}}
-				renderItem={({ item }) => <NationImage id={item} />}
+				renderItem={({ item }) => (
+					<NationCard
+						name={item.name}
+						element={item.element}
+						archon={item.archon}
+						controllingEntity={item.controllingEntity}
+						id={item.id}
+					/>
+				)}
 			/>
 		</View>
 	);

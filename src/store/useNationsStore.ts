@@ -4,23 +4,21 @@ import {
 	getNationImageTypes,
 	getNationsIds,
 } from "../services/nations.services";
+import { Normalized } from "../types/nation";
 
 interface NationsState {
 	ids: string[];
+	details: Normalized[];
 	error: string | null;
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	clearCacheForId?: (id: string) => void;
 	fetchNationsIds: () => Promise<void>;
 	fetchNationImageTypes: (id: string) => Promise<string[]>;
-	fetchNationDetails: (id: any) => Promise<void>;
+	fetchAllDetails: () => Promise<void>;
 }
 
 export const useNationsStore = create<NationsState>((set, get) => ({
 	ids: [],
+	details: [],
 	error: null,
-	cache: {},
-	loadingId: null,
 	fetchNationsIds: async () => {
 		const { ids } = get();
 		if (ids.length) return;
@@ -39,29 +37,20 @@ export const useNationsStore = create<NationsState>((set, get) => ({
 			return null;
 		}
 	},
-	fetchNationDetails: async (id) => {
-		const { cache } = get();
-
-		if (cache[id]) {
-			set({ loadingId: null });
-			return;
-		}
-
+	fetchAllDetails: async () => {
 		try {
-			set({ loadingId: id });
-			const data = await getNationDetails(id);
-			set((state) => ({
-				cache: { ...state.cache, [id]: data },
-				loadingId: null,
-			}));
+			let { ids, fetchNationsIds } = get();
+			if (!ids.length) {
+				await fetchNationsIds();
+				ids = get().ids;
+			}
+
+			const detailedObject = await Promise.all(
+				ids.map((id) => getNationDetails(id))
+			);
+			set({ details: detailedObject });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
 	},
-	clearCacheForId: (id: string) =>
-		set((state) => {
-			const newCache = { ...state.cache };
-			delete newCache[id];
-			return { cache: newCache };
-		}),
 }));
