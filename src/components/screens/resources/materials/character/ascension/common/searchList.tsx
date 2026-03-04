@@ -1,10 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { NormalizedCommonAscensionMaterialGroup } from "@/src/types/common.ascension.material";
+import { Normalized } from "@/src/types/common.ascension.material";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import MaterialCard from "./materialCard";
 
 export default function SearchList({
 	finalData,
@@ -12,7 +12,7 @@ export default function SearchList({
 	onRefresh,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
-	finalData: NormalizedCommonAscensionMaterialGroup[];
+	finalData: Normalized[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
@@ -28,22 +28,23 @@ export default function SearchList({
 		Promise.all(urls.map((url) => Image.prefetch(url)));
 	}, [commonAscension, finalData, materials]);
 
-	const flatItems = finalData.flatMap((group) => group.items);
-
 	return (
 		<View style={{ alignItems: "center" }}>
 			<FlatList
-				data={flatItems}
-				keyExtractor={(item) => item.id}
-				numColumns={3}
-				initialNumToRender={12}
-				columnWrapperStyle={{
-					justifyContent: "space-between",
-					marginBottom: 10,
-				}}
+				data={finalData}
+				keyExtractor={(item) => item.material}
+				initialNumToRender={5}
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				renderItem={({ item }) => <MaterialsImage id={item.id} />}
+				renderItem={({ item }) => (
+					<MaterialCard
+						material={item.material}
+						characters={item.characters ?? []}
+						weapons={item.weapons ?? []}
+						items={item.items}
+						sources={item.sources}
+					/>
+				)}
 			/>
 		</View>
 	);
