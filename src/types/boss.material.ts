@@ -1,14 +1,11 @@
-export type BossMaterialItem = {
+export type Api = Record<string, ApiObject>;
+
+export type ApiObject = {
 	name: string;
 	source: string;
-	characters: string[];
+	characters?: string[];
 };
 
-export type RawBossMaterialsApi = {
-	id: string;
-	[key: string]: BossMaterialItem | string;
-};
-
-export type NormalizedBossMaterialGroup = BossMaterialItem & {
+export type Normalized = ApiObject & {
 	id: string;
 };

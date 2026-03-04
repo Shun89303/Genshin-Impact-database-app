@@ -1,10 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { NormalizedBossMaterialGroup } from "@/src/types/boss.material";
+import { Normalized } from "@/src/types/boss.material";
 import { Image } from "expo-image";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import MaterialCard from "./materialCard";
 
 export default function SearchList({
 	finalData,
@@ -12,7 +12,7 @@ export default function SearchList({
 	onRefresh,
 }: {
 	// finalData: TalentBoss[] | { label: string; data: TalentBoss[] }[];
-	finalData: NormalizedBossMaterialGroup[];
+	finalData: Normalized[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
@@ -31,15 +31,17 @@ export default function SearchList({
 			<FlatList
 				data={finalData}
 				keyExtractor={(item) => item.id}
-				numColumns={3}
 				initialNumToRender={15}
-				columnWrapperStyle={{
-					justifyContent: "space-between",
-					marginBottom: 10,
-				}}
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				renderItem={({ item }) => <MaterialsImage id={item.id} />}
+				renderItem={({ item }) => (
+					<MaterialCard
+						id={item.id}
+						name={item.name}
+						source={item.source}
+						characters={item.characters ?? []}
+					/>
+				)}
 			/>
 		</View>
 	);
