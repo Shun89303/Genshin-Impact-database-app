@@ -1,22 +1,18 @@
-export type CommonAscensionMaterialItem = {
+export type Api = Record<string, ApiObject>;
+
+export type ApiObject = {
+	characters?: string[];
+	weapons?: string[];
+	items: ApiItem[];
+	sources: string[];
+};
+
+export type ApiItem = {
 	id: string;
 	name: string;
 	rarity: number;
 };
 
-export type CommonAscensionMaterialGroup = {
-	characters?: string[];
-	weapons?: string[];
-	items: CommonAscensionMaterialItem[];
-	sources?: string[];
+export type Normalized = ApiObject & {
+	material: string;
 };
-
-export type RawCommonAscensionMaterialsApi = {
-	id: string;
-	[key: string]: CommonAscensionMaterialGroup | string;
-};
-
-export type NormalizedCommonAscensionMaterialGroup =
-	CommonAscensionMaterialGroup & {
-		id: string;
-	};
