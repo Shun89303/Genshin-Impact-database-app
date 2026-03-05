@@ -13,9 +13,9 @@ import ErrorState from "../../ui/ErrorState";
 import ScreenLoader from "../../ui/ScreenLoader";
 import FilterCatalog from "../../utils/filter/character/filterCatalog";
 import SearchFilterBar from "../../utils/filter/character/searchFilterBar";
-import styles from "./charactersList.styles";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
+import styles from "./styles/charactersList.styles";
 
 export default function CharactersList() {
 	const ids = useCharactersStore((state) => state.ids);

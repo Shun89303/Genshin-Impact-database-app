@@ -2,12 +2,13 @@ import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { Character } from "@/src/types/character";
 import React, { useState } from "react";
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, ScrollView, View } from "react-native";
 import CharacterConstellations from "./characterConstellations";
 import CharacterGallery from "./characterGallery";
 import CharacterOverview from "./characterOverview";
 import CharacterTabs, { Tab } from "./characterTabs";
 import ExpandableHorizontalList from "./expandableHorizontalList";
+import styles from "./styles/characterDetails.styles";
 
 export default function CharacterDetails({
 	character,
@@ -104,17 +105,3 @@ export default function CharacterDetails({
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-	},
-	scrollContainer: {
-		flex: 0,
-	},
-	scrollContent: {
-		paddingVertical: 16,
-		paddingHorizontal: 12,
-	},
-});

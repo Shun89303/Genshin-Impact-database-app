@@ -1,7 +1,7 @@
 import { Character } from "@/src/types/character";
 import { FlatList, View } from "react-native";
 import CharacterImage from "./characterImage";
-import styles from "./searchList.styles";
+import styles from "./styles/searchList.styles";
 
 export default function SearchList({
 	finalData,
