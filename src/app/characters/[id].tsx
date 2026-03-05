@@ -1,4 +1,4 @@
-import CharacterDetails from "@/src/components/screens/characters/characterDetails";
+import CharacterDetails from "@/src/components/screens/characters/details/characterDetails";
 import { useCharacters } from "@/src/hooks/useCharacters";
 import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
