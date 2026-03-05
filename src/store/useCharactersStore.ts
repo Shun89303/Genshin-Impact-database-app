@@ -24,10 +24,6 @@ interface CharactersState {
 		characters: Character[],
 		type: "vision" | "weapon" | "nation"
 	) => { label: string; data: Character[] }[];
-	// loadingId: string | null;
-	// fetchCharacterDetails: (id: any) => Promise<void>;
-	// cache: Record<string, unknown>;
-	// clearCacheForId?: (id: string) => void;
 }
 
 export const useCharactersStore = create<CharactersState>((set, get) => ({
