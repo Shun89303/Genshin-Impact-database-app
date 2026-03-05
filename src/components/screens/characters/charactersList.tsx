@@ -70,9 +70,13 @@ export default function CharactersList() {
 	return (
 		<SafeAreaView style={styles.safeArea}>
 			<View style={styles.container}>
-				<View style={styles.header}>
+				<View>
 					<SearchFilterBar sheetRef={sheetRef} />
 				</View>
+
+				<View
+					style={{ height: 1, backgroundColor: "#334155", marginVertical: 12 }}
+				/>
 
 				<View style={styles.list}>
 					<ListComponent
