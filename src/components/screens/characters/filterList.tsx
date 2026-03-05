@@ -1,7 +1,7 @@
 import { Character } from "@/src/types/character";
 import { FlatList, Text, View } from "react-native";
 import CharacterImage from "./characterImage";
-import styles from "./filterList.styles";
+import styles from "./styles/filterList.styles";
 
 export default function FilterList({
 	finalData,

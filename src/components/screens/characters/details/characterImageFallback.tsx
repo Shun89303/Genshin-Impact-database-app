@@ -2,6 +2,7 @@ import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import { Image } from "expo-image";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import styles from "./styles/characterImageFallback.styles";
 
 export default function CharacterImageFallback({
 	uri,
@@ -43,24 +44,3 @@ export default function CharacterImageFallback({
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	loader: {
-		...StyleSheet.absoluteFillObject,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-
-	unavailable: {
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#334155",
-	},
-
-	unavailableText: {
-		color: "#CBD5E1",
-		fontSize: 10,
-		textAlign: "center",
-		paddingHorizontal: 2,
-	},
-});
