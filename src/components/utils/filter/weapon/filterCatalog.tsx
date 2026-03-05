@@ -45,7 +45,7 @@ export default function FilterCatalog({ sheetRef }: { sheetRef: any }) {
 
 const styles = StyleSheet.create({
 	container: {
-		paddingVertical: 24,
+		paddingBottom: 24,
 		gap: 24,
 		backgroundColor: "#1E293B",
 	},

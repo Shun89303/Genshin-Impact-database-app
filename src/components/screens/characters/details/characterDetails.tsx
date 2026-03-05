@@ -51,6 +51,8 @@ export default function CharacterDetails({
 				<CharacterTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 			</View>
 
+			<View style={{ height: 1, backgroundColor: "#334155" }} />
+
 			<ScrollView
 				style={styles.scrollContainer}
 				contentContainerStyle={styles.scrollContent}

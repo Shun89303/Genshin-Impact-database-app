@@ -11,10 +11,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 	},
 
-	header: {
-		marginBottom: 12,
-	},
-
 	list: {
 		flex: 1,
 	},
@@ -32,7 +28,7 @@ const styles = StyleSheet.create({
 
 	sheetContent: {
 		paddingHorizontal: 16,
-		paddingBottom: 24,
+		paddingVertical: 10,
 	},
 });
 

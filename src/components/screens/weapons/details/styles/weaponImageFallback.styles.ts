@@ -20,13 +20,6 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: "center",
 	},
-
-	loader: {
-		...StyleSheet.absoluteFillObject,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "rgba(15, 23, 42, 0.5)",
-	},
 });
 
 export default styles;

@@ -68,6 +68,8 @@ export default function WeaponsList() {
 				<SearchFilterBar sheetRef={sheetRef} />
 			</View>
 
+			<View style={{ height: 1, backgroundColor: "#334155", marginTop: 12 }} />
+
 			<ListComponent
 				finalData={finalData}
 				refreshing={isRefreshing}
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
 	searchContainer: {
 		paddingHorizontal: 16,
 		paddingTop: 10,
-		paddingBottom: 6,
 	},
 
 	sheetBackground: {

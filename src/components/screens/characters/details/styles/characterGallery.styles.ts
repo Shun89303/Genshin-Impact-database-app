@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
 	tipText: {
 		fontSize: 12,
-		color: "#1E293B", // dark tip text for light background
+		color: "#94A3B8",
 		marginBottom: 8,
 		textAlign: "center",
 	},

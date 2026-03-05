@@ -1,26 +1,66 @@
 import { useArtifactsStore } from "@/src/store/useArtifactsStore";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function SearchFilterBar({ sheetRef }: { sheetRef: any }) {
 	const input = useArtifactsStore((state) => state.input);
 	const setInput = useArtifactsStore((state) => state.setInput);
 
 	return (
-		<View
-			style={{
-				flexDirection: "row",
-				justifyContent: "space-around",
-				alignItems: "center",
-			}}
-		>
+		<View style={styles.container}>
 			<TextInput
-				placeholder="Search name"
+				style={styles.input}
+				placeholder="Search artifact name"
+				placeholderTextColor="#9CA3AF"
 				value={input}
 				onChangeText={setInput}
 			/>
-			<Pressable onPress={() => sheetRef.current?.expand()}>
-				<Text>Filter</Text>
+
+			<Pressable
+				style={({ pressed }) => [
+					styles.filterButton,
+					pressed && styles.filterButtonPressed,
+				]}
+				onPress={() => sheetRef.current?.expand()}
+			>
+				<Text style={styles.filterText}>Filter</Text>
 			</Pressable>
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 10,
+	},
+
+	input: {
+		flex: 1,
+		height: 44,
+		paddingHorizontal: 14,
+		borderRadius: 10,
+		backgroundColor: "#1F2937",
+		color: "#FFFFFF",
+		fontSize: 15,
+	},
+
+	filterButton: {
+		height: 44,
+		paddingHorizontal: 18,
+		borderRadius: 10,
+		backgroundColor: "#2563EB",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
+	filterButtonPressed: {
+		opacity: 0.8,
+	},
+
+	filterText: {
+		color: "#FFFFFF",
+		fontWeight: "600",
+		fontSize: 14,
+	},
+});

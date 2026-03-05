@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 		margin: 4,
 		borderRadius: 12,
 		overflow: "hidden",
-		backgroundColor: "#1E293B", // subtle dark background while loading
+		backgroundColor: "#1E293B",
 		justifyContent: "center",
 		alignItems: "center",
 	},

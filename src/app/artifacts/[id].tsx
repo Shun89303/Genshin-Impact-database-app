@@ -1,56 +1,16 @@
-import ArtifactDetails from "@/src/components/screens/artifacts/artifactDetails";
-import styles from "@/src/components/styles.modules";
-import { useArtifactsStore } from "@/src/store/useArtifactsStore";
-import { useFocusEffect } from "@react-navigation/native";
+import ArtifactDetails from "@/src/components/screens/artifacts/details/artifactDetails";
+import ScreenLoader from "@/src/components/ui/ScreenLoader";
+import { useArtifacts } from "@/src/hooks/useArtifacts";
 import { useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 export default function ArtifactsDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const fetchArtifactDetails = useArtifactsStore(
-		(state) => state.fetchArtifactDetails
-	);
-	const error = useArtifactsStore((state) => state.error);
-	const cache = useArtifactsStore((state) => state.cache);
-	const loadingId = useArtifactsStore((state) => state.loadingId);
 
-	useFocusEffect(
-		useCallback(() => {
-			fetchArtifactDetails(id);
-		}, [fetchArtifactDetails, id])
-	);
+	const { details, isLoading } = useArtifacts();
 
-	const loading = loadingId === id;
-	const details = cache[id];
+	const artifact = details.find((art) => art.id === id);
 
-	if (loading || !details)
-		return (
-			<>
-				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
-					Loading Item: {id}
-				</Text>
-				<ActivityIndicator />
-			</>
-		);
+	if (isLoading || !artifact) return <ScreenLoader />;
 
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</View>
-		);
-
-	return (
-		<View>
-			<Text style={{ textAlign: "center" }}>Artifact Details</Text>
-			<FlatList
-				data={Object.entries(details)}
-				keyExtractor={([key]) => key}
-				renderItem={({ item: [field, value] }) => (
-					<ArtifactDetails field={field} value={value} />
-				)}
-			/>
-		</View>
-	);
+	return <ArtifactDetails artifact={artifact} />;
 }
