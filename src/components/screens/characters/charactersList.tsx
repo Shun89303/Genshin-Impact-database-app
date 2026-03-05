@@ -55,10 +55,15 @@ export default function CharactersList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (isLoading) return <ScreenLoader />;
+	if (isLoading || isRefreshing) return <ScreenLoader />;
+
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (!details.length)
-		return <EmptyState message="No characters found" onRetry={refetch} />;
+		return (
+			<SafeAreaView style={styles.safeArea}>
+				<EmptyState message="No characters found" onRetry={refetch} />
+			</SafeAreaView>
+		);
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 

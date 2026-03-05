@@ -15,6 +15,7 @@ import {
 export default function CharacterImage({ id }: { id: string }) {
 	const { error } = useCharactersStore();
 	const [loading, setLoading] = useState(true);
+	const [failed, setFailed] = useState(false);
 	const router = useRouter();
 
 	const characters = endpoints.characters;
@@ -36,14 +37,24 @@ export default function CharacterImage({ id }: { id: string }) {
 			}
 		>
 			<View style={styles.imageWrapper}>
-				<Image
-					source={{ uri: `${BASE_URL}${characters}/${id}${card}` }}
-					style={styles.image}
-					cachePolicy="memory-disk"
-					onLoad={() => setLoading(false)}
-				/>
+				{!failed ? (
+					<Image
+						source={{ uri: `${BASE_URL}${characters}/${id}${card}` }}
+						style={styles.image}
+						cachePolicy="memory-disk"
+						onLoad={() => setLoading(false)}
+						onError={() => {
+							setLoading(false);
+							setFailed(true);
+						}}
+					/>
+				) : (
+					<View style={styles.unavailable}>
+						<Text style={styles.unavailableText}>Image Unavailable</Text>
+					</View>
+				)}
 
-				{loading && (
+				{loading && !failed && (
 					<View style={styles.loaderOverlay}>
 						<ActivityIndicator size="small" />
 					</View>
@@ -68,7 +79,7 @@ const styles = StyleSheet.create({
 
 	imageWrapper: {
 		width: "100%",
-		aspectRatio: 0.5, // keeps 100x200 ratio clean
+		aspectRatio: 0.5,
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: "#0F172A",
@@ -83,6 +94,20 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		justifyContent: "center",
 		alignItems: "center",
+	},
+
+	unavailable: {
+		width: "100%",
+		height: "100%",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#334155",
+	},
+
+	unavailableText: {
+		color: "#CBD5E1",
+		fontSize: 12,
+		textAlign: "center",
 	},
 
 	errorContainer: {

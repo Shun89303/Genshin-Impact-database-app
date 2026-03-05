@@ -9,25 +9,25 @@ import { Character, CharacterImageAssets } from "../types/character";
 interface CharactersState {
 	error: string | null;
 	ids: string[];
-	input: string;
 	details: Character[];
 	detailsById: Record<string, Character>;
+	input: string;
+	fetchCharactersIds: () => Promise<void>;
+	fetchAllDetails: () => Promise<void>;
+	setInput: (i: string) => void;
 	selectedType: "vision" | "weapon" | "nation" | null;
 	setSelectedType: (
 		type: "vision" | "weapon" | "nation" | null,
 		sheetRef: any
 	) => void;
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	clearCacheForId?: (id: string) => void;
-	fetchCharactersIds: () => Promise<void>;
-	setInput: (i: string) => void;
-	fetchAllDetails: () => Promise<void>;
-	fetchCharacterDetails: (id: any) => Promise<void>;
 	groupByType: (
 		characters: Character[],
 		type: "vision" | "weapon" | "nation"
 	) => { label: string; data: Character[] }[];
+	// loadingId: string | null;
+	// fetchCharacterDetails: (id: any) => Promise<void>;
+	// cache: Record<string, unknown>;
+	// clearCacheForId?: (id: string) => void;
 }
 
 export const useCharactersStore = create<CharactersState>((set, get) => ({
@@ -42,18 +42,20 @@ export const useCharactersStore = create<CharactersState>((set, get) => ({
 		sheetRef.current.close();
 	},
 	setInput: (i) => set({ input: i }),
-	cache: {},
-	loadingId: null,
 	fetchCharactersIds: async () => {
 		try {
+			set({ error: null });
 			const ids = await getCharactersIds();
-			set({ ids });
+			const lowerCaseIds = ids.map((id) => id.toLowerCase());
+			set({ ids: lowerCaseIds });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
 	},
 	fetchAllDetails: async () => {
 		try {
+			set({ error: null });
+
 			let { ids, fetchCharactersIds, details, detailsById } = get();
 			if (!ids.length) {
 				await fetchCharactersIds();
@@ -103,31 +105,6 @@ export const useCharactersStore = create<CharactersState>((set, get) => ({
 			set({ error: error.message });
 		}
 	},
-	fetchCharacterDetails: async (id) => {
-		const { cache } = get();
-
-		if (cache[id]) {
-			set({ loadingId: null });
-			return;
-		}
-
-		try {
-			set({ loadingId: id });
-			const data = await getCharacterDetails(id);
-			set((state) => ({
-				cache: { ...state.cache, [id]: data },
-				loadingId: null,
-			}));
-		} catch (error: any) {
-			set({ error: error.message });
-		}
-	},
-	clearCacheForId: (id: string) =>
-		set((state) => {
-			const newCache = { ...state.cache };
-			delete newCache[id];
-			return { cache: newCache };
-		}),
 	groupByType: (characters, type) => {
 		const options = FILTER_CATEGORIES[type];
 

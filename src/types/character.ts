@@ -1,4 +1,3 @@
-// Base reusable types
 export type ValueItem = {
 	name: string;
 	value: string | number;
@@ -69,7 +68,6 @@ export interface CharacterImageAssets {
 	talentSkill: string;
 }
 
-// Main character type
 export type Character = {
 	id: string;
 	name: string;
@@ -82,9 +80,9 @@ export type Character = {
 	nation: string;
 	affiliation: string;
 	rarity: 4 | 5;
-	release: string; // YYYY-MM-DD
+	release: string;
 	constellation: string;
-	birthday: string; // YYYY-MM-DD
+	birthday: string;
 	description: string;
 
 	skillTalents: SkillTalent[];

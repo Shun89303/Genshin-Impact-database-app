@@ -19,8 +19,6 @@ export default function SearchList({
 				keyExtractor={(item) => item.id}
 				numColumns={3}
 				initialNumToRender={9}
-				windowSize={15}
-				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
 				showsVerticalScrollIndicator={false}
