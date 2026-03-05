@@ -5,6 +5,9 @@ import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
+import { StyleSheet, View } from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 import EmptyState from "../../ui/EmptyState";
 import ErrorState from "../../ui/ErrorState";
 import ScreenLoader from "../../ui/ScreenLoader";
@@ -31,6 +34,7 @@ export default function WeaponsList() {
 		if (!ids.length) return;
 
 		const remainingIds = ids.slice(15);
+
 		remainingIds.forEach((id) => {
 			Image.prefetch(`${BASE_URL}${weapons}/${id}${icon}`);
 		});
@@ -59,23 +63,56 @@ export default function WeaponsList() {
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<>
-			<SearchFilterBar sheetRef={sheetRef} />
+		<SafeAreaView style={styles.container}>
+			<View style={styles.searchContainer}>
+				<SearchFilterBar sheetRef={sheetRef} />
+			</View>
+
 			<ListComponent
 				finalData={finalData}
 				refreshing={isRefreshing}
 				onRefresh={refetch}
 			/>
+
 			<BottomSheet
 				ref={sheetRef}
 				snapPoints={snapPoints}
 				index={-1}
 				enablePanDownToClose
+				backgroundStyle={styles.sheetBackground}
+				handleIndicatorStyle={styles.sheetIndicator}
 			>
-				<BottomSheetView>
+				<BottomSheetView style={styles.sheetContent}>
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</>
+		</SafeAreaView>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#0F172A",
+	},
+
+	searchContainer: {
+		paddingHorizontal: 16,
+		paddingTop: 10,
+		paddingBottom: 6,
+	},
+
+	sheetBackground: {
+		backgroundColor: "#1E293B",
+	},
+
+	sheetIndicator: {
+		backgroundColor: "#6B7280",
+		width: 40,
+	},
+
+	sheetContent: {
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+	},
+});
