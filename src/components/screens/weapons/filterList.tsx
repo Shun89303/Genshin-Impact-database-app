@@ -19,9 +19,9 @@ export default function FilterList({
 				initialNumToRender={15}
 				windowSize={21}
 				removeClippedSubviews
-				refreshing={refreshing}
-				onRefresh={onRefresh}
 				contentContainerStyle={styles.listContent}
+				onRefresh={onRefresh}
+				refreshing={refreshing}
 				renderItem={({ item }) => (
 					<View style={styles.section}>
 						<Text style={styles.sectionTitle}>{item.label}</Text>

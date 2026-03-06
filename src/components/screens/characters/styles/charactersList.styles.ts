@@ -4,11 +4,17 @@ const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
 		backgroundColor: "#0F172A",
+		paddingVertical: 10,
 	},
 
 	container: {
 		flex: 1,
 		paddingHorizontal: 16,
+	},
+
+	refreshSpinner: {
+		alignItems: "center",
+		marginVertical: 12,
 	},
 
 	list: {

@@ -6,11 +6,17 @@ import { useLocalSearchParams } from "expo-router";
 export default function WeaponsDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
 
-	const { details, isLoading } = useWeapons();
+	const { details, isLoading, isRefreshing, refetch } = useWeapons();
 
 	const weapon = details.find((wea) => wea.id === id);
 
 	if (isLoading || !weapon) return <ScreenLoader />;
 
-	return <WeaponDetails weapon={weapon} />;
+	return (
+		<WeaponDetails
+			weapon={weapon}
+			refreshing={isRefreshing}
+			onRefresh={refetch}
+		/>
+	);
 }

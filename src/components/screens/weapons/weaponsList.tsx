@@ -1,13 +1,11 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { useWeapons } from "@/src/hooks/useWeapons";
-import { useWeaponsStore } from "@/src/store/useWeaponsStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { SafeAreaView } from "react-native-safe-area-context";
 import EmptyState from "../../ui/EmptyState";
 import ErrorState from "../../ui/ErrorState";
 import ScreenLoader from "../../ui/ScreenLoader";
@@ -17,18 +15,23 @@ import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function WeaponsList() {
-	const ids = useWeaponsStore((state) => state.ids);
-	const input = useWeaponsStore((state) => state.input);
-	const selectedType = useWeaponsStore((state) => state.selectedType);
-	const groupByType = useWeaponsStore((state) => state.groupByType);
-
 	const weapons = endpoints.weapons;
 	const icon = endpoints.icon;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
-	const { details, error, isLoading, isRefreshing, refetch } = useWeapons();
+	const {
+		ids,
+		input,
+		selectedType,
+		groupByType,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useWeapons();
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -63,7 +66,7 @@ export default function WeaponsList() {
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<View style={styles.container}>
 			<View style={styles.searchContainer}>
 				<SearchFilterBar sheetRef={sheetRef} />
 			</View>
@@ -88,7 +91,7 @@ export default function WeaponsList() {
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</SafeAreaView>
+		</View>
 	);
 }
 

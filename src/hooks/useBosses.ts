@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useBossesStore } from "../store/useBossesStore";
 
 export function useBosses() {
-	const fetchBossesIds = useBossesStore((s) => s.fetchBossesIds);
+	const fetchAllDetails = useBossesStore((s) => s.fetchAllDetails);
 	const ids = useBossesStore((s) => s.ids);
+	const details = useBossesStore((s) => s.details);
 	const error = useBossesStore((s) => s.error);
+	const input = useBossesStore((s) => s.input);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -18,13 +20,15 @@ export function useBosses() {
 					setIsLoading(true);
 				}
 
-				await fetchBossesIds();
+				await fetchAllDetails();
 			} finally {
-				setIsLoading(false);
-				setIsRefreshing(false);
+				setTimeout(() => {
+					setIsLoading(false);
+					setIsRefreshing(false);
+				}, 1500);
 			}
 		},
-		[fetchBossesIds]
+		[fetchAllDetails]
 	);
 
 	useEffect(() => {
@@ -33,6 +37,8 @@ export function useBosses() {
 
 	return {
 		ids,
+		details,
+		input,
 		error,
 		isLoading,
 		isRefreshing,

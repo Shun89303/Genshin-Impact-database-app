@@ -6,6 +6,10 @@ export function useCharacters() {
 	const details = useCharactersStore((s) => s.details);
 	const detailsById = useCharactersStore((s) => s.detailsById);
 	const error = useCharactersStore((s) => s.error);
+	const ids = useCharactersStore((state) => state.ids);
+	const input = useCharactersStore((state) => state.input);
+	const selectedType = useCharactersStore((state) => state.selectedType);
+	const groupByType = useCharactersStore((state) => state.groupByType);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -21,8 +25,10 @@ export function useCharacters() {
 
 				await fetchAllDetails();
 			} finally {
-				setIsLoading(false);
-				setIsRefreshing(false);
+				setTimeout(() => {
+					setIsLoading(false);
+					setIsRefreshing(false);
+				}, 1500);
 			}
 		},
 		[fetchAllDetails]
@@ -33,6 +39,10 @@ export function useCharacters() {
 	}, [fetchData]);
 
 	return {
+		ids,
+		input,
+		selectedType,
+		groupByType,
 		details,
 		detailsById,
 		error,

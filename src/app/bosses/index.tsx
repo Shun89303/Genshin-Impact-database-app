@@ -1,10 +1,10 @@
 import BossesList from "@/src/components/screens/bosses/bossesList";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function BossesScreen() {
 	return (
-		<SafeAreaView>
+		<View style={{flex: 1}}>
 			<BossesList />
-		</SafeAreaView>
+		</View>
 	);
 }

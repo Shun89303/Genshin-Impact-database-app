@@ -2,14 +2,22 @@ import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { Weapon } from "@/src/types/weapon";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 import styles from "./styles/weaponDetails.styles";
 import WeaponBasicInfo from "./weaponBasicInfo";
 import WeaponImageFallback from "./weaponImageFallback";
 import WeaponStats from "./weaponStats";
 import WeaponTabs, { WeaponTab } from "./weaponTabs";
 
-export default function WeaponDetails({ weapon }: { weapon: Weapon }) {
+export default function WeaponDetails({
+	weapon,
+	refreshing,
+	onRefresh,
+}: {
+	weapon: Weapon;
+	refreshing: boolean;
+	onRefresh: () => void;
+}) {
 	const [activeTab, setActiveTab] = useState<WeaponTab>("Basic Info");
 	const { weapons, icon } = endpoints;
 
@@ -38,6 +46,13 @@ export default function WeaponDetails({ weapon }: { weapon: Weapon }) {
 				style={styles.scrollContainer}
 				contentContainerStyle={styles.scrollContent}
 				showsVerticalScrollIndicator={false}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+						colors={["#000000ff"]} // Android
+					/>
+				}
 			>
 				{activeTab === "Basic Info" && <WeaponBasicInfo weapon={weapon} />}
 				{activeTab === "Stats & Passive" && <WeaponStats weapon={weapon} />}

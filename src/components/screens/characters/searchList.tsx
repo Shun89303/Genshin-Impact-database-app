@@ -16,14 +16,13 @@ export default function SearchList({
 		<View style={styles.container}>
 			<FlatList
 				data={finalData as Character[]}
-				keyExtractor={(item) => item.id}
 				numColumns={3}
 				initialNumToRender={9}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
 				showsVerticalScrollIndicator={false}
 				columnWrapperStyle={styles.row}
 				contentContainerStyle={styles.content}
+				onRefresh={onRefresh}
+				refreshing={refreshing}
 				renderItem={({ item }) => (
 					<View style={styles.item}>
 						<CharacterImage id={item.id} />
