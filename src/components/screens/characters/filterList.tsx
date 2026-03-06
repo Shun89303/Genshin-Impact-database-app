@@ -20,10 +20,10 @@ export default function FilterList({
 				initialNumToRender={9}
 				windowSize={21}
 				removeClippedSubviews
-				refreshing={refreshing}
-				onRefresh={onRefresh}
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.contentContainer}
+				onRefresh={onRefresh}
+				refreshing={refreshing}
 				renderItem={({ item }) => (
 					<View style={styles.groupContainer}>
 						<Text style={styles.groupTitle}>{item.label}</Text>

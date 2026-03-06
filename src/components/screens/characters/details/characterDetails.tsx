@@ -2,7 +2,7 @@ import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { Character } from "@/src/types/character";
 import React, { useState } from "react";
-import { Dimensions, ScrollView, View } from "react-native";
+import { Dimensions, RefreshControl, ScrollView, View } from "react-native";
 import CharacterConstellations from "./characterConstellations";
 import CharacterGallery from "./characterGallery";
 import CharacterOverview from "./characterOverview";
@@ -12,8 +12,12 @@ import styles from "./styles/characterDetails.styles";
 
 export default function CharacterDetails({
 	character,
+	refreshing,
+	onRefresh,
 }: {
 	character: Character;
+	refreshing: boolean;
+	onRefresh: () => void;
 }) {
 	const [activeTab, setActiveTab] = useState<Tab>("Overview");
 
@@ -57,6 +61,13 @@ export default function CharacterDetails({
 				style={styles.scrollContainer}
 				contentContainerStyle={styles.scrollContent}
 				showsVerticalScrollIndicator={false}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+						colors={["#000000ff"]} // Android
+					/>
+				}
 			>
 				{/* Overview */}
 				{activeTab === "Overview" && (

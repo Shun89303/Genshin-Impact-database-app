@@ -43,6 +43,7 @@ export const useArtifactsStore = create<ArtifactsState>((set, get) => ({
 	},
 	fetchAllDetails: async () => {
 		try {
+			set({ error: null });
 			let { ids, fetchArtifactsIds, details } = get();
 			if (!ids.length) {
 				await fetchArtifactsIds();

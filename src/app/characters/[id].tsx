@@ -6,7 +6,7 @@ import { Text, View } from "react-native";
 export default function CharacterDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
 
-	const { detailsById, isLoading } = useCharacters();
+	const { detailsById, isLoading, isRefreshing, refetch } = useCharacters();
 	const character = detailsById[id];
 
 	if (isLoading || !character) {
@@ -17,5 +17,11 @@ export default function CharacterDetailsScreen() {
 		);
 	}
 
-	return <CharacterDetails character={character} />;
+	return (
+		<CharacterDetails
+			character={character}
+			refreshing={isRefreshing}
+			onRefresh={refetch}
+		/>
+	);
 }

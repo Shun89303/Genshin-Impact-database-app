@@ -5,6 +5,10 @@ export function useArtifacts() {
 	const fetchAllDetails = useArtifactsStore((s) => s.fetchAllDetails);
 	const details = useArtifactsStore((s) => s.details);
 	const error = useArtifactsStore((s) => s.error);
+	const ids = useArtifactsStore((state) => state.ids);
+	const input = useArtifactsStore((state) => state.input);
+	const selectedType = useArtifactsStore((state) => state.selectedType);
+	const groupByType = useArtifactsStore((state) => state.groupByType);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -20,8 +24,10 @@ export function useArtifacts() {
 
 				await fetchAllDetails();
 			} finally {
-				setIsLoading(false);
-				setIsRefreshing(false);
+				setTimeout(() => {
+					setIsLoading(false);
+					setIsRefreshing(false);
+				}, 1500);
 			}
 		},
 		[fetchAllDetails]
@@ -32,6 +38,10 @@ export function useArtifacts() {
 	}, [fetchData]);
 
 	return {
+		ids,
+		input,
+		selectedType,
+		groupByType,
 		details,
 		error,
 		isLoading,

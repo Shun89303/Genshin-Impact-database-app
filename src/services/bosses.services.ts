@@ -1,21 +1,16 @@
 import apiClient from "../api/client";
 import { endpoints } from "../api/endpoints";
+import { ApiIds, Boss } from "../types/boss";
 
 const boss = endpoints.boss;
 const weeklyBoss = endpoints.weeklyBoss;
-const list = endpoints.list;
 
 // will return an ARRAY of over 80 Boss id strings
-export function getBossesIds() {
+export function getBossesIds(): Promise<ApiIds> {
 	return apiClient(`${boss}${weeklyBoss}`);
 }
 
 // will return a huge OBJECT containing all the details of a Boss
-export function getBossDetails(id: string) {
+export function getBossDetails(id: string): Promise<Boss> {
 	return apiClient(`${boss}${weeklyBoss}/${id}`);
-}
-
-// will return a small ARRAY containing the types of images the api offers for the selected Boss
-export function getBossImageTypes(id: string) {
-	return apiClient(`${boss}${weeklyBoss}/${id}${list}`);
 }

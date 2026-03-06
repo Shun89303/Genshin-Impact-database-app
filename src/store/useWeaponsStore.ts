@@ -40,6 +40,7 @@ export const useWeaponsStore = create<WeaponsState>((set, get) => ({
 	},
 	fetchAllDetails: async () => {
 		try {
+			set({ error: null });
 			let { ids, fetchWeaponsIds, details } = get();
 			if (!ids.length) {
 				await fetchWeaponsIds();

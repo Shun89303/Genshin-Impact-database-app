@@ -22,6 +22,7 @@ export const endpoints = {
 	talentBook: "/talent-book",
 	list: "/list",
 	icon: "/icon",
+	portrait: "/portrait",
 	card: "/card",
 	gachaCard: "/gacha-card",
 	circletOfLogos: "/circlet-of-logos",

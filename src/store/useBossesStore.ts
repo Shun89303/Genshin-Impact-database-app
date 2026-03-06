@@ -1,26 +1,22 @@
 import { create } from "zustand";
-import {
-	getBossDetails,
-	getBossesIds,
-	getBossImageTypes,
-} from "../services/bosses.services";
+import { getBossDetails, getBossesIds } from "../services/bosses.services";
+import { Boss } from "../types/boss";
 
 interface BossesState {
 	error: string | null;
 	ids: string[];
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	clearCacheForId?: (id: string) => void;
+	details: Boss[];
+	input: string;
 	fetchBossesIds: () => Promise<void>;
-	fetchBossImageTypes: (id: string) => Promise<string[]>;
-	fetchBossDetails: (id: any) => Promise<void>;
+	fetchAllDetails: () => Promise<void>;
+	setInput: (i: string) => void;
 }
 
 export const useBossesStore = create<BossesState>((set, get) => ({
-	ids: [],
 	error: null,
-	cache: {},
-	loadingId: null,
+	ids: [],
+	details: [],
+	input: "",
 	fetchBossesIds: async () => {
 		const { ids } = get();
 		if (ids.length) {
@@ -33,37 +29,24 @@ export const useBossesStore = create<BossesState>((set, get) => ({
 			set({ error: error.message });
 		}
 	},
-	fetchBossImageTypes: async (id) => {
+	fetchAllDetails: async () => {
 		try {
-			return await getBossImageTypes(id);
-		} catch (error: any) {
-			set({ error: error.message });
-			return null;
-		}
-	},
-	fetchBossDetails: async (id) => {
-		const { cache } = get();
-
-		if (cache[id]) {
-			set({ loadingId: null });
-			return;
-		}
-
-		try {
-			set({ loadingId: id });
-			const data = await getBossDetails(id);
-			set((state) => ({
-				cache: { ...state.cache, [id]: data },
-				loadingId: null,
-			}));
+			set({ error: null });
+			let { ids, fetchBossesIds, details } = get();
+			if (!ids.length) {
+				await fetchBossesIds();
+				ids = get().ids;
+			}
+			if (details.length) {
+				return;
+			}
+			const fetchedDetails = await Promise.all(
+				ids.map((id) => getBossDetails(id))
+			);
+			set({ details: fetchedDetails });
 		} catch (error: any) {
 			set({ error: error.message });
 		}
 	},
-	clearCacheForId: (id: string) =>
-		set((state) => {
-			const newCache = { ...state.cache };
-			delete newCache[id];
-			return { cache: newCache };
-		}),
+	setInput: (i) => set({ input: i }),
 }));

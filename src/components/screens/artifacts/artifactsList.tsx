@@ -1,12 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { useArtifacts } from "@/src/hooks/useArtifacts";
-import { useArtifactsStore } from "@/src/store/useArtifactsStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
 import { StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import EmptyState from "../../ui/EmptyState";
 import ErrorState from "../../ui/ErrorState";
@@ -17,17 +15,22 @@ import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function ArtifactsList() {
-	const ids = useArtifactsStore((state) => state.ids);
-	const input = useArtifactsStore((state) => state.input);
-	const selectedType = useArtifactsStore((state) => state.selectedType);
-	const groupByType = useArtifactsStore((state) => state.groupByType);
-
 	const { artifacts, circletOfLogos } = endpoints;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
-	const { details, error, isLoading, isRefreshing, refetch } = useArtifacts();
+	const {
+		ids,
+		input,
+		selectedType,
+		groupByType,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useArtifacts();
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -62,7 +65,7 @@ export default function ArtifactsList() {
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<View style={styles.container}>
 			<View style={styles.searchContainer}>
 				<SearchFilterBar sheetRef={sheetRef} />
 			</View>
@@ -87,7 +90,7 @@ export default function ArtifactsList() {
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</SafeAreaView>
+		</View>
 	);
 }
 

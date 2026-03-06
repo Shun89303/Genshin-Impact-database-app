@@ -19,8 +19,8 @@ export default function SearchList({
 				windowSize={21}
 				removeClippedSubviews
 				numColumns={3}
-				refreshing={refreshing}
 				onRefresh={onRefresh}
+				refreshing={refreshing}
 				renderItem={({ item }) => (
 					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
 						<ArtifactImage id={item.id} />

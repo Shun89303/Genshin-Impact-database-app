@@ -1,7 +1,6 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { useCharacters } from "@/src/hooks/useCharacters";
-import { useCharactersStore } from "@/src/store/useCharactersStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
@@ -18,18 +17,23 @@ import SearchList from "./searchList";
 import styles from "./styles/charactersList.styles";
 
 export default function CharactersList() {
-	const ids = useCharactersStore((state) => state.ids);
-	const input = useCharactersStore((state) => state.input);
-	const selectedType = useCharactersStore((state) => state.selectedType);
-	const groupByType = useCharactersStore((state) => state.groupByType);
-
 	const characters = endpoints.characters;
 	const card = endpoints.card;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
-	const { details, error, isLoading, isRefreshing, refetch } = useCharacters();
+	const {
+		ids,
+		input,
+		selectedType,
+		groupByType,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useCharacters();
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -55,7 +59,7 @@ export default function CharactersList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (isLoading || isRefreshing) return <ScreenLoader />;
+	if (isLoading) return <ScreenLoader />;
 
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (!details.length)
@@ -68,7 +72,7 @@ export default function CharactersList() {
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<SafeAreaView style={styles.safeArea}>
+		<View style={styles.safeArea}>
 			<View style={styles.container}>
 				<View>
 					<SearchFilterBar sheetRef={sheetRef} />
@@ -99,6 +103,6 @@ export default function CharactersList() {
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</SafeAreaView>
+		</View>
 	);
 }
