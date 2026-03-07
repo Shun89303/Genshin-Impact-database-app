@@ -1,30 +1,26 @@
-import { potion } from "@/src/types/potion";
+import { NormalizedPotion } from "@/src/types/potion";
 import { FlatList, View } from "react-native";
-import PotionImage from "./potionImage";
+import PotionCard from "./potionCard";
 
 export default function SearchList({
 	finalData,
 	refreshing,
 	onRefresh,
 }: {
-	finalData: potion[] | { label: string; data: potion[] }[];
+	finalData: NormalizedPotion[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View>
 			<FlatList
-				data={finalData as potion[]}
+				data={finalData}
 				windowSize={21}
 				removeClippedSubviews
-				numColumns={3}
+				numColumns={2}
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				renderItem={({ item }) => (
-					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
-						<PotionImage id={item.id} />
-					</View>
-				)}
+				renderItem={({ item }) => <PotionCard potion={item} />}
 			/>
 		</View>
 	);

@@ -5,6 +5,7 @@ export function usePotionConsumables() {
 	const fetchAllDetails = usePotionStore((s) => s.fetchAllDetails);
 	const details = usePotionStore((s) => s.details);
 	const error = usePotionStore((s) => s.error);
+	const input = usePotionStore((state) => state.input);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -32,6 +33,7 @@ export function usePotionConsumables() {
 	}, [fetchData]);
 
 	return {
+		input,
 		details,
 		error,
 		isLoading,

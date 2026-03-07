@@ -12,7 +12,7 @@ export default function FoodDetailsScreen() {
 	if (isLoading || !food) {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<Text>Loading character...</Text>
+				<Text>Loading food...</Text>
 			</View>
 		);
 	}

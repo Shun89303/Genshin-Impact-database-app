@@ -1,18 +1,18 @@
-import { NormalizedFood } from "@/src/types/food";
+import { NormalizedPotion } from "@/src/types/potion";
 import { StyleSheet, Text, View } from "react-native";
-import FoodImage from "./foodImage";
+import PotionImage from "./potionImage";
 
-export default function FoodCard({ food }: { food: NormalizedFood }) {
+export default function PotionCard({ potion }: { potion: NormalizedPotion }) {
 	return (
 		<View style={styles.card}>
-			<FoodImage id={food.id} />
+			<PotionImage id={potion.id} />
 
 			<View style={styles.info}>
 				<Text style={styles.label}>Rarity</Text>
-				<Text style={styles.value}>{food.rarity}★</Text>
+				<Text style={styles.value}>{potion.rarity}★</Text>
 
 				<Text style={styles.label}>Name</Text>
-				<Text style={styles.value}>{food.name}</Text>
+				<Text style={styles.value}>{potion.name}</Text>
 			</View>
 		</View>
 	);

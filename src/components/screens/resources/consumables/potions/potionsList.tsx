@@ -2,39 +2,29 @@ import { endpoints } from "@/src/api/endpoints";
 import EmptyState from "@/src/components/ui/EmptyState";
 import ErrorState from "@/src/components/ui/ErrorState";
 import ScreenLoader from "@/src/components/ui/ScreenLoader";
-import FilterCatalog from "@/src/components/utils/filter/potion/filterCatalog";
-import SearchFilterBar from "@/src/components/utils/filter/potion/searchFilterBar";
+import SearchBar from "@/src/components/utils/filter/potion/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { usePotionConsumables } from "@/src/hooks/useConsumables.potion";
-import { usePotionStore } from "@/src/store/usePotion.consumables.store";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useEffect, useMemo, useRef } from "react";
-import FilterList from "./filterList";
+import { useEffect, useMemo } from "react";
+import { StyleSheet, View, useColorScheme } from "react-native";
 import SearchList from "./searchList";
 
 export default function PotionsList() {
-	const input = usePotionStore((state) => state.input);
-	const selectedType = usePotionStore((state) => state.selectedType);
-	const groupByType = usePotionStore((state) => state.groupByType);
-	const potionsIds = usePotionStore((state) => state.potionsIds);
-
 	const consumables = endpoints.consumables;
 	const potions = endpoints.potions;
+	const colorScheme = useColorScheme();
 
-	const sheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ["40%"], []);
-
-	const { details, error, isLoading, isRefreshing, refetch } =
+	const { input, details, error, isLoading, isRefreshing, refetch } =
 		usePotionConsumables();
 
 	useEffect(() => {
-		if (!potionsIds.length) return;
+		if (!details.length) return;
 
-		potionsIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${consumables}${potions}/${id}`);
+		details.forEach((potion) => {
+			Image.prefetch(`${BASE_URL}${consumables}${potions}/${potion.id}`);
 		});
-	}, [potionsIds, consumables, potions]);
+	}, [details, consumables, potions]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -46,38 +36,41 @@ export default function PotionsList() {
 			);
 		}
 
-		if (selectedType) {
-			return groupByType(result, selectedType);
-		}
-
 		return result;
-	}, [details, groupByType, input, selectedType]);
+	}, [details, input]);
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (details.length === 0)
 		return <EmptyState message={"No potions found"} onRetry={refetch} />;
 
-	const ListComponent = selectedType ? FilterList : SearchList;
-
 	return (
-		<>
-			<SearchFilterBar sheetRef={sheetRef} />
-			<ListComponent
+		<View
+			style={[
+				styles.container,
+				colorScheme === "dark" ? styles.dark : styles.light,
+			]}
+		>
+			<SearchBar />
+			<SearchList
 				finalData={finalData}
 				refreshing={isRefreshing}
 				onRefresh={refetch}
 			/>
-			<BottomSheet
-				ref={sheetRef}
-				snapPoints={snapPoints}
-				index={-1}
-				enablePanDownToClose
-			>
-				<BottomSheetView>
-					<FilterCatalog sheetRef={sheetRef} />
-				</BottomSheetView>
-			</BottomSheet>
-		</>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		paddingHorizontal: 16, // side padding
+		paddingTop: 12, // top spacing for search bar
+	},
+	light: {
+		backgroundColor: "#F9FAFB",
+	},
+	dark: {
+		backgroundColor: "#0F172A",
+	},
+});
