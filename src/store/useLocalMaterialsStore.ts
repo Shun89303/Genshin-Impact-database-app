@@ -1,9 +1,6 @@
 import { create } from "zustand";
 import { FILTER_CATEGORIES } from "../config/category/lsmCategory/filterCategories";
-import {
-	getAllLocalMaterialImageIds,
-	getAllLocalMaterialsData,
-} from "../services/local.materials.services";
+import { getAllLocalMaterialsData } from "../services/local.materials.services";
 import { ApiObject, Normalized } from "../types/local.material";
 
 interface LocalMaterialsState {
@@ -12,12 +9,8 @@ interface LocalMaterialsState {
 	details: Normalized[];
 	selectedType: "nation" | null;
 	setSelectedType: (type: "nation" | null, sheetRef: any) => void;
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	materialIds: string[];
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchMaterialIds: () => Promise<void>;
 	groupByType: (
 		LSMs: Normalized[],
 		type: "nation"
@@ -35,21 +28,6 @@ export const useLocalMaterialsStore = create<LocalMaterialsState>(
 			sheetRef.current.close();
 		},
 		setInput: (i) => set({ input: i }),
-		cache: {},
-		loadingId: null,
-		materialIds: [],
-		fetchMaterialIds: async () => {
-			try {
-				const { materialIds } = get();
-
-				if (!materialIds.length) {
-					const materialIds = await getAllLocalMaterialImageIds();
-					set({ materialIds });
-				}
-			} catch (error: any) {
-				set({ error: error.message });
-			}
-		},
 		fetchAllDetails: async () => {
 			try {
 				let { details } = get();

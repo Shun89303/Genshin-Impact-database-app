@@ -1,9 +1,7 @@
-import { endpoints } from "@/src/api/endpoints";
-import { BASE_URL } from "@/src/config/env";
 import { ApiObject } from "@/src/types/local.material";
-import { Image } from "expo-image";
-import { useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import CharacterImage from "./characterImage";
+import MaterialsImage from "./materialsImage";
 
 type Props = {
 	nationName: string;
@@ -11,15 +9,6 @@ type Props = {
 };
 
 export default function MaterialCard({ nationName, items }: Props) {
-	const {
-		materials,
-		localSpecialties,
-		characters: chaEndpoint,
-		icon,
-	} = endpoints;
-
-	const [imageError, setImageError] = useState(false);
-
 	return (
 		<View style={styles.container}>
 			<Text style={styles.nationTitle}>{nationName}</Text>
@@ -30,44 +19,26 @@ export default function MaterialCard({ nationName, items }: Props) {
 					renderItem={({ item }) => (
 						<View style={styles.materialCard}>
 							<Text style={styles.materialName}>{item.name}</Text>
-							{!imageError ? (
-								<Image
-									contentFit="contain"
-									source={{
-										uri: `${BASE_URL}${materials}${localSpecialties}/${item.id}`,
-									}}
-									style={styles.materialImage}
-									cachePolicy="memory-disk"
-									onError={() => setImageError(true)}
-								/>
-							) : (
-								<View style={[styles.materialImage, styles.imageFallback]}>
-									<Text style={{ color: "#555" }}>Image Not Available</Text>
-								</View>
-							)}
+							<MaterialsImage id={item.id} />
 							{item.characters.length > 0 && (
-								<>
+								<View style={styles.charactersWrapper}>
 									<Text style={styles.charactersTitle}>Characters</Text>
 									<FlatList
 										data={item.characters}
 										keyExtractor={(chaId) => chaId}
 										horizontal
 										showsHorizontalScrollIndicator={false}
+										contentContainerStyle={styles.characterList}
 										renderItem={({ item: chaId }) => (
-											<Image
-												style={styles.characterImage}
-												contentFit="contain"
-												cachePolicy="memory-disk"
-												source={{
-													uri: `${BASE_URL}${chaEndpoint}/${chaId}${icon}`,
-												}}
-											/>
+											<CharacterImage id={chaId} />
 										)}
 									/>
-								</>
+								</View>
 							)}
 						</View>
 					)}
+					horizontal={false}
+					showsVerticalScrollIndicator={false}
 				/>
 			)}
 		</View>
@@ -76,6 +47,7 @@ export default function MaterialCard({ nationName, items }: Props) {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		marginBottom: 40,
 		paddingHorizontal: 16,
 	},
@@ -83,16 +55,18 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontSize: 20,
 		fontWeight: "700",
-		marginBottom: 12,
+		marginBottom: 16,
 		color: "#222",
 	},
 	materialCard: {
+		flex: 1,
 		alignItems: "center",
-		marginRight: 12,
-		marginBottom: 16,
-		backgroundColor: "#fafafa",
+		marginBottom: 46,
+		padding: 12,
 		borderRadius: 12,
-		padding: 8,
+		backgroundColor: "#FFFFFF", // clean neutral background
+		borderWidth: 1,
+		borderColor: "#E0E0E0", // subtle border
 		shadowColor: "#000",
 		shadowOpacity: 0.05,
 		shadowOffset: { width: 0, height: 2 },
@@ -102,32 +76,23 @@ const styles = StyleSheet.create({
 	materialName: {
 		fontSize: 16,
 		fontWeight: "600",
-		marginBottom: 6,
-		color: "#333",
-	},
-	materialImage: {
-		width: 100,
-		height: 100,
-		borderRadius: 8,
 		marginBottom: 8,
+		color: "#333",
+		textAlign: "center",
 	},
-	imageFallback: {
-		backgroundColor: "#eee",
-		justifyContent: "center",
-		alignItems: "center",
+	charactersWrapper: {
+		width: "100%",
+		marginTop: 8,
 	},
 	charactersTitle: {
 		fontSize: 14,
 		fontWeight: "500",
-		marginTop: 8,
 		marginBottom: 6,
 		color: "#555",
+		textAlign: "left",
+		paddingLeft: 4,
 	},
-	characterImage: {
-		width: 50,
-		height: 50,
-		marginRight: 8,
-		borderRadius: 8,
-		backgroundColor: "#f5f5f5",
+	characterList: {
+		paddingLeft: 4,
 	},
 });
