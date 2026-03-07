@@ -1,32 +1,41 @@
-import { food } from "@/src/types/food";
-import { FlatList, View } from "react-native";
-import FoodImage from "./foodImage";
+import { NormalizedFood } from "@/src/types/food";
+import { FlatList, StyleSheet, View } from "react-native";
+import FoodCard from "./foodCard";
 
 export default function SearchList({
 	finalData,
 	refreshing,
 	onRefresh,
 }: {
-	finalData: food[] | { label: string; data: food[] }[];
+	finalData: NormalizedFood[] | { label: string; data: NormalizedFood[] }[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View style={styles.container}>
 			<FlatList
-				data={finalData as food[]}
+				data={finalData as NormalizedFood[]}
+				numColumns={2}
 				initialNumToRender={12}
 				windowSize={21}
 				removeClippedSubviews
-				numColumns={3}
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				renderItem={({ item }) => (
-					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
-						<FoodImage id={item.id} />
-					</View>
-				)}
+				contentContainerStyle={styles.listContent}
+				renderItem={({ item }) => <FoodCard food={item} />}
 			/>
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		alignItems: "center",
+		paddingHorizontal: 16,
+	},
+	listContent: {
+		paddingVertical: 12,
+		paddingBottom: 24,
+	},
+});

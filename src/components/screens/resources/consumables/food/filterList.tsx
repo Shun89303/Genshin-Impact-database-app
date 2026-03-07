@@ -1,4 +1,4 @@
-import { food } from "@/src/types/food";
+import { NormalizedFood } from "@/src/types/food";
 import { FlatList, Text, View } from "react-native";
 import FoodImage from "./foodImage";
 
@@ -7,14 +7,14 @@ export default function FilterList({
 	refreshing,
 	onRefresh,
 }: {
-	finalData: food[] | { label: string; data: food[] }[];
+	finalData: NormalizedFood[] | { label: string; data: NormalizedFood[] }[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
 		<View>
 			<FlatList
-				data={finalData as { label: string; data: food[] }[]}
+				data={finalData as { label: string; data: NormalizedFood[] }[]}
 				keyExtractor={(item) => item.label}
 				initialNumToRender={12}
 				windowSize={21}

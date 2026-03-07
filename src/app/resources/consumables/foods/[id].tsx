@@ -1,54 +1,23 @@
-import FoodDetails from "@/src/components/screens/resources/consumables/food/foodDetails";
-import styles from "@/src/components/styles.modules";
-import { useFoodStore } from "@/src/store/useFood.consumables.store";
-import { useFocusEffect } from "@react-navigation/native";
+import FoodDetails from "@/src/components/screens/resources/consumables/food/details/foodDetails";
+import { useFoodConsumables } from "@/src/hooks/useConsumables.food";
 import { useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function FoodDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const storeFoodDetails = useFoodStore((state) => state.storeFoodDetails);
-	const error = useFoodStore((state) => state.error);
-	const cache = useFoodStore((state) => state.cache);
-	const loadingId = useFoodStore((state) => state.loadingId);
 
-	useFocusEffect(
-		useCallback(() => {
-			storeFoodDetails(id);
-		}, [storeFoodDetails, id])
-	);
+	const { details, isLoading, isRefreshing, refetch } = useFoodConsumables();
+	const food = details.find((f) => f.id === id);
 
-	const loading = loadingId === id;
-	const details = cache[id];
-
-	if (loading || !details)
+	if (isLoading || !food) {
 		return (
-			<>
-				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
-					Loading Item: {id}
-				</Text>
-				<ActivityIndicator />
-			</>
-		);
-
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<Text>Loading character...</Text>
 			</View>
 		);
+	}
 
 	return (
-		<View>
-			<Text style={{ textAlign: "center" }}>Food Details</Text>
-			<FlatList
-				data={Object.entries(details)}
-				keyExtractor={([key]) => key}
-				renderItem={({ item: [field, value] }) => (
-					<FoodDetails field={field} value={value} />
-				)}
-			/>
-		</View>
+		<FoodDetails food={food} refreshing={isRefreshing} onRefresh={refetch} />
 	);
 }
