@@ -1,4 +1,4 @@
-import { TalentBook } from "@/src/types/talent.book";
+import { Normalized } from "@/src/types/talent.book";
 import { FlatList, Text, View } from "react-native";
 import MaterialsImage from "./materialsImage";
 
@@ -7,14 +7,14 @@ export default function FilterList({
 	refreshing,
 	onRefresh,
 }: {
-	finalData: TalentBook[] | { label: string; data: TalentBook[] }[];
+	finalData: Normalized[] | { label: string; data: Normalized[] }[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
 		<View>
 			<FlatList
-				data={finalData as { label: string; data: TalentBook[] }[]}
+				data={finalData as { label: string; data: Normalized[] }[]}
 				keyExtractor={(item) => item.label}
 				initialNumToRender={12}
 				windowSize={21}

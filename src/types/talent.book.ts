@@ -2,9 +2,9 @@ export type Api = Record<string, ApiObject>;
 
 export type ApiObject = {
 	characters?: string[];
-	availability?: string[];
-	source?: string;
-	items?: ApiItem[];
+	availability: string[];
+	source: string;
+	items: ApiItem[];
 };
 
 export type ApiItem = {

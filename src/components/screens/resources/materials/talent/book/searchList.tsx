@@ -12,7 +12,7 @@ export default function SearchList({
 	onRefresh: any;
 }) {
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View style={{ flex: 1, alignItems: "center" }}>
 			<FlatList
 				data={finalData as Normalized[]}
 				keyExtractor={(item) => item.id}
@@ -21,15 +21,7 @@ export default function SearchList({
 				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				renderItem={({ item }) => (
-					<MaterialCard
-						materialName={item.id}
-						items={item.items ?? []}
-						charactersArray={item.characters ?? []}
-						availability={item.availability ?? []}
-						source={item.source ?? ""}
-					/>
-				)}
+				renderItem={({ item }) => <MaterialCard material={item} />}
 			/>
 		</View>
 	);

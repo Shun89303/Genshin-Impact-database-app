@@ -25,7 +25,7 @@ export default function PotionImage({ id }: any) {
 		<>
 			<Pressable
 				onPress={() =>
-					router.push({
+					router.navigate({
 						pathname: "/resources/consumables/potions/[id]",
 						params: { id },
 					})

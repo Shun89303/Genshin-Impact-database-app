@@ -32,7 +32,7 @@ export default function ArtifactImage({ id }: { id: string }) {
 		<Pressable
 			style={({ pressed }) => [styles.card, pressed && styles.pressed]}
 			onPress={() =>
-				router.push({ pathname: "/artifacts/[id]", params: { id } })
+				router.navigate({ pathname: "/artifacts/[id]", params: { id } })
 			}
 		>
 			<View style={styles.imageWrapper}>

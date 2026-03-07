@@ -1,35 +1,19 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-	ActivityIndicator,
-	Pressable,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-export default function MaterialsImage({ id }: any) {
+export default function MaterialsImageFallback({ id }: any) {
 	const materials = endpoints.materials;
 	const talentBook = endpoints.talentBook;
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
-	const router = useRouter();
 
 	const imageUri = `${BASE_URL}${materials}${talentBook}/${id}`;
 
 	return (
-		<Pressable
-			style={styles.container}
-			onPress={() =>
-				router.navigate({
-					pathname: "/resources/materials/details/talent/book/[id]",
-					params: { id },
-				})
-			}
-		>
+		<View style={styles.container}>
 			{loading && (
 				<ActivityIndicator style={styles.loader} size="small" color="#3B82F6" />
 			)}
@@ -49,7 +33,7 @@ export default function MaterialsImage({ id }: any) {
 					<Text style={styles.errorText}>Image failed</Text>
 				</View>
 			)}
-		</Pressable>
+		</View>
 	);
 }
 
@@ -62,7 +46,6 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#F8FAFC",
 	},
 	image: {
 		width: "100%",

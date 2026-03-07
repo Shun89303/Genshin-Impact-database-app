@@ -28,7 +28,7 @@ export default function CharacterImage({ id }: { id: string }) {
 		<Pressable
 			style={({ pressed }) => [styles.card, pressed && styles.pressed]}
 			onPress={() =>
-				router.push({ pathname: "/characters/[id]", params: { id } })
+				router.navigate({ pathname: "/characters/[id]", params: { id } })
 			}
 		>
 			<View style={styles.imageWrapper}>

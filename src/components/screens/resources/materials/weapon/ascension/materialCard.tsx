@@ -59,11 +59,12 @@ const styles = StyleSheet.create({
 	},
 
 	title: {
-		fontSize: 18,
+		fontSize: 17,
 		fontWeight: "700",
 		marginBottom: 12,
 		color: "#1e293b",
 		textAlign: "center",
+		textTransform: "capitalize",
 	},
 
 	itemsRow: {

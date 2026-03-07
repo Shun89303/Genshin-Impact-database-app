@@ -28,7 +28,9 @@ export default function WeaponImage({ id }: { id: string }) {
 
 	return (
 		<Pressable
-			onPress={() => router.push({ pathname: "/weapons/[id]", params: { id } })}
+			onPress={() =>
+				router.navigate({ pathname: "/weapons/[id]", params: { id } })
+			}
 			style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
 		>
 			{loading && (

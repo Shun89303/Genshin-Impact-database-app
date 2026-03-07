@@ -1,10 +1,10 @@
 import MaterialsList from "@/src/components/screens/resources/materials/talent/book/materialsList";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function TalentBookMaterials() {
 	return (
-		<SafeAreaView>
+		<View style={{ flex: 1 }}>
 			<MaterialsList />
-		</SafeAreaView>
+		</View>
 	);
 }

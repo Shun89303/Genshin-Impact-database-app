@@ -3,7 +3,7 @@ import { BASE_URL } from "@/src/config/env";
 import { useBosses } from "@/src/hooks/useBosses";
 import { Image } from "expo-image";
 import { useEffect, useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import EmptyState from "../../ui/EmptyState";
 import ErrorState from "../../ui/ErrorState";
 import ScreenLoader from "../../ui/ScreenLoader";
@@ -47,6 +47,17 @@ export default function BossesList() {
 			<SearchBar />
 
 			<View style={styles.divider} />
+
+			<Text
+				style={{
+					textAlign: "center",
+					color: "white",
+					paddingBottom: 12,
+					fontWeight: "300",
+				}}
+			>
+				Touch an image to see details
+			</Text>
 
 			<SearchList
 				finalData={finalData}

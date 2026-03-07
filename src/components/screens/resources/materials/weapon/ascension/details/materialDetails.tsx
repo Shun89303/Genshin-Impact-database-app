@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: "700",
 		marginBottom: 12,
-		color: "#1e293b",
+		color: "#64748b",
 	},
 
 	weaponImage: {
