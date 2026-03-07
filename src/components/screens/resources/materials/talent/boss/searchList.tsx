@@ -28,25 +28,17 @@ export default function SearchList({
 	}, [finalData, characters, gachaCard]);
 
 	return (
-		<View>
+		<View style={{ flex: 1 }}>
 			<FlatList
 				data={finalData}
 				keyExtractor={(item) => item.id}
 				initialNumToRender={9}
 				windowSize={21}
 				removeClippedSubviews
-				contentContainerStyle={{
-					gap: 10,
-				}}
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				renderItem={({ item }) => (
-					<MaterialCard
-						materialName={item.name}
-						materialId={item.id}
-						charactersArray={item.characters ?? []}
-					/>
-				)}
+				contentContainerStyle={{ paddingBottom: 10 }}
+				renderItem={({ item }) => <MaterialCard material={item} />}
 			/>
 		</View>
 	);

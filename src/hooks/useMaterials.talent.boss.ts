@@ -5,6 +5,7 @@ export function useBossTalentMaterials() {
 	const fetchAllDetails = useTalentBossMaterialsStore((s) => s.fetchAllDetails);
 	const details = useTalentBossMaterialsStore((s) => s.details);
 	const error = useTalentBossMaterialsStore((s) => s.error);
+	const input = useTalentBossMaterialsStore((state) => state.input);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -32,6 +33,7 @@ export function useBossTalentMaterials() {
 	}, [fetchData]);
 
 	return {
+		input,
 		details,
 		error,
 		isLoading,

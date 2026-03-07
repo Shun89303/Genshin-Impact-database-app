@@ -1,24 +1,9 @@
-import { endpoints } from "@/src/api/endpoints";
-import { BASE_URL } from "@/src/config/env";
-import { Image } from "expo-image";
-import { useState } from "react";
+import { ApiObject } from "@/src/types/talent.boss";
 import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
+import CharacterImage from "./characterImage";
+import MaterialsImage from "./materialsImage";
 
-type Props = {
-	materialName: string;
-	materialId: string;
-	charactersArray: string[];
-};
-
-export default function MaterialCard({
-	materialName,
-	materialId,
-	charactersArray,
-}: Props) {
-	const { materials, talentBoss, icon, characters } = endpoints;
-
-	const [imageError, setImageError] = useState(false);
-
+export default function MaterialCard({ material }: { material: ApiObject }) {
 	function toImageId(detailId: string) {
 		return detailId.replace(/'/g, "-");
 	}
@@ -26,46 +11,24 @@ export default function MaterialCard({
 	return (
 		<View style={styles.card}>
 			{/* Material Name */}
-			<Text style={styles.materialName}>{materialName}</Text>
+			<Text style={styles.materialName}>{material.name}</Text>
 
 			{/* Material Image */}
-			{!imageError ? (
-				<Image
-					source={{
-						uri: `${BASE_URL}${materials}${talentBoss}/${toImageId(
-							materialId
-						)}`,
-					}}
-					style={styles.materialImage}
-					cachePolicy="memory-disk"
-					onError={() => setImageError(true)}
-				/>
-			) : (
-				<View style={[styles.materialImage, styles.imageFallback]}>
-					<Text style={{ color: "#555" }}>Image Not Available</Text>
-				</View>
-			)}
+			<View style={styles.materialImageWrapper}>
+				<MaterialsImage id={toImageId(material.id)} />
+			</View>
 
 			{/* Characters Section */}
-			{charactersArray.length > 0 && (
+			{material.characters && material.characters.length > 0 && (
 				<View style={styles.charactersSection}>
 					<Text style={styles.sectionTitle}>Characters</Text>
 					<FlatList
-						data={charactersArray}
+						data={material.characters}
 						keyExtractor={(chaId) => chaId}
 						horizontal
 						showsHorizontalScrollIndicator={false}
 						contentContainerStyle={styles.charactersList}
-						renderItem={({ item: id }) => (
-							<Image
-								source={{
-									uri: `${BASE_URL}${characters}/${id}${icon}`,
-								}}
-								style={styles.characterImage}
-								contentFit="contain"
-								cachePolicy="memory-disk"
-							/>
-						)}
+						renderItem={({ item: id }) => <CharacterImage id={id} />}
 					/>
 				</View>
 			)}
@@ -77,48 +40,60 @@ const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
 	card: {
-		marginBottom: 40,
-		padding: 16,
-		backgroundColor: "#fff",
-		borderRadius: 12,
-		shadowColor: "#000",
-		shadowOpacity: 0.1,
-		shadowRadius: 6,
-		shadowOffset: { width: 0, height: 3 },
-		alignItems: "center",
-		width: width * 0.9, // make card responsive
+		marginBottom: 28,
+		paddingVertical: 18,
+		paddingHorizontal: 16,
+		backgroundColor: "#1E293B", // dark-friendly background
+		borderRadius: 16,
+		width: width * 0.92,
 		alignSelf: "center",
+		alignItems: "center",
+
+		shadowColor: "#000",
+		shadowOpacity: 0.25,
+		shadowRadius: 10,
+		shadowOffset: { width: 0, height: 6 },
+		elevation: 5,
 	},
+
 	materialName: {
 		fontSize: 20,
 		fontWeight: "700",
-		marginBottom: 12,
+		color: "#F1F5F9",
 		textAlign: "center",
+		marginBottom: 14,
+		letterSpacing: 0.3,
 	},
-	materialImage: {
-		width: 120,
-		height: 120,
-		marginBottom: 12,
+
+	materialImageWrapper: {
+		padding: 8,
+		borderRadius: 12,
+		backgroundColor: "#334155",
+		marginBottom: 14,
 	},
+
 	charactersSection: {
 		width: "100%",
-		marginTop: 12,
+		marginTop: 6,
 	},
+
 	sectionTitle: {
 		fontWeight: "600",
-		fontSize: 16,
-		marginBottom: 8,
-		marginLeft: 8,
+		fontSize: 15,
+		marginBottom: 10,
+		paddingLeft: 4,
+		color: "#CBD5F5",
 	},
+
 	charactersList: {
-		paddingLeft: 8,
-		paddingRight: 8,
+		paddingLeft: 2,
+		paddingRight: 4,
 	},
+
 	characterImage: {
-		width: 60,
-		height: 80,
-		marginRight: 8,
-		borderRadius: 6,
+		width: 56,
+		height: 76,
+		marginRight: 10,
+		borderRadius: 8,
 	},
-	imageFallback: { backgroundColor: "#eee", borderRadius: 8 },
 });

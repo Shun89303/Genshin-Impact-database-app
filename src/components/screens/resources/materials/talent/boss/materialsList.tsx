@@ -5,58 +5,67 @@ import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import SearchBar from "@/src/components/utils/filter/talentBoss/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { useBossTalentMaterials } from "@/src/hooks/useMaterials.talent.boss";
-import { useTalentBossMaterialsStore } from "@/src/store/useTalentBossStore";
 import { Image } from "expo-image";
 import { useEffect, useMemo } from "react";
+import { StyleSheet, View } from "react-native";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const input = useTalentBossMaterialsStore((state) => state.input);
-	const materialIds = useTalentBossMaterialsStore((state) => state.materialIds);
+	const { materials, talentBoss } = endpoints;
 
-	const materials = endpoints.materials;
-	const talentBoss = endpoints.talentBoss;
-
-	const { details, error, isLoading, isRefreshing, refetch } =
+	const { input, details, error, isLoading, isRefreshing, refetch } =
 		useBossTalentMaterials();
 
-	useEffect(() => {
-		if (!materialIds.length) return;
+	const basePath = `${BASE_URL}${materials}${talentBoss}`;
 
-		const remainingIds = materialIds.slice(9);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${talentBoss}/${id}`);
+	useEffect(() => {
+		if (!details?.length) return;
+
+		details.forEach((mat) => {
+			Image.prefetch(`${basePath}/${mat.id}`);
 		});
-	}, [materialIds, materials, talentBoss]);
+	}, [details, basePath]);
 
 	const finalData = useMemo(() => {
-		let result = details;
+		if (!input.trim()) return details;
 
-		if (input.trim().length > 0) {
-			const lower = input.toLowerCase();
-			result = result.filter(
-				(boss) =>
-					boss.id.toLowerCase().includes(lower) ||
-					boss.name.toLowerCase().includes(lower)
-			);
-		}
+		const lower = input.toLowerCase();
 
-		return result;
+		return details.filter(
+			(boss) =>
+				boss.id.toLowerCase().includes(lower) ||
+				boss.name.toLowerCase().includes(lower)
+		);
 	}, [details, input]);
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
-	if (details.length === 0)
-		return <EmptyState message={"No materials found"} onRetry={refetch} />;
+	if (!details.length)
+		return <EmptyState message="No materials found" onRetry={refetch} />;
 
 	return (
-		<>
+		<View style={styles.container}>
 			<SearchBar />
-			<SearchList
-				finalData={finalData}
-				refreshing={isRefreshing}
-				onRefresh={refetch}
-			/>
-		</>
+			<View style={styles.listContainer}>
+				<SearchList
+					finalData={finalData}
+					refreshing={isRefreshing}
+					onRefresh={refetch}
+				/>
+			</View>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		paddingHorizontal: 16,
+		paddingTop: 8,
+	},
+
+	listContainer: {
+		flex: 1,
+		marginTop: 8,
+	},
+});
