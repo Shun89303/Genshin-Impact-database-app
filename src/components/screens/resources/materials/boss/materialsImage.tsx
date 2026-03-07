@@ -28,7 +28,7 @@ export default function MaterialsImage({ id, size = 100 }: Props) {
 	return (
 		<Pressable
 			onPress={() =>
-				router.replace({
+				router.navigate({
 					pathname: "/resources/materials/details/boss/[id]",
 					params: { id },
 				})

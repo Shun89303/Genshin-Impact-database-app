@@ -1,30 +1,21 @@
-import MaterialDetails from "@/src/components/screens/resources/materials/talent/book/materialDetails";
+import MaterialDetails from "@/src/components/screens/resources/materials/talent/book/details/materialDetails";
 import styles from "@/src/components/styles.modules";
-import { useTalentBookMaterialsStore } from "@/src/store/useTalentBookStore";
-import { useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
-import { ActivityIndicator, FlatList, Text } from "react-native";
+import { useBookTalentMaterials } from "@/src/hooks/useMaterials.talent.book";
+import { useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TalentBookMaterialsDetails() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const storeMaterialDetails = useTalentBookMaterialsStore(
-		(state) => state.storeMaterialDetails
-	);
-	const error = useTalentBookMaterialsStore((state) => state.error);
-	const cache = useTalentBookMaterialsStore((state) => state.cache);
-	const loadingId = useTalentBookMaterialsStore((state) => state.loadingId);
 
-	useFocusEffect(
-		useCallback(() => {
-			storeMaterialDetails(id);
-		}, [storeMaterialDetails, id])
+	const { details, isLoading, isRefreshing, refetch, error } =
+		useBookTalentMaterials();
+
+	const matchedItem = details.find((mat) =>
+		mat.items.find((item) => item.id === id)
 	);
 
-	const loading = loadingId === id;
-	const details = cache[id];
-
-	if (loading || !details) {
+	if (isLoading || !matchedItem) {
 		return (
 			<SafeAreaView>
 				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
@@ -44,15 +35,12 @@ export default function TalentBookMaterialsDetails() {
 	}
 
 	return (
-		<SafeAreaView>
-			<Text style={{ textAlign: "center" }}>Talent-Book Material Details</Text>
-			<FlatList
-				data={Object.entries(details)}
-				keyExtractor={([key]) => key}
-				renderItem={({ item: [field, value] }) => (
-					<MaterialDetails field={field} value={value} />
-				)}
+		<View style={{ flex: 1 }}>
+			<MaterialDetails
+				material={matchedItem}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
-		</SafeAreaView>
+		</View>
 	);
 }

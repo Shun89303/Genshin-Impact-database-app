@@ -9,7 +9,7 @@ import { useAscensionWeaponMaterials } from "@/src/hooks/useMaterials.weapon.asc
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
@@ -70,6 +70,16 @@ export default function MaterialsList() {
 	return (
 		<View style={styles.container}>
 			<SearchFilterBar sheetRef={sheetRef} />
+			<Text
+				style={{
+					textAlign: "center",
+					color: "black",
+					padding: 6,
+					fontWeight: "300",
+				}}
+			>
+				Touch an image to see details
+			</Text>
 			<ListComponent
 				finalData={finalData}
 				refreshing={isRefreshing}

@@ -36,7 +36,9 @@ export default function BossImage({ id }: { id: string }) {
 				localStyles.container,
 				pressed && localStyles.pressed,
 			]}
-			onPress={() => router.push({ pathname: "/bosses/[id]", params: { id } })}
+			onPress={() =>
+				router.navigate({ pathname: "/bosses/[id]", params: { id } })
+			}
 		>
 			<View style={localStyles.imageWrapper}>
 				{loading && (

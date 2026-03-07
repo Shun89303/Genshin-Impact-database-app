@@ -5,6 +5,11 @@ export function useBookTalentMaterials() {
 	const fetchAllDetails = useTalentBookMaterialsStore((s) => s.fetchAllDetails);
 	const details = useTalentBookMaterialsStore((s) => s.details);
 	const error = useTalentBookMaterialsStore((s) => s.error);
+	const input = useTalentBookMaterialsStore((state) => state.input);
+	const selectedType = useTalentBookMaterialsStore(
+		(state) => state.selectedType
+	);
+	const groupByType = useTalentBookMaterialsStore((state) => state.groupByType);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -32,6 +37,9 @@ export function useBookTalentMaterials() {
 	}, [fetchData]);
 
 	return {
+		input,
+		selectedType,
+		groupByType,
 		details,
 		error,
 		isLoading,

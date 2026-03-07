@@ -15,7 +15,7 @@ export default function MaterialsImage({ id }: any) {
 		<>
 			<Pressable
 				onPress={() =>
-					router.replace({
+					router.navigate({
 						pathname: "/resources/materials/details/character/experience/[id]",
 						params: { id },
 					})

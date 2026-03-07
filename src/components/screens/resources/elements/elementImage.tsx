@@ -34,7 +34,10 @@ export default function ElementImage({ id, size = 100 }: any) {
 	return (
 		<Pressable
 			onPress={() =>
-				router.push({ pathname: "/resources/elements/[id]", params: { id } })
+				router.navigate({
+					pathname: "/resources/elements/[id]",
+					params: { id },
+				})
 			}
 			style={localStyles.pressable}
 		>

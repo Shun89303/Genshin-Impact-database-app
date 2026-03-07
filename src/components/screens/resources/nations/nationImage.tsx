@@ -25,7 +25,10 @@ export default function NationImage({ id }: any) {
 		<>
 			<Pressable
 				onPress={() =>
-					router.push({ pathname: "/resources/nations/[id]", params: { id } })
+					router.navigate({
+						pathname: "/resources/nations/[id]",
+						params: { id },
+					})
 				}
 			>
 				{loading && <ActivityIndicator />}

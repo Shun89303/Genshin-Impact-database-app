@@ -7,7 +7,7 @@ import { BASE_URL } from "@/src/config/env";
 import { usePotionConsumables } from "@/src/hooks/useConsumables.potion";
 import { Image } from "expo-image";
 import { useEffect, useMemo } from "react";
-import { StyleSheet, View, useColorScheme } from "react-native";
+import { StyleSheet, Text, View, useColorScheme } from "react-native";
 import SearchList from "./searchList";
 
 export default function PotionsList() {
@@ -52,6 +52,16 @@ export default function PotionsList() {
 			]}
 		>
 			<SearchBar />
+			<Text
+				style={{
+					textAlign: "center",
+					color: "white",
+					padding: 6,
+					fontWeight: "300",
+				}}
+			>
+				Touch an image to see details
+			</Text>
 			<SearchList
 				finalData={finalData}
 				refreshing={isRefreshing}

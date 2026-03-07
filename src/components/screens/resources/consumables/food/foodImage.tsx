@@ -26,7 +26,7 @@ export default function FoodImage({ id }: any) {
 	return (
 		<Pressable
 			onPress={() =>
-				router.push({
+				router.navigate({
 					pathname: "/resources/consumables/foods/[id]",
 					params: { id },
 				})

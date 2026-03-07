@@ -16,7 +16,7 @@ export default function MaterialsImage({ id, rarity, name }: ApiItem) {
 		<Pressable
 			style={({ pressed }) => [styles.card, pressed && styles.pressed]}
 			onPress={() =>
-				router.replace({
+				router.navigate({
 					pathname:
 						"/resources/materials/details/character/ascension/common/[id]",
 					params: { id },
