@@ -7,6 +7,13 @@ export function useCharacterAscensionMaterials() {
 	);
 	const details = useCharacterAscensionMaterialsStore((s) => s.details);
 	const error = useCharacterAscensionMaterialsStore((s) => s.error);
+	const input = useCharacterAscensionMaterialsStore((state) => state.input);
+	const selectedType = useCharacterAscensionMaterialsStore(
+		(state) => state.selectedType
+	);
+	const groupByType = useCharacterAscensionMaterialsStore(
+		(state) => state.groupByType
+	);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -34,6 +41,9 @@ export function useCharacterAscensionMaterials() {
 	}, [fetchData]);
 
 	return {
+		input,
+		selectedType,
+		groupByType,
 		details,
 		error,
 		isLoading,

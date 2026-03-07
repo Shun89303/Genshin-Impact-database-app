@@ -1,5 +1,5 @@
-import { MaterialTier } from "@/src/types/character.ascension.material";
-import { FlatList, Text, View } from "react-native";
+import { Normalized } from "@/src/types/character.ascension.material";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import MaterialsImage from "./materialsImage";
 
 export default function FilterList({
@@ -7,14 +7,14 @@ export default function FilterList({
 	refreshing,
 	onRefresh,
 }: {
-	finalData: MaterialTier[] | { label: string; data: MaterialTier[] }[];
+	finalData: Normalized[] | { label: string; data: Normalized[] }[];
 	refreshing: boolean;
 	onRefresh: any;
 }) {
 	return (
-		<View style={{ paddingBottom: 10 }}>
+		<View style={styles.container}>
 			<FlatList
-				data={finalData as { label: string; data: MaterialTier[] }[]}
+				data={finalData as { label: string; data: Normalized[] }[]}
 				keyExtractor={(item) => item.label}
 				initialNumToRender={20}
 				windowSize={21}
@@ -22,31 +22,20 @@ export default function FilterList({
 				refreshing={refreshing}
 				onRefresh={onRefresh}
 				renderItem={({ item }) => (
-					<View
-						style={{
-							paddingVertical: 20,
-							paddingHorizontal: 25,
-							gap: 10,
-						}}
-					>
-						<Text
-							style={{
-								fontWeight: "bold",
-								fontSize: 20,
-							}}
-						>
-							{item.label}
-						</Text>
+					<View style={styles.categorySection}>
+						<Text style={styles.categoryTitle}>{item.label}</Text>
 						<FlatList
 							horizontal
 							data={item.data}
-							keyExtractor={(item) => item.id}
-							renderItem={({ item }) => (
-								<View
-									key={item.id}
-									style={{ justifyContent: "space-evenly", padding: 5 }}
-								>
-									<MaterialsImage id={item.id} />
+							keyExtractor={(mat) => mat.id}
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={styles.horizontalList}
+							renderItem={({ item: mat }) => (
+								<View style={styles.item}>
+									<MaterialsImage id={mat.id} />
+									<Text style={styles.itemName} numberOfLines={3}>
+										{mat.name}
+									</Text>
 								</View>
 							)}
 						/>
@@ -56,3 +45,42 @@ export default function FilterList({
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		paddingBottom: 10,
+		backgroundColor: "#fafafa",
+	},
+
+	categorySection: {
+		paddingVertical: 20,
+		paddingHorizontal: 16,
+		gap: 12,
+	},
+
+	categoryTitle: {
+		fontWeight: "700",
+		fontSize: 20,
+		color: "#333",
+		marginBottom: 8,
+		textTransform: "capitalize",
+	},
+
+	horizontalList: {
+		gap: 12,
+		paddingLeft: 4,
+	},
+
+	item: {
+		alignItems: "center",
+		width: 80,
+		marginRight: 8,
+	},
+
+	itemName: {
+		fontSize: 12,
+		color: "#555",
+		textAlign: "center",
+		marginTop: 4,
+	},
+});
