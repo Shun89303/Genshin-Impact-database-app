@@ -1,19 +1,20 @@
 import { create } from "zustand";
-import {
-	getAllCommonAscensionMaterialImageIds,
-	getAllCommonAscensionMaterialsData,
-} from "../services/common.ascension.materials.services";
+import { FILTER_CATEGORIES } from "../config/category/commonCategory/filterCategories";
+import { getAllCommonAscensionMaterialsData } from "../services/common.ascension.materials.services";
 import { Normalized } from "../types/common.ascension.material";
 
 interface CommonAscensionMaterialsState {
 	error: string | null;
 	input: string;
 	details: Normalized[];
-	loadingId: string | null;
-	materialIds: string[];
+	selectedType: "rarity" | null;
+	setSelectedType: (type: "rarity" | null, sheetRef: any) => void;
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchMaterialIds: () => Promise<void>;
+	groupByType: (
+		LSMs: Normalized[],
+		type: "rarity"
+	) => { label: string; data: Normalized[] }[];
 }
 
 export const useCommonAscensionMaterialsStore =
@@ -21,21 +22,12 @@ export const useCommonAscensionMaterialsStore =
 		error: null,
 		input: "",
 		details: [],
-		setInput: (i) => set({ input: i }),
-		loadingId: null,
-		materialIds: [],
-		fetchMaterialIds: async () => {
-			try {
-				const { materialIds } = get();
-
-				if (!materialIds?.length) {
-					const materialIds = await getAllCommonAscensionMaterialImageIds();
-					set({ materialIds });
-				}
-			} catch (error: any) {
-				set({ error: error.message });
-			}
+		selectedType: null,
+		setSelectedType: (type, sheetRef) => {
+			set({ selectedType: type });
+			sheetRef.current.close();
 		},
+		setInput: (i) => set({ input: i }),
 		fetchAllDetails: async () => {
 			try {
 				let { details } = get();
@@ -53,5 +45,30 @@ export const useCommonAscensionMaterialsStore =
 			} catch (error: any) {
 				set({ error: error.message });
 			}
+		},
+		groupByType: (commons, type) => {
+			const options = FILTER_CATEGORIES[type];
+
+			return options
+				.map((option) => {
+					const filtered = commons
+						.map((mat) => {
+							const items = mat.items.filter((item) => item.rarity === option);
+
+							if (!items.length) return null;
+
+							return {
+								...mat,
+								items,
+							};
+						})
+						.filter(Boolean) as Normalized[];
+
+					return {
+						label: `${option}★`,
+						data: filtered,
+					};
+				})
+				.filter((group) => group.data.length > 0);
 		},
 	}));

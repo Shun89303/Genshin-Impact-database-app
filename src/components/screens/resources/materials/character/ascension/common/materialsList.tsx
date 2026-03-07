@@ -2,34 +2,43 @@ import { endpoints } from "@/src/api/endpoints";
 import EmptyState from "@/src/components/ui/EmptyState";
 import ErrorState from "@/src/components/ui/ErrorState";
 import ScreenLoader from "@/src/components/ui/ScreenLoader";
-import SearchBar from "@/src/components/utils/filter/commonMaterial/searchBar";
+import FilterCatalog from "@/src/components/utils/filter/commonMaterial/filterCatalog";
+import SearchFilterBar from "@/src/components/utils/filter/commonMaterial/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
 import { useCommonAscensionMaterials } from "@/src/hooks/useMaterials.character.ascension.common";
-import { useCommonAscensionMaterialsStore } from "@/src/store/useCommonAscensionStore";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { StyleSheet, View } from "react-native";
+import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const input = useCommonAscensionMaterialsStore((state) => state.input);
-	const materialIds = useCommonAscensionMaterialsStore(
-		(state) => state.materialIds
-	);
+	const { materials, commonAscension } = endpoints;
 
-	const materials = endpoints.materials;
-	const commonAscension = endpoints.commonAscension;
+	const sheetRef = useRef<BottomSheet>(null);
+	const snapPoints = useMemo(() => ["40%"], []);
 
-	const { details, error, isLoading, isRefreshing, refetch } =
-		useCommonAscensionMaterials();
+	const {
+		input,
+		selectedType,
+		groupByType,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useCommonAscensionMaterials();
 
 	useEffect(() => {
-		if (!materialIds.length) return;
+		if (!details.length) return;
 
-		const remainingIds = materialIds.slice(12);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${commonAscension}/${id}`);
+		details.forEach((mat) => {
+			mat.items.forEach((item) => {
+				Image.prefetch(`${BASE_URL}${materials}${commonAscension}/${item.id}`);
+			});
 		});
-	}, [materialIds, materials, commonAscension]);
+	}, [details, materials, commonAscension]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -52,22 +61,74 @@ export default function MaterialsList() {
 				.filter((group) => group !== null);
 		}
 
+		if (selectedType) {
+			return groupByType(result, selectedType);
+		}
+
 		return result;
-	}, [details, input]);
+	}, [details, input, groupByType, selectedType]);
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (details.length === 0)
-		return <EmptyState message={"No potions found"} onRetry={refetch} />;
+		return <EmptyState message={"No materials found"} onRetry={refetch} />;
+
+	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<>
-			<SearchBar />
-			<SearchList
+		<View style={styles.container}>
+			<View style={styles.topBar}>
+				<SearchFilterBar sheetRef={sheetRef} />
+			</View>
+
+			<ListComponent
 				finalData={finalData}
 				refreshing={isRefreshing}
 				onRefresh={refetch}
 			/>
-		</>
+
+			<BottomSheet
+				ref={sheetRef}
+				snapPoints={snapPoints}
+				index={-1}
+				enablePanDownToClose
+				backgroundStyle={styles.sheetBackground}
+				handleIndicatorStyle={styles.sheetHandle}
+			>
+				<BottomSheetView style={styles.sheetContent}>
+					<FilterCatalog sheetRef={sheetRef} />
+				</BottomSheetView>
+			</BottomSheet>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#ffffff",
+	},
+
+	topBar: {
+		backgroundColor: "#ffffff",
+		paddingHorizontal: 10,
+		paddingVertical: 8,
+	},
+
+	sheetBackground: {
+		backgroundColor: "#ffffff",
+		borderTopLeftRadius: 18,
+		borderTopRightRadius: 18,
+		borderWidth: 1,
+		borderColor: "#e5e5e5",
+	},
+
+	sheetHandle: {
+		backgroundColor: "#d4d4d4",
+	},
+
+	sheetContent: {
+		paddingHorizontal: 16,
+		paddingVertical: 10,
+	},
+});
