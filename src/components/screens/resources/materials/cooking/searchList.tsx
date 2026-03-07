@@ -28,7 +28,7 @@ export default function SearchList({
 	}, [cookingIngredients, finalData, materials]);
 
 	return (
-		<View>
+		<View style={{ flex: 1 }}>
 			<FlatList
 				data={finalData}
 				keyExtractor={(item) => item.id}

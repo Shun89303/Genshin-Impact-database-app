@@ -5,56 +5,54 @@ import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import SearchBar from "@/src/components/utils/filter/cim/searchBar";
 import { BASE_URL } from "@/src/config/env";
 import { useCookingMaterials } from "@/src/hooks/useMaterials.cooking";
-import { useCookingMaterialsStore } from "@/src/store/useCookingMaterialsStore";
 import { Image } from "expo-image";
 import { useEffect, useMemo } from "react";
+import { StyleSheet, View } from "react-native";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const input = useCookingMaterialsStore((state) => state.input);
-	const materialIds = useCookingMaterialsStore((state) => state.materialIds);
-
-	const materials = endpoints.materials;
-	const cookingIngredients = endpoints.cookingIngredients;
-
-	const { details, error, isLoading, isRefreshing, refetch } =
+	const { materials, cookingIngredients } = endpoints;
+	const { input, details, error, isLoading, isRefreshing, refetch } =
 		useCookingMaterials();
 
+	// Prefetch images for smoother UI
 	useEffect(() => {
-		if (!materialIds.length) return;
-
-		const remainingIds = materialIds.slice(15);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${cookingIngredients}/${id}`);
+		if (!details.length) return;
+		details.forEach((mat) => {
+			Image.prefetch(`${BASE_URL}${materials}${cookingIngredients}/${mat.id}`);
 		});
-	}, [materialIds, materials, cookingIngredients]);
+	}, [details, materials, cookingIngredients]);
 
 	const finalData = useMemo(() => {
-		let result = details;
-
-		if (input.trim().length > 0) {
-			const lower = input.toLowerCase();
-			result = result.filter((cooking) =>
-				cooking.id.toLowerCase().includes(lower)
-			);
-		}
-
-		return result;
+		if (input.trim().length === 0) return details;
+		const lower = input.toLowerCase();
+		return details.filter((cooking) =>
+			cooking.id.toLowerCase().includes(lower)
+		);
 	}, [details, input]);
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (details.length === 0)
-		return <EmptyState message={"No materials found"} onRetry={refetch} />;
+		return <EmptyState message="No materials found" onRetry={refetch} />;
 
 	return (
-		<>
+		<View style={styles.container}>
 			<SearchBar />
 			<SearchList
 				finalData={finalData}
 				refreshing={isRefreshing}
 				onRefresh={refetch}
 			/>
-		</>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		paddingHorizontal: 16, // consistent horizontal padding
+		paddingTop: 12, // spacing from top
+		backgroundColor: "#f9f9f9", // subtle background
+	},
+});
