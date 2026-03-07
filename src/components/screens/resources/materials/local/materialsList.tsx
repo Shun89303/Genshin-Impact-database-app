@@ -6,36 +6,39 @@ import FilterCatalog from "@/src/components/utils/filter/lsm/filterCatalog";
 import SearchFilterBar from "@/src/components/utils/filter/lsm/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
 import { useLocalMaterials } from "@/src/hooks/useMaterials.local";
-import { useLocalMaterialsStore } from "@/src/store/useLocalMaterialsStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
+import { StyleSheet, View } from "react-native";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const input = useLocalMaterialsStore((state) => state.input);
-	const selectedType = useLocalMaterialsStore((state) => state.selectedType);
-	const groupByType = useLocalMaterialsStore((state) => state.groupByType);
-	const materialIds = useLocalMaterialsStore((state) => state.materialIds);
-
-	const materials = endpoints.materials;
-	const localSpecialties = endpoints.localSpecialties;
+	const { materials, localSpecialties } = endpoints;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
-	const { details, error, isLoading, isRefreshing, refetch } =
-		useLocalMaterials();
+	const {
+		input,
+		selectedType,
+		groupByType,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useLocalMaterials();
 
 	useEffect(() => {
-		if (!materialIds.length) return;
+		if (!details.length) return;
 
-		const remainingIds = materialIds.slice(12);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${localSpecialties}/${id}`);
+		details.forEach((mat) => {
+			mat.items.forEach((item) => {
+				Image.prefetch(`${BASE_URL}${materials}${localSpecialties}/${item.id}`);
+			});
 		});
-	}, [materialIds, materials, localSpecialties]);
+	}, [details, materials, localSpecialties]);
 
 	const finalData = useMemo(() => {
 		let result = details;
@@ -66,23 +69,49 @@ export default function MaterialsList() {
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<>
+		<View style={styles.container}>
 			<SearchFilterBar sheetRef={sheetRef} />
-			<ListComponent
-				finalData={finalData}
-				refreshing={isRefreshing}
-				onRefresh={refetch}
-			/>
+			<View style={styles.listWrapper}>
+				<ListComponent
+					finalData={finalData}
+					refreshing={isRefreshing}
+					onRefresh={refetch}
+				/>
+			</View>
 			<BottomSheet
 				ref={sheetRef}
 				snapPoints={snapPoints}
 				index={-1}
 				enablePanDownToClose
+				backgroundStyle={styles.bottomSheet}
 			>
-				<BottomSheetView>
+				<BottomSheetView style={styles.bottomSheetView}>
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#F5F5F5", // neutral light background
+	},
+	listWrapper: {
+		flex: 1,
+		borderTopWidth: 1,
+		borderTopColor: "#D0D0D0", // subtle top border
+		paddingHorizontal: 10,
+		paddingVertical: 5,
+		backgroundColor: "#FFFFFF", // white background for list
+	},
+	bottomSheet: {
+		backgroundColor: "#F9F9F9", // neutral sheet background
+		borderTopLeftRadius: 16,
+		borderTopRightRadius: 16,
+	},
+	bottomSheetView: {
+		padding: 16,
+	},
+});

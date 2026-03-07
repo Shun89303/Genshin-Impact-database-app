@@ -5,6 +5,9 @@ export function useLocalMaterials() {
 	const fetchAllDetails = useLocalMaterialsStore((s) => s.fetchAllDetails);
 	const details = useLocalMaterialsStore((s) => s.details);
 	const error = useLocalMaterialsStore((s) => s.error);
+	const input = useLocalMaterialsStore((state) => state.input);
+	const selectedType = useLocalMaterialsStore((state) => state.selectedType);
+	const groupByType = useLocalMaterialsStore((state) => state.groupByType);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -32,6 +35,9 @@ export function useLocalMaterials() {
 	}, [fetchData]);
 
 	return {
+		input,
+		selectedType,
+		groupByType,
 		details,
 		error,
 		isLoading,
