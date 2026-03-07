@@ -1,9 +1,6 @@
 import { create } from "zustand";
 import { FILTER_CATEGORIES } from "../config/category/camCategory/filterCategories";
-import {
-	getAllCharacterAscensionMaterialImageIds,
-	getAllCharacterAscensionMaterialsData,
-} from "../services/character.ascension.materials.services";
+import { getAllCharacterAscensionMaterialsData } from "../services/character.ascension.materials.services";
 import { Normalized } from "../types/character.ascension.material";
 
 interface CharacterAscensionMaterialsState {
@@ -12,12 +9,8 @@ interface CharacterAscensionMaterialsState {
 	details: Normalized[];
 	selectedType: "element" | null;
 	setSelectedType: (type: "element" | null, sheetRef: any) => void;
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	materialIds: string[];
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchMaterialIds: () => Promise<void>;
 	groupByType: (
 		cams: Normalized[],
 		type: "element"
@@ -35,21 +28,6 @@ export const useCharacterAscensionMaterialsStore =
 			sheetRef.current.close();
 		},
 		setInput: (i) => set({ input: i }),
-		cache: {},
-		loadingId: null,
-		materialIds: [],
-		fetchMaterialIds: async () => {
-			try {
-				const { materialIds } = get();
-
-				if (!materialIds?.length) {
-					const materialIds = await getAllCharacterAscensionMaterialImageIds();
-					set({ materialIds });
-				}
-			} catch (error: any) {
-				set({ error: error.message });
-			}
-		},
 		fetchAllDetails: async () => {
 			try {
 				let { details } = get();

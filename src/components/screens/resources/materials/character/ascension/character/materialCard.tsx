@@ -1,10 +1,6 @@
-import { endpoints } from "@/src/api/endpoints";
-import { BASE_URL } from "@/src/config/env";
 import { Normalized } from "@/src/types/character.ascension.material";
-
-import { Image } from "expo-image";
-import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import MaterialsImage from "./materialsImage";
 
 export default function MaterialCard({
 	id,
@@ -14,9 +10,6 @@ export default function MaterialCard({
 	element,
 	title,
 }: Normalized) {
-	const { materials, characterAscension } = endpoints;
-	const [imageError, setImageError] = useState(false);
-
 	return (
 		<View style={styles.card}>
 			{/* Header */}
@@ -27,21 +20,9 @@ export default function MaterialCard({
 
 			{/* Image */}
 			<View style={styles.imageWrapper}>
-				{!imageError ? (
-					<Image
-						source={{
-							uri: `${BASE_URL}${materials}${characterAscension}/${id}`,
-						}}
-						style={styles.image}
-						contentFit="contain"
-						cachePolicy="memory-disk"
-						onError={() => setImageError(true)}
-					/>
-				) : (
-					<View style={styles.fallback}>
-						<Text style={styles.fallbackText}>Image Not Available</Text>
-					</View>
-				)}
+				<View style={styles.imageContainer}>
+					<MaterialsImage id={id} />
+				</View>
 			</View>
 
 			{/* Info */}
@@ -67,10 +48,12 @@ export default function MaterialCard({
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#1e1e1e",
-		borderRadius: 12,
+		borderRadius: 16, // increased for smoother corners
 		padding: 16,
 		marginVertical: 8,
+		backgroundColor: "#f9f9f9",
+		borderWidth: 1,
+		borderColor: "#ddd",
 	},
 
 	header: {
@@ -79,20 +62,15 @@ const styles = StyleSheet.create({
 	},
 
 	element: {
-		fontSize: 14,
+		fontSize: 13,
 		fontWeight: "600",
-		color: "#bbb",
-	},
-
-	source: {
-		fontSize: 14,
-		fontWeight: "600",
-		color: "#bbb",
+		color: "#666",
+		textTransform: "capitalize",
 	},
 
 	type: {
 		fontSize: 12,
-		color: "#888",
+		color: "#999",
 		marginTop: 2,
 	},
 
@@ -102,9 +80,16 @@ const styles = StyleSheet.create({
 		marginVertical: 12,
 	},
 
-	image: {
+	imageContainer: {
 		width: 100,
 		height: 100,
+		borderRadius: 16, // same as card for consistency
+		overflow: "hidden", // ensures image respects border radius
+	},
+
+	image: {
+		width: "100%",
+		height: "100%",
 	},
 
 	fallback: {
@@ -112,20 +97,20 @@ const styles = StyleSheet.create({
 		height: 100,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#2a2a2a",
-		borderRadius: 8,
+		backgroundColor: "#e0e0e0",
+		borderRadius: 16,
 	},
 
 	fallbackText: {
 		fontSize: 12,
-		color: "#888",
+		color: "#999",
 		textAlign: "center",
 	},
 
 	name: {
 		fontSize: 16,
 		fontWeight: "700",
-		color: "#fff",
+		color: "#333",
 		marginBottom: 4,
 	},
 
@@ -139,9 +124,16 @@ const styles = StyleSheet.create({
 		marginTop: 8,
 	},
 
+	source: {
+		fontSize: 14,
+		fontWeight: "600",
+		color: "#666",
+		marginBottom: 4,
+	},
+
 	sourceItem: {
 		fontSize: 12,
-		color: "#ccc",
+		color: "#888",
 		marginBottom: 2,
 	},
 
