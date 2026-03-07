@@ -39,64 +39,67 @@ export default function FoodDetails({
 	}
 
 	return (
-		<ScrollView
-			style={styles.container}
-			contentContainerStyle={styles.content}
-			refreshControl={
-				<RefreshControl
-					refreshing={refreshing}
-					onRefresh={onRefresh}
-					colors={["#000000ff"]} // Android
-				/>
-			}
-		>
+		<View style={styles.container}>
 			<FoodImageFallback
 				uri={buildImageUrl(food.id)}
 				style={styles.mainImage}
 			/>
+			<ScrollView
+				contentContainerStyle={styles.content}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+						colors={["#000000ff"]} // Android
+					/>
+				}
+			>
+				{/* Info section */}
+				<View style={styles.infoSection}>
+					<Text style={styles.label}>Name</Text>
+					<Text style={styles.value}>{food.name}</Text>
 
-			{/* Info section */}
-			<View style={styles.infoSection}>
-				<Text style={styles.label}>Name</Text>
-				<Text style={styles.value}>{food.name}</Text>
+					<Text style={styles.label}>Rarity</Text>
+					<Text style={styles.value}>{food.rarity}★</Text>
 
-				<Text style={styles.label}>Type</Text>
-				<Text style={styles.value}>{food.type}</Text>
+					<Text style={styles.label}>Type</Text>
+					<Text style={styles.value}>{food.type}</Text>
 
-				<Text style={styles.label}>Effect</Text>
-				<Text style={styles.value}>{food.effect}</Text>
+					<Text style={styles.label}>Effect</Text>
+					<Text style={styles.value}>{food.effect}</Text>
 
-				<Text style={styles.label}>Description</Text>
-				<Text style={styles.value}>{food.description}</Text>
+					<Text style={styles.label}>Description</Text>
+					<Text style={styles.value}>{food.description}</Text>
 
-				<Text style={styles.label}>Proficiency</Text>
-				<Text style={styles.value}>{food.proficiency}</Text>
-			</View>
-
-			{/* Recipe section */}
-			{food.recipe && food.recipe.length > 0 && (
-				<View style={styles.recipeSection}>
-					<Text style={styles.sectionTitle}>Recipe</Text>
-					<ScrollView
-						horizontal
-						showsHorizontalScrollIndicator={false}
-						contentContainerStyle={styles.recipeList}
-					>
-						{food.recipe.map((recipe) => (
-							<View key={recipe.item} style={styles.recipeCard}>
-								<FoodImageFallback
-									uri={`${BASE_URL}${materials}${cookingIngredients}/${formatForEndpoint(
-										recipe.item
-									)}`}
-									style={styles.recipeImage}
-								/>
-								<Text style={styles.recipeText}>Qty: {recipe.quantity}</Text>
-							</View>
-						))}
-					</ScrollView>
+					<Text style={styles.label}>Proficiency</Text>
+					<Text style={styles.value}>{food.proficiency}</Text>
 				</View>
-			)}
-		</ScrollView>
+
+				{/* Recipe section */}
+				{food.recipe && food.recipe.length > 0 && (
+					<View style={styles.recipeSection}>
+						<Text style={styles.sectionTitle}>Recipe</Text>
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={styles.recipeList}
+						>
+							{food.recipe.map((recipe) => (
+								<View key={recipe.item} style={styles.recipeCard}>
+									<FoodImageFallback
+										uri={`${BASE_URL}${materials}${cookingIngredients}/${formatForEndpoint(
+											recipe.item
+										)}`}
+										style={styles.recipeImage}
+									/>
+									<Text style={styles.recipeText}>Qty: {recipe.quantity}</Text>
+								</View>
+							))}
+						</ScrollView>
+					</View>
+				)}
+			</ScrollView>
+		</View>
 	);
 }
 
@@ -125,6 +128,7 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 2 },
 		shadowRadius: 4,
 		elevation: 2,
+		gap: 10,
 	},
 	label: {
 		fontSize: 13,

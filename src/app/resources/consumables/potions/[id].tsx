@@ -1,56 +1,27 @@
-import PotionDetails from "@/src/components/screens/resources/consumables/potions/potionDetails";
-import styles from "@/src/components/styles.modules";
-import { usePotionStore } from "@/src/store/usePotion.consumables.store";
-import { useFocusEffect } from "@react-navigation/native";
+import PotionDetails from "@/src/components/screens/resources/consumables/potions/details/potionDetails";
+import { usePotionConsumables } from "@/src/hooks/useConsumables.potion";
 import { useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function PotionDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const storePotionDetails = usePotionStore(
-		(state) => state.storePotionDetails
-	);
-	const error = usePotionStore((state) => state.error);
-	const cache = usePotionStore((state) => state.cache);
-	const loadingId = usePotionStore((state) => state.loadingId);
 
-	useFocusEffect(
-		useCallback(() => {
-			storePotionDetails(id);
-		}, [storePotionDetails, id])
-	);
+	const { details, isLoading, isRefreshing, refetch } = usePotionConsumables();
+	const potion = details.find((p) => p.id === id);
 
-	const loading = loadingId === id;
-	const details = cache[id];
-
-	if (loading || !details)
+	if (isLoading || !potion) {
 		return (
-			<>
-				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
-					Loading Item: {id}
-				</Text>
-				<ActivityIndicator />
-			</>
-		);
-
-	if (error)
-		return (
-			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<Text>Loading potion...</Text>
 			</View>
 		);
+	}
 
 	return (
-		<View>
-			<Text style={{ textAlign: "center" }}>Potion Details</Text>
-			<FlatList
-				data={Object.entries(details)}
-				keyExtractor={([key]) => key}
-				renderItem={({ item: [field, value] }) => (
-					<PotionDetails field={field} value={value} />
-				)}
-			/>
-		</View>
+		<PotionDetails
+			potion={potion}
+			refreshing={isRefreshing}
+			onRefresh={refetch}
+		/>
 	);
 }
