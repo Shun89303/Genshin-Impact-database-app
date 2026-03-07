@@ -12,7 +12,7 @@ export default function SearchList({
 	onRefresh: any;
 }) {
 	return (
-		<View style={{ alignItems: "center" }}>
+		<View style={{ flex: 1, alignItems: "center" }}>
 			<FlatList
 				data={finalData as Weapon[]}
 				initialNumToRender={15}
@@ -21,6 +21,7 @@ export default function SearchList({
 				numColumns={3}
 				onRefresh={onRefresh}
 				refreshing={refreshing}
+				contentContainerStyle={{ paddingBottom: 20 }}
 				renderItem={({ item }) => (
 					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
 						<WeaponImage id={item.id} />

@@ -1,64 +1,29 @@
 import { create } from "zustand";
-import {
-	getAllWeaponExperienceMaterialImageIds,
-	getAllWeaponExperienceMaterialsData,
-} from "../services/weapon.experience.materials.services";
+import { getAllWeaponExperienceMaterialsData } from "../services/weapon.experience.materials.services";
+import { EnhancementItem } from "../types/weapon.experience.material";
 
 interface WeaponExperienceMaterialsState {
 	error: string | null;
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	materialsObject: Record<string, unknown>;
-	materialIds: string[];
-	fetchMaterialsObject: () => Promise<void>;
-	fetchMaterialIds: () => Promise<void>;
-	storeMaterialDetails: (id: string) => void;
+	details: EnhancementItem[];
+	fetchAllDetails: () => Promise<void>;
 }
 
 export const useWeaponExperienceMaterialsStore =
 	create<WeaponExperienceMaterialsState>((set, get) => ({
 		error: null,
-		cache: {},
-		loadingId: null,
-		materialsObject: {},
-		materialIds: [],
-		fetchMaterialsObject: async () => {
-			const { materialsObject } = get();
-			if (Object.keys(materialsObject).length > 0) return;
+		details: [],
+		fetchAllDetails: async () => {
 			try {
-				const allMaterials = await getAllWeaponExperienceMaterialsData();
-				const allMaterialsArray = Object.entries(allMaterials);
-				const withoutListItem = allMaterialsArray.slice(0, -1);
-				const materialsObject = Object.fromEntries(withoutListItem);
-				set({ materialsObject });
-			} catch (error: any) {
-				set({ error: error.message });
-			}
-		},
-		fetchMaterialIds: async () => {
-			try {
-				const { materialIds } = get();
+				let { details } = get();
+				if (!details.length) {
+					const apiObject = await getAllWeaponExperienceMaterialsData();
 
-				if (!materialIds.length) {
-					const materialIds = await getAllWeaponExperienceMaterialImageIds();
-					set({ materialIds });
+					const normalizedArray = apiObject.items.map((item) => ({ ...item }));
+
+					set({ details: normalizedArray });
 				}
 			} catch (error: any) {
 				set({ error: error.message });
 			}
-		},
-		storeMaterialDetails: (id) => {
-			const { materialsObject, cache } = get();
-			if (cache[id]) {
-				set({ loadingId: null });
-				return;
-			}
-
-			set({ loadingId: id });
-			const details = materialsObject[id];
-			set((state) => ({
-				cache: { ...state.cache, [id]: details },
-				loadingId: null,
-			}));
 		},
 	}));
