@@ -1,11 +1,11 @@
 import apiClient from "../api/client";
 import { endpoints } from "../api/endpoints";
-import { FoodApi } from "../types/food";
+import { Food } from "../types/food";
 import { PotionApi } from "../types/potion";
 
 const consumables = endpoints.consumables;
 const potions = endpoints.potions;
-const Food = endpoints.food;
+const food = endpoints.food;
 const list = endpoints.list;
 
 // returns a huge object containing key as id and value as the entire details of the id
@@ -19,11 +19,6 @@ export function getAllPotionImageIds() {
 }
 
 // returns a huge object containing key as id and value as the entire details of the id
-export function getAllFoodData(): Promise<Record<string, FoodApi>> {
-	return apiClient(`${consumables}${Food}`);
-}
-
-// returns an array containing all the ids of image endpoints
-export function getAllFoodImageIds() {
-	return apiClient(`${consumables}${Food}${list}`);
+export function getAllFoodData(): Promise<Record<string, Food>> {
+	return apiClient(`${consumables}${food}`);
 }

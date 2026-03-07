@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 	inputWrapper: {
 		flex: 1,
 		height: 48,
-		backgroundColor: "#1E293B",
+		backgroundColor: "#0F172A",
 		borderRadius: 12,
 		paddingHorizontal: 16,
 		justifyContent: "center",

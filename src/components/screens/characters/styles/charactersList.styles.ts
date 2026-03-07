@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
-		backgroundColor: "#0F172A",
+		// backgroundColor: "#0F172A",
+		backgroundColor: "#1E2A3A",
 		paddingVertical: 10,
 	},
 
@@ -22,7 +23,8 @@ const styles = StyleSheet.create({
 	},
 
 	sheetBackground: {
-		backgroundColor: "#1E293B",
+		// backgroundColor: "#1E293B",
+		backgroundColor: "#0F172A",
 		borderTopLeftRadius: 24,
 		borderTopRightRadius: 24,
 	},

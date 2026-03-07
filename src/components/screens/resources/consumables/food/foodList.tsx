@@ -6,37 +6,40 @@ import FilterCatalog from "@/src/components/utils/filter/food/filterCatalog";
 import SearchFilterBar from "@/src/components/utils/filter/food/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
 import { useFoodConsumables } from "@/src/hooks/useConsumables.food";
-import { useFoodStore } from "@/src/store/useFood.consumables.store";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
+import { StyleSheet, View } from "react-native";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function FoodList() {
-	const input = useFoodStore((state) => state.input);
-	const selectedType = useFoodStore((state) => state.selectedType);
-	const groupByType = useFoodStore((state) => state.groupByType);
-	const foodIds = useFoodStore((state) => state.foodIds);
-
 	const food = endpoints.food;
 	const consumables = endpoints.consumables;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
-	const { details, error, isLoading, isRefreshing, refetch } =
-		useFoodConsumables();
+	const {
+		input,
+		selectedType,
+		groupByType,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useFoodConsumables();
 
+	// Prefetch images for smooth scrolling
 	useEffect(() => {
-		if (!foodIds.length) return;
-
-		const remainingIds = foodIds.slice(12);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${consumables}${food}/${id}`);
+		if (!details.length) return;
+		details.forEach((f) => {
+			Image.prefetch(`${BASE_URL}${consumables}${food}/${f.id}`);
 		});
-	}, [foodIds, consumables, food]);
+	}, [details, consumables, food]);
 
+	// Filter and group data
 	const finalData = useMemo(() => {
 		let result = details;
 
@@ -47,22 +50,19 @@ export default function FoodList() {
 			);
 		}
 
-		if (selectedType) {
-			return groupByType(result, selectedType);
-		}
-
-		return result;
+		return selectedType ? groupByType(result, selectedType) : result;
 	}, [details, groupByType, input, selectedType]);
 
+	// Loading and error states
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (details.length === 0)
-		return <EmptyState message={"No foods found"} onRetry={refetch} />;
+		return <EmptyState message="No foods found" onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<>
+		<View style={styles.container}>
 			<SearchFilterBar sheetRef={sheetRef} />
 			<ListComponent
 				finalData={finalData}
@@ -74,11 +74,28 @@ export default function FoodList() {
 				snapPoints={snapPoints}
 				index={-1}
 				enablePanDownToClose
+				handleIndicatorStyle={styles.handleIndicator}
 			>
-				<BottomSheetView>
+				<BottomSheetView style={styles.bottomSheet}>
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#f8f8f8", // light neutral background
+	},
+	bottomSheet: {
+		paddingHorizontal: 16,
+		paddingTop: 8,
+	},
+	handleIndicator: {
+		backgroundColor: "#ccc",
+		width: 40,
+		height: 4,
+	},
+});
