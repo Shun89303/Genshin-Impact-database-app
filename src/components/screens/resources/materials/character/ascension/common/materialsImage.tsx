@@ -1,34 +1,19 @@
 import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
-import { ApiItem } from "@/src/types/common.ascension.material";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function MaterialsImage({ id, rarity, name }: ApiItem) {
+export default function MaterialsImage({ id }: { id: string }) {
 	const materials = endpoints.materials;
 	const commonAscension = endpoints.commonAscension;
 	const [imageError, setImageError] = useState(false);
-	const router = useRouter();
 
 	return (
-		<Pressable
-			style={({ pressed }) => [styles.card, pressed && styles.pressed]}
-			onPress={() =>
-				router.navigate({
-					pathname:
-						"/resources/materials/details/character/ascension/common/[id]",
-					params: { id },
-				})
-			}
-		>
-			{/* Image */}
+		<View style={styles.card}>
 			{!imageError ? (
 				<Image
-					source={{
-						uri: `${BASE_URL}${materials}${commonAscension}/${id}`,
-					}}
+					source={{ uri: `${BASE_URL}${materials}${commonAscension}/${id}` }}
 					style={styles.image}
 					contentFit="contain"
 					cachePolicy="memory-disk"
@@ -39,60 +24,39 @@ export default function MaterialsImage({ id, rarity, name }: ApiItem) {
 					<Text style={styles.fallbackText}>No Image</Text>
 				</View>
 			)}
-
-			{/* Info */}
-			<View style={styles.info}>
-				<Text style={styles.rarity}>{"★".repeat(rarity ?? 0)}</Text>
-				<Text style={styles.name}>{name}</Text>
-			</View>
-		</Pressable>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	card: {
-		width: 110,
+		width: 100,
+		height: 100,
 		padding: 8,
-		borderRadius: 14,
-		backgroundColor: "#1E1E1E",
+		borderRadius: 12,
+		marginRight: 12,
+		backgroundColor: "#FFFFFF",
+		borderWidth: 1,
+		borderColor: "#E5E7EB",
 		alignItems: "center",
-	},
-
-	pressed: {
-		opacity: 0.7,
+		justifyContent: "center",
 	},
 
 	image: {
-		width: 100,
-		height: 100,
+		width: 90,
+		height: 90,
 	},
 
 	fallback: {
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#2C2C2C",
-		borderRadius: 10,
+		backgroundColor: "#F3F4F6",
+		borderRadius: 8,
 	},
 
 	fallbackText: {
 		fontSize: 12,
-		color: "#888",
-	},
-
-	info: {
-		marginTop: 6,
-		alignItems: "center",
-	},
-
-	rarity: {
-		fontSize: 12,
-		color: "#F5C518",
-		marginBottom: 2,
-	},
-
-	name: {
-		fontSize: 13,
-		color: "#E0E0E0",
-		textAlign: "center",
+		color: "#6B7280",
+		fontWeight: "500",
 	},
 });

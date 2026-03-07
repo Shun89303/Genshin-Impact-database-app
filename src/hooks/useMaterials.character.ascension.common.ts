@@ -7,6 +7,13 @@ export function useCommonAscensionMaterials() {
 	);
 	const details = useCommonAscensionMaterialsStore((s) => s.details);
 	const error = useCommonAscensionMaterialsStore((s) => s.error);
+	const input = useCommonAscensionMaterialsStore((state) => state.input);
+	const selectedType = useCommonAscensionMaterialsStore(
+		(state) => state.selectedType
+	);
+	const groupByType = useCommonAscensionMaterialsStore(
+		(state) => state.groupByType
+	);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -34,6 +41,9 @@ export function useCommonAscensionMaterials() {
 	}, [fetchData]);
 
 	return {
+		input,
+		selectedType,
+		groupByType,
 		details,
 		error,
 		isLoading,

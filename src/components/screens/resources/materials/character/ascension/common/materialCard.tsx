@@ -23,18 +23,15 @@ export default function MaterialCard({
 				showsHorizontalScrollIndicator={false}
 				contentContainerStyle={styles.horizontalList}
 				renderItem={({ item }) => (
-					<View style={styles.imageWrapper}>
-						<MaterialsImage
-							id={item.id}
-							name={item.name}
-							rarity={item.rarity}
-						/>
+					<View style={styles.itemWrapper}>
+						<MaterialsImage id={item.id} />
+						<Text style={styles.itemName}>{item.name}</Text>
 					</View>
 				)}
 			/>
 
 			{/* Sources */}
-			<View style={styles.section}>
+			<View style={[styles.section, styles.divider]}>
 				<Text style={styles.sectionTitle}>Sources</Text>
 				{sources.map((source) => (
 					<Text key={source} style={styles.sourceText}>
@@ -44,7 +41,7 @@ export default function MaterialCard({
 			</View>
 
 			{/* Characters */}
-			<View style={styles.section}>
+			<View style={[styles.section, styles.divider]}>
 				<Text style={styles.sectionTitle}>Characters</Text>
 				<FlatList
 					data={characters}
@@ -53,7 +50,7 @@ export default function MaterialCard({
 					showsHorizontalScrollIndicator={false}
 					contentContainerStyle={styles.horizontalList}
 					renderItem={({ item }) => (
-						<View style={styles.imageWrapper}>
+						<View style={styles.itemWrapper}>
 							<CharacterImage item={item} />
 						</View>
 					)}
@@ -61,7 +58,7 @@ export default function MaterialCard({
 			</View>
 
 			{/* Weapons */}
-			<View style={styles.section}>
+			<View style={[styles.section, styles.divider]}>
 				<Text style={styles.sectionTitle}>Weapons</Text>
 				<FlatList
 					data={weapons}
@@ -70,7 +67,7 @@ export default function MaterialCard({
 					showsHorizontalScrollIndicator={false}
 					contentContainerStyle={styles.horizontalList}
 					renderItem={({ item }) => (
-						<View style={styles.imageWrapper}>
+						<View style={styles.itemWrapper}>
 							<WeaponImage item={item} />
 						</View>
 					)}
@@ -82,42 +79,61 @@ export default function MaterialCard({
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#1E1E1E",
+		backgroundColor: "#FFFFFF",
 		borderRadius: 16,
 		padding: 16,
-		marginVertical: 12,
+		borderWidth: 1,
+		borderColor: "#E5E7EB",
+		marginBottom: 40,
 	},
 
 	title: {
 		textAlign: "center",
-		fontSize: 20,
+		fontSize: 18,
 		fontWeight: "700",
-		marginBottom: 12,
-		color: "#FFFFFF",
+		marginBottom: 16,
+		color: "#111827",
 	},
 
 	section: {
-		marginTop: 20,
+		marginTop: 24,
+	},
+
+	divider: {
+		borderTopWidth: 1,
+		borderTopColor: "#F3F4F6",
+		paddingTop: 16,
 	},
 
 	sectionTitle: {
-		fontSize: 16,
+		fontSize: 15,
 		fontWeight: "600",
-		marginBottom: 8,
-		color: "#E0E0E0",
+		marginBottom: 12,
+		color: "#374151",
 	},
 
 	horizontalList: {
-		gap: 12,
+		paddingVertical: 4,
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 16, // evenly space items
 	},
 
-	imageWrapper: {
-		marginRight: 12,
+	itemWrapper: {
+		alignItems: "center", // centers image + name
+	},
+
+	itemName: {
+		marginTop: 6,
+		fontSize: 13,
+		color: "#374151",
+		textAlign: "center",
 	},
 
 	sourceText: {
-		fontSize: 14,
-		color: "#BDBDBD",
+		fontSize: 13,
+		color: "#6B7280",
 		marginBottom: 4,
+		lineHeight: 18,
 	},
 });
