@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useWeaponExperienceMaterialsStore } from "../store/useWeaponExperienceStore";
 
 export function useExperienceWeaponMaterials() {
-	const fetchMaterialIds = useWeaponExperienceMaterialsStore(
-		(s) => s.fetchMaterialIds
+	const fetchAllDetails = useWeaponExperienceMaterialsStore(
+		(s) => s.fetchAllDetails
 	);
-	const materialIds = useWeaponExperienceMaterialsStore((s) => s.materialIds);
 	const error = useWeaponExperienceMaterialsStore((s) => s.error);
+	const details = useWeaponExperienceMaterialsStore((s) => s.details);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -20,13 +20,13 @@ export function useExperienceWeaponMaterials() {
 					setIsLoading(true);
 				}
 
-				await fetchMaterialIds();
+				await fetchAllDetails();
 			} finally {
 				setIsLoading(false);
 				setIsRefreshing(false);
 			}
 		},
-		[fetchMaterialIds]
+		[fetchAllDetails]
 	);
 
 	useEffect(() => {
@@ -34,7 +34,7 @@ export function useExperienceWeaponMaterials() {
 	}, [fetchData]);
 
 	return {
-		materialIds,
+		details,
 		error,
 		isLoading,
 		isRefreshing,

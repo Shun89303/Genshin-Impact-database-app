@@ -10,7 +10,9 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 export default function FoodImage({ id }: any) {
 	const { error } = useFoodStore();
 	const [loading, setLoading] = useState(true);
+	const [failed, setFailed] = useState(false);
 	const router = useRouter();
+
 	const consumables = endpoints.consumables;
 	const food = endpoints.food;
 
@@ -22,23 +24,42 @@ export default function FoodImage({ id }: any) {
 		);
 
 	return (
-		<>
-			<Pressable
-				onPress={() =>
-					router.push({
-						pathname: "/resources/consumables/foods/[id]",
-						params: { id },
-					})
-				}
-			>
-				{loading && <ActivityIndicator />}
+		<Pressable
+			onPress={() =>
+				router.push({
+					pathname: "/resources/consumables/foods/[id]",
+					params: { id },
+				})
+			}
+		>
+			{loading && !failed && <ActivityIndicator />}
+
+			{failed ? (
+				<View
+					style={{
+						width: 100,
+						height: 100,
+						margin: 4,
+						justifyContent: "center",
+						alignItems: "center",
+						backgroundColor: "#e5e5e5",
+						borderRadius: 12,
+					}}
+				>
+					<Text style={{ textAlign: "center" }}>Image not available</Text>
+				</View>
+			) : (
 				<Image
 					source={{ uri: `${BASE_URL}${consumables}${food}/${id}` }}
 					style={{ width: 100, height: 100, margin: 4 }}
 					cachePolicy="memory-disk"
 					onLoad={() => setLoading(false)}
+					onError={() => {
+						setLoading(false);
+						setFailed(true);
+					}}
 				/>
-			</Pressable>
-		</>
+			)}
+		</Pressable>
 	);
 }

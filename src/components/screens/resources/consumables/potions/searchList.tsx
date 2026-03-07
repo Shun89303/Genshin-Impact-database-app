@@ -12,7 +12,7 @@ export default function SearchList({
 	onRefresh: any;
 }) {
 	return (
-		<View>
+		<View style={{ flex: 1 }}>
 			<FlatList
 				data={finalData}
 				windowSize={21}
@@ -20,6 +20,7 @@ export default function SearchList({
 				numColumns={2}
 				refreshing={refreshing}
 				onRefresh={onRefresh}
+				contentContainerStyle={{ paddingBottom: 20 }}
 				renderItem={({ item }) => <PotionCard potion={item} />}
 			/>
 		</View>

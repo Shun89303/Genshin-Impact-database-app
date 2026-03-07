@@ -33,14 +33,12 @@ export const useWeaponAscensionMaterialsStore =
 				let { details } = get();
 				if (!details.length) {
 					const apiObject = await getAllWeaponAscensionMaterialsData();
-					const apiArray = Object.entries(apiObject);
-					const apiArrayWithoutLastItem = apiArray.slice(0, -1);
-					const normalizedArray = apiArrayWithoutLastItem.map(
-						([key, value]) => ({
-							id: key,
-							...value,
-						})
-					);
+					const { id, ...materialsOnly } = apiObject;
+					const apiArray = Object.entries(materialsOnly);
+					const normalizedArray = apiArray.map(([key, value]) => ({
+						id: key,
+						...value,
+					}));
 					set({ details: normalizedArray });
 				}
 			} catch (error: any) {
