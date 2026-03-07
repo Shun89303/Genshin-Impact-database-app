@@ -1,20 +1,13 @@
 import { create } from "zustand";
-import {
-	getAllCookingMaterialImageIds,
-	getAllCookingMaterialsData,
-} from "../services/cooking.materials.services";
+import { getAllCookingMaterialsData } from "../services/cooking.materials.services";
 import { Normalized } from "../types/cooking.material";
 
 interface CookingMaterialsState {
 	error: string | null;
 	input: string;
 	details: Normalized[];
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	materialIds: string[];
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchMaterialIds: () => Promise<void>;
 }
 
 export const useCookingMaterialsStore = create<CookingMaterialsState>(
@@ -23,21 +16,6 @@ export const useCookingMaterialsStore = create<CookingMaterialsState>(
 		input: "",
 		details: [],
 		setInput: (i) => set({ input: i }),
-		cache: {},
-		loadingId: null,
-		materialIds: [],
-		fetchMaterialIds: async () => {
-			try {
-				const { materialIds } = get();
-
-				if (!materialIds?.length) {
-					const materialIds = await getAllCookingMaterialImageIds();
-					set({ materialIds });
-				}
-			} catch (error: any) {
-				set({ error: error.message });
-			}
-		},
 		fetchAllDetails: async () => {
 			try {
 				let { details } = get();

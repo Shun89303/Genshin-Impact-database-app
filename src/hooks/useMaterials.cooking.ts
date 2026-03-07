@@ -5,6 +5,7 @@ export function useCookingMaterials() {
 	const fetchAllDetails = useCookingMaterialsStore((s) => s.fetchAllDetails);
 	const details = useCookingMaterialsStore((s) => s.details);
 	const error = useCookingMaterialsStore((s) => s.error);
+	const input = useCookingMaterialsStore((state) => state.input);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -32,6 +33,7 @@ export function useCookingMaterials() {
 	}, [fetchData]);
 
 	return {
+		input,
 		details,
 		error,
 		isLoading,

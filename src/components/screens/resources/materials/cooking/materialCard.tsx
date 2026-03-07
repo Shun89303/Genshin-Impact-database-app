@@ -57,6 +57,7 @@ export default function MaterialCard({
 
 const styles = StyleSheet.create({
 	card: {
+		flex: 1,
 		backgroundColor: "#fff",
 		padding: 16,
 		marginVertical: 8,
