@@ -1,23 +1,21 @@
-import MaterialDetails from "@/src/components/screens/resources/materials/weapon/ascension/materialDetails";
+import MaterialDetails from "@/src/components/screens/resources/materials/weapon/ascension/details/materialDetails";
 import styles from "@/src/components/styles.modules";
-import { useWeaponAscensionMaterialsStore } from "@/src/store/useWeaponAscensionStore";
+import { useAscensionWeaponMaterials } from "@/src/hooks/useMaterials.weapon.ascension";
 
 import { useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, FlatList, Text } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WeaponAscensionMaterialsDetails() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const error = useWeaponAscensionMaterialsStore((state) => state.error);
-	const cache = useWeaponAscensionMaterialsStore((state) => state.cache);
-	const loadingId = useWeaponAscensionMaterialsStore(
-		(state) => state.loadingId
+	const { details, isLoading, isRefreshing, refetch, error } =
+		useAscensionWeaponMaterials();
+
+	const matchedItem = details.find((mat) =>
+		mat.items.find((item) => item.id === id)
 	);
 
-	const loading = loadingId === id;
-	const details = cache[id];
-
-	if (loading || !details) {
+	if (isLoading || !matchedItem) {
 		return (
 			<SafeAreaView>
 				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
@@ -37,17 +35,12 @@ export default function WeaponAscensionMaterialsDetails() {
 	}
 
 	return (
-		<SafeAreaView>
-			<Text style={{ textAlign: "center" }}>
-				Weapon Ascension Material Details
-			</Text>
-			<FlatList
-				data={Object.entries(details)}
-				keyExtractor={([key]) => key}
-				renderItem={({ item: [field, value] }) => (
-					<MaterialDetails field={field} value={value} />
-				)}
+		<View style={{ flex: 1 }}>
+			<MaterialDetails
+				material={matchedItem}
+				refreshing={isRefreshing}
+				onRefresh={refetch}
 			/>
-		</SafeAreaView>
+		</View>
 	);
 }

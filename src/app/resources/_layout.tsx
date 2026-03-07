@@ -36,7 +36,7 @@ export default function ResourcesTab() {
 					}}
 				/>
 				<Tabs.Screen
-					name="materials/(drawer)"
+					name="materials"
 					options={{
 						tabBarLabel: "Materials",
 						tabBarIcon: ({ size, color }) => (
@@ -46,12 +46,6 @@ export default function ResourcesTab() {
 								color={color}
 							/>
 						),
-					}}
-				/>
-				<Tabs.Screen
-					name="materials/details"
-					options={{
-						href: null,
 					}}
 				/>
 				<Tabs.Screen

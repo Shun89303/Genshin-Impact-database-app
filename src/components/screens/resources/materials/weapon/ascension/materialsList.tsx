@@ -6,43 +6,43 @@ import FilterCatalog from "@/src/components/utils/filter/wam/filterCatalog";
 import SearchFilterBar from "@/src/components/utils/filter/wam/searchFilterBar";
 import { BASE_URL } from "@/src/config/env";
 import { useAscensionWeaponMaterials } from "@/src/hooks/useMaterials.weapon.ascension";
-import { useWeaponAscensionMaterialsStore } from "@/src/store/useWeaponAscensionStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
+import { StyleSheet, View } from "react-native";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const input = useWeaponAscensionMaterialsStore((state) => state.input);
-	const selectedType = useWeaponAscensionMaterialsStore(
-		(state) => state.selectedType
-	);
-	const groupByType = useWeaponAscensionMaterialsStore(
-		(state) => state.groupByType
-	);
-	const materialIds = useWeaponAscensionMaterialsStore(
-		(state) => state.materialIds
-	);
-
 	const materials = endpoints.materials;
 	const weaponAscension = endpoints.weaponAscension;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
-	const { details, error, isLoading, isRefreshing, refetch } =
-		useAscensionWeaponMaterials();
+	const {
+		input,
+		selectedType,
+		groupByType,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useAscensionWeaponMaterials();
 
+	// Prefetch images for smoother loading
 	useEffect(() => {
-		if (!materialIds.length) return;
+		if (!details.length) return;
 
-		const remainingIds = materialIds.slice(20);
-		remainingIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${weaponAscension}/${id}`);
+		details.forEach((mat) => {
+			mat.items.forEach((item) => {
+				Image.prefetch(`${BASE_URL}${materials}${weaponAscension}/${item.id}`);
+			});
 		});
-	}, [materialIds, materials, weaponAscension]);
+	}, [details, materials, weaponAscension]);
 
+	// Filter and group data
 	const finalData = useMemo(() => {
 		let result = details;
 
@@ -63,12 +63,12 @@ export default function MaterialsList() {
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (details.length === 0)
-		return <EmptyState message={"No materials found"} onRetry={refetch} />;
+		return <EmptyState message="No materials found" onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
 	return (
-		<>
+		<View style={styles.container}>
 			<SearchFilterBar sheetRef={sheetRef} />
 			<ListComponent
 				finalData={finalData}
@@ -80,11 +80,41 @@ export default function MaterialsList() {
 				snapPoints={snapPoints}
 				index={-1}
 				enablePanDownToClose
+				handleIndicatorStyle={styles.sheetHandle}
+				backgroundStyle={styles.sheetBackground}
 			>
-				<BottomSheetView>
+				<BottomSheetView style={styles.sheetContent}>
 					<FilterCatalog sheetRef={sheetRef} />
 				</BottomSheetView>
 			</BottomSheet>
-		</>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#f9fafb", // soft light background
+		paddingHorizontal: 16,
+		paddingTop: 8,
+	},
+
+	sheetHandle: {
+		backgroundColor: "#cbd5e1", // subtle gray handle
+		width: 40,
+		height: 4,
+		borderRadius: 2,
+		marginVertical: 8,
+		alignSelf: "center",
+	},
+
+	sheetBackground: {
+		backgroundColor: "#fff", // clean white sheet
+		borderRadius: 12,
+	},
+
+	sheetContent: {
+		paddingHorizontal: 16,
+		paddingVertical: 12,
+	},
+});

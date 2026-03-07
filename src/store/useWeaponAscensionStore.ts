@@ -1,9 +1,6 @@
 import { create } from "zustand";
 import { FILTER_CATEGORIES } from "../config/category/wamCategory/filterCategories";
-import {
-	getAllWeaponAscensionMaterialImageIds,
-	getAllWeaponAscensionMaterialsData,
-} from "../services/weapon.ascension.materials.services";
+import { getAllWeaponAscensionMaterialsData } from "../services/weapon.ascension.materials.services";
 import { Normalized } from "../types/weapon.ascension.material";
 
 interface WeaponAscensionMaterialsState {
@@ -12,12 +9,8 @@ interface WeaponAscensionMaterialsState {
 	details: Normalized[];
 	selectedType: "availability" | null;
 	setSelectedType: (type: "availability" | null, sheetRef: any) => void;
-	cache: Record<string, unknown>;
-	loadingId: string | null;
-	materialIds: string[];
 	setInput: (i: string) => void;
 	fetchAllDetails: () => Promise<void>;
-	fetchMaterialIds: () => Promise<void>;
 	groupByType: (
 		materials: Normalized[],
 		type: "availability"
@@ -35,21 +28,6 @@ export const useWeaponAscensionMaterialsStore =
 			sheetRef.current.close();
 		},
 		setInput: (i) => set({ input: i }),
-		cache: {},
-		loadingId: null,
-		materialIds: [],
-		fetchMaterialIds: async () => {
-			try {
-				const { materialIds } = get();
-
-				if (!materialIds?.length) {
-					const materialIds = await getAllWeaponAscensionMaterialImageIds();
-					set({ materialIds });
-				}
-			} catch (error: any) {
-				set({ error: error.message });
-			}
-		},
 		fetchAllDetails: async () => {
 			try {
 				let { details } = get();

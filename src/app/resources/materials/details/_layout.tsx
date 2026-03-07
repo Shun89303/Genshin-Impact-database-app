@@ -5,7 +5,7 @@ export default function DetailsStack() {
 		<Stack
 			screenOptions={{
 				title: "Details",
-				headerBackVisible: false,
+				headerShown: false,
 			}}
 		>
 			<Stack.Screen name="index" />
