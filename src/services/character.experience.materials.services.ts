@@ -1,14 +1,10 @@
 import apiClient from "../api/client";
 import { endpoints } from "../api/endpoints";
+import { CharacterExperience } from "../types/character.experience.material";
 
 const materials = endpoints.materials;
 const characterExperience = endpoints.characterExperience;
-const list = endpoints.list;
 
-export function getAllCharacterExperienceMaterialsData() {
+export function getAllCharacterExperienceMaterialsData(): Promise<CharacterExperience> {
 	return apiClient(`${materials}${characterExperience}`);
-}
-
-export function getAllCharacterExperienceMaterialImageIds() {
-	return apiClient(`${materials}${characterExperience}${list}`);
 }

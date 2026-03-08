@@ -6,40 +6,63 @@ import { BASE_URL } from "@/src/config/env";
 import { useExperienceMaterials } from "@/src/hooks/useMaterials.character.experience";
 import { Image } from "expo-image";
 import { useEffect } from "react";
-import { FlatList, View } from "react-native";
-import MaterialsImage from "./materialsImage";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import MaterialCard from "./materialCard";
 
 export default function MaterialsList() {
-	const materials = endpoints.materials;
-	const characterExperience = endpoints.characterExperience;
+	const { materials, characterExperience } = endpoints;
 
-	const { materialIds, error, isLoading, isRefreshing, refetch } =
+	const { details, error, isLoading, isRefreshing, refetch } =
 		useExperienceMaterials();
 
-	useEffect(() => {
-		if (!materialIds.length) return;
+	function toEndpointId(id: string): string {
+		return id.replace(/'/g, "-");
+	}
 
-		materialIds.forEach((id) => {
-			Image.prefetch(`${BASE_URL}${materials}${characterExperience}/${id}`);
+	useEffect(() => {
+		if (!details.length) return;
+
+		details.forEach((mat) => {
+			Image.prefetch(
+				`${BASE_URL}${materials}${characterExperience}/${toEndpointId(mat.id)}`
+			);
 		});
-	}, [materialIds, materials, characterExperience]);
+	}, [details, materials, characterExperience]);
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
-	if (materialIds.length === 0)
+	if (details.length === 0)
 		return <EmptyState message={"No materials found"} onRetry={refetch} />;
 
 	return (
-		<View style={{ alignItems: "center" }}>
-			<FlatList
-				data={materialIds}
-				keyExtractor={(id) => id}
-				numColumns={3}
-				removeClippedSubviews
-				refreshing={isRefreshing}
-				onRefresh={refetch}
-				renderItem={({ item }) => <MaterialsImage id={item} />}
-			/>
-		</View>
+		<ScrollView
+			contentContainerStyle={styles.container}
+			refreshControl={
+				<RefreshControl
+					refreshing={isRefreshing}
+					onRefresh={refetch}
+					colors={["#000000ff"]} // Android
+				/>
+			}
+		>
+			<View style={styles.grid}>
+				{details.map((mat) => (
+					<MaterialCard key={mat.id} material={mat} />
+				))}
+			</View>
+		</ScrollView>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		paddingHorizontal: 16,
+		paddingVertical: 20,
+		flexGrow: 1,
+		justifyContent: "center",
+	},
+
+	grid: {
+		gap: 16,
+	},
+});
