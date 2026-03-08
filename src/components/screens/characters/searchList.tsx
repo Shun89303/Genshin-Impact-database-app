@@ -1,6 +1,9 @@
+import { endpoints } from "@/src/api/endpoints";
+import { BASE_URL } from "@/src/config/env";
 import { Character } from "@/src/types/character";
+import { useRouter } from "expo-router";
 import { FlatList, View } from "react-native";
-import CharacterImage from "./characterImage";
+import PressableImage from "../../common/PressableImage";
 import styles from "./styles/searchList.styles";
 
 export default function SearchList({
@@ -12,6 +15,7 @@ export default function SearchList({
 	refreshing: boolean;
 	onRefresh: any;
 }) {
+	const router = useRouter();
 	return (
 		<View style={styles.container}>
 			<FlatList
@@ -25,7 +29,15 @@ export default function SearchList({
 				refreshing={refreshing}
 				renderItem={({ item }) => (
 					<View style={styles.item}>
-						<CharacterImage id={item.id} />
+						<PressableImage
+							uri={`${BASE_URL}${endpoints.characters}/${item.id}${endpoints.card}`}
+							onPress={() =>
+								router.navigate({
+									pathname: "/characters/[id]",
+									params: { id: item.id },
+								})
+							}
+						/>
 					</View>
 				)}
 			/>

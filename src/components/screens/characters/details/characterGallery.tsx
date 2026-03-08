@@ -1,10 +1,16 @@
 import { endpoints } from "@/src/api/endpoints";
+import FallbackImage from "@/src/components/common/FallbackImage";
 import { BASE_URL } from "@/src/config/env";
 import { Character } from "@/src/types/character";
 import { useState } from "react";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
-import CharacterImageFallback from "./characterImageFallback";
-import styles from "./styles/characterGallery.styles";
+import {
+	Modal,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
 
 export default function CharacterGallery({
 	character,
@@ -39,7 +45,7 @@ export default function CharacterGallery({
 				{images.map((uri, idx) => (
 					<Pressable key={idx} onPress={() => handlePress(uri)}>
 						<View style={[styles.card, { width: cardWidth }]}>
-							<CharacterImageFallback
+							<FallbackImage
 								uri={`${BASE_URL}${characters}/${character.id}/${uri}`}
 								style={styles.image}
 							/>
@@ -48,7 +54,6 @@ export default function CharacterGallery({
 				))}
 			</ScrollView>
 
-			{/* Modal for full-screen view */}
 			<Modal
 				visible={modalVisible}
 				transparent
@@ -59,14 +64,61 @@ export default function CharacterGallery({
 					style={styles.modalContainer}
 					onPress={() => setModalVisible(false)}
 				>
-					{selectedImage ? (
-						<CharacterImageFallback
+					{selectedImage && (
+						<FallbackImage
 							uri={`${BASE_URL}${characters}/${character.id}/${selectedImage}`}
 							style={styles.modalImage}
 						/>
-					) : null}
+					)}
 				</Pressable>
 			</Modal>
 		</>
 	);
 }
+
+const styles = StyleSheet.create({
+	tipText: {
+		fontSize: 12,
+		color: "#64748B",
+		marginBottom: 8,
+		textAlign: "center",
+	},
+
+	container: {
+		gap: 16,
+		alignItems: "center",
+	},
+
+	card: {
+		borderRadius: 14,
+		backgroundColor: "#FFFFFF",
+		justifyContent: "center",
+		alignItems: "center",
+		shadowColor: "#00000020",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		elevation: 2,
+	},
+
+	image: {
+		width: "100%",
+		aspectRatio: 1,
+		borderRadius: 10,
+	},
+
+	modalContainer: {
+		flex: 1,
+		backgroundColor: "rgba(0,0,0,0.5)", // lighter overlay
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 16,
+	},
+
+	modalImage: {
+		width: "90%",
+		height: "80%",
+		borderRadius: 14,
+		backgroundColor: "#F8FAFC", // modal background for contrast
+	},
+});

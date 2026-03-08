@@ -5,20 +5,19 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
 import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-import EmptyState from "../../ui/EmptyState";
-import ErrorState from "../../ui/ErrorState";
-import ScreenLoader from "../../ui/ScreenLoader";
-import FilterCatalog from "../../utils/filter/character/filterCatalog";
-import SearchFilterBar from "../../utils/filter/character/searchFilterBar";
+import Divider from "../../common/Divider";
+import EmptyState from "../../common/EmptyState";
+import ErrorState from "../../common/ErrorState";
+import FilterCatalog from "../../common/FilterCatalog";
+import ScreenLoader from "../../common/ScreenLoader";
+import SearchFilterBar from "../../common/SearchFilterBar";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 import styles from "./styles/charactersList.styles";
 
 export default function CharactersList() {
-	const characters = endpoints.characters;
-	const card = endpoints.card;
+	const { characters, card } = endpoints;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
@@ -26,7 +25,9 @@ export default function CharactersList() {
 	const {
 		ids,
 		input,
+		setInput,
 		selectedType,
+		setSelectedType,
 		groupByType,
 		details,
 		error,
@@ -35,11 +36,22 @@ export default function CharactersList() {
 		refetch,
 	} = useCharacters();
 
+	type option = {
+		label: string;
+		value: "vision" | "weapon" | "nation" | null;
+	};
+
+	const options: option[] = [
+		{ label: "Vision", value: "vision" },
+		{ label: "Weapon", value: "weapon" },
+		{ label: "Nation", value: "nation" },
+		{ label: "None", value: null },
+	];
+
 	useEffect(() => {
 		if (!ids.length) return;
 
-		const remainingIds = ids.slice(9);
-		remainingIds.forEach((id) => {
+		ids.forEach((id) => {
 			Image.prefetch(`${BASE_URL}${characters}/${id}${card}`);
 		});
 	}, [ids, card, characters]);
@@ -60,14 +72,9 @@ export default function CharactersList() {
 	}, [details, groupByType, input, selectedType]);
 
 	if (isLoading) return <ScreenLoader />;
-
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
 	if (!details.length)
-		return (
-			<SafeAreaView style={styles.safeArea}>
-				<EmptyState message="No characters found" onRetry={refetch} />
-			</SafeAreaView>
-		);
+		return <EmptyState message="No characters found" onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
@@ -75,12 +82,14 @@ export default function CharactersList() {
 		<View style={styles.safeArea}>
 			<View style={styles.container}>
 				<View>
-					<SearchFilterBar sheetRef={sheetRef} />
+					<SearchFilterBar
+						value={input}
+						onChangeText={setInput}
+						onFilterPress={() => sheetRef.current?.expand()}
+					/>
 				</View>
 
-				<View
-					style={{ height: 1, backgroundColor: "#334155", marginVertical: 12 }}
-				/>
+				<Divider />
 
 				<View style={styles.list}>
 					<ListComponent
@@ -100,7 +109,13 @@ export default function CharactersList() {
 				handleIndicatorStyle={styles.sheetIndicator}
 			>
 				<BottomSheetView style={styles.sheetContent}>
-					<FilterCatalog sheetRef={sheetRef} />
+					<FilterCatalog
+						options={options}
+						selectedValue={selectedType}
+						onSelect={(val: "vision" | "weapon" | "nation" | null) =>
+							setSelectedType(val, sheetRef)
+						}
+					/>
 				</BottomSheetView>
 			</BottomSheet>
 		</View>

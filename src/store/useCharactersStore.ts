@@ -8,6 +8,7 @@ import { Character, CharacterImageAssets } from "../types/character";
 
 interface CharactersState {
 	error: string | null;
+	setError: (e: string) => void;
 	ids: string[];
 	details: Character[];
 	detailsById: Record<string, Character>;
@@ -28,6 +29,7 @@ interface CharactersState {
 
 export const useCharactersStore = create<CharactersState>((set, get) => ({
 	error: null,
+	setError: (e) => set({ error: e }),
 	ids: [],
 	input: "",
 	details: [],
@@ -49,57 +51,52 @@ export const useCharactersStore = create<CharactersState>((set, get) => ({
 		}
 	},
 	fetchAllDetails: async () => {
-		try {
-			set({ error: null });
-
-			let { ids, fetchCharactersIds, details, detailsById } = get();
-			if (!ids.length) {
-				await fetchCharactersIds();
-				ids = get().ids;
-			}
-			if (details.length && Object.keys(detailsById).length) {
-				return;
-			}
-			const fetchedDetails = await Promise.all(
-				ids.map((id) => getCharacterDetails(id))
-			);
-			const normalized: Record<string, Character> = {};
-			fetchedDetails.forEach((char) => {
-				const images: CharacterImageAssets = {
-					card: "card",
-					constellation: "constellation",
-					constellation1: "constellation-1",
-					constellation2: "constellation-2",
-					constellation3: "constellation-3",
-					constellation4: "constellation-4",
-					constellation5: "constellation-5",
-					constellation6: "constellation-6",
-					constellationShape: "constellation-shape",
-					gachaCard: "gacha-card",
-					gachaSplash: "gacha-splash",
-					icon: "icon",
-					iconBig: "icon-big",
-					iconSide: "icon-side",
-					namecardBackground: "namecard-background",
-					portrait: "portrait",
-					talentBurst: "talent-burst",
-					talentNa: "talent-na",
-					talentPassive0: "talent-passive-0",
-					talentPassive1: "talent-passive-1",
-					talentPassive2: "talent-passive-2",
-					talentSkill: "talent-skill",
-				};
-
-				normalized[char.id] = {
-					...char,
-					images,
-				};
-			});
-			set({ details: fetchedDetails });
-			set({ detailsById: normalized });
-		} catch (error: any) {
-			set({ error: error.message });
+		set({ error: null });
+		let { ids, fetchCharactersIds, details, detailsById } = get();
+		if (!ids.length) {
+			await fetchCharactersIds();
+			ids = get().ids;
 		}
+		if (details.length && Object.keys(detailsById).length) {
+			return;
+		}
+		const fetchedDetails = await Promise.all(
+			ids.map((id) => getCharacterDetails(id))
+		);
+		const normalized: Record<string, Character> = {};
+		fetchedDetails.forEach((char) => {
+			const images: CharacterImageAssets = {
+				card: "card",
+				constellation: "constellation",
+				constellation1: "constellation-1",
+				constellation2: "constellation-2",
+				constellation3: "constellation-3",
+				constellation4: "constellation-4",
+				constellation5: "constellation-5",
+				constellation6: "constellation-6",
+				constellationShape: "constellation-shape",
+				gachaCard: "gacha-card",
+				gachaSplash: "gacha-splash",
+				icon: "icon",
+				iconBig: "icon-big",
+				iconSide: "icon-side",
+				namecardBackground: "namecard-background",
+				portrait: "portrait",
+				talentBurst: "talent-burst",
+				talentNa: "talent-na",
+				talentPassive0: "talent-passive-0",
+				talentPassive1: "talent-passive-1",
+				talentPassive2: "talent-passive-2",
+				talentSkill: "talent-skill",
+			};
+
+			normalized[char.id] = {
+				...char,
+				images,
+			};
+		});
+		set({ details: fetchedDetails });
+		set({ detailsById: normalized });
 	},
 	groupByType: (characters, type) => {
 		const options = FILTER_CATEGORIES[type];
