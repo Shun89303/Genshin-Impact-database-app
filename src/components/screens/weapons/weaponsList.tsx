@@ -6,11 +6,12 @@ import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 
-import EmptyState from "../../ui/EmptyState";
-import ErrorState from "../../ui/ErrorState";
-import ScreenLoader from "../../ui/ScreenLoader";
-import FilterCatalog from "../../utils/filter/weapon/filterCatalog";
-import SearchFilterBar from "../../utils/filter/weapon/searchFilterBar";
+import Divider from "../../common/Divider";
+import EmptyState from "../../common/EmptyState";
+import ErrorState from "../../common/ErrorState";
+import FilterCatalog from "../../common/FilterCatalog";
+import ScreenLoader from "../../common/ScreenLoader";
+import SearchFilterBar from "../../common/SearchFilterBar";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
@@ -23,7 +24,9 @@ export default function WeaponsList() {
 
 	const {
 		ids,
+		setInput,
 		input,
+		setSelectedType,
 		selectedType,
 		groupByType,
 		details,
@@ -32,6 +35,14 @@ export default function WeaponsList() {
 		isRefreshing,
 		refetch,
 	} = useWeapons();
+
+	type WeaponFilterType = "type" | "rarity" | null;
+
+	const options: { label: string; value: WeaponFilterType }[] = [
+		{ label: "Type", value: "type" },
+		{ label: "Rarity", value: "rarity" },
+		{ label: "None", value: null },
+	];
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -60,7 +71,7 @@ export default function WeaponsList() {
 
 	if (isLoading) return <ScreenLoader />;
 	if (error) return <ErrorState message={error} onRetry={refetch} />;
-	if (details.length === 0)
+	if (!details.length)
 		return <EmptyState message={"No weapons found"} onRetry={refetch} />;
 
 	const ListComponent = selectedType ? FilterList : SearchList;
@@ -68,10 +79,14 @@ export default function WeaponsList() {
 	return (
 		<View style={styles.container}>
 			<View style={styles.searchContainer}>
-				<SearchFilterBar sheetRef={sheetRef} />
+				<SearchFilterBar
+					value={input}
+					onChangeText={setInput}
+					onFilterPress={() => sheetRef.current?.expand()}
+				/>
 			</View>
 
-			<View style={{ height: 1, backgroundColor: "#334155", marginTop: 12 }} />
+			<Divider />
 
 			<ListComponent
 				finalData={finalData}
@@ -88,7 +103,13 @@ export default function WeaponsList() {
 				handleIndicatorStyle={styles.sheetIndicator}
 			>
 				<BottomSheetView style={styles.sheetContent}>
-					<FilterCatalog sheetRef={sheetRef} />
+					<FilterCatalog
+						options={options}
+						selectedValue={selectedType}
+						onSelect={(val: "type" | "rarity" | null) =>
+							setSelectedType(val, sheetRef)
+						}
+					/>
 				</BottomSheetView>
 			</BottomSheet>
 		</View>
@@ -98,16 +119,16 @@ export default function WeaponsList() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#0F172A",
+		backgroundColor: "#F8FAFC",
+		paddingHorizontal: 16,
 	},
 
 	searchContainer: {
-		paddingHorizontal: 16,
 		paddingTop: 10,
 	},
 
 	sheetBackground: {
-		backgroundColor: "#1E293B",
+		backgroundColor: "#FFFFFF",
 	},
 
 	sheetIndicator: {
