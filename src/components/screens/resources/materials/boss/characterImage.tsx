@@ -39,26 +39,29 @@ const styles = StyleSheet.create({
 		height: 60,
 		marginRight: 10,
 		borderRadius: 12,
-		backgroundColor: "#1E1E1E",
+		backgroundColor: "#F0F0F0", // soft slightly dark for contrast
 		justifyContent: "center",
 		alignItems: "center",
+		borderWidth: 1,
+		borderColor: "#D0D0D0",
 	},
 
 	image: {
 		width: 45,
 		height: 45,
+		borderRadius: 8,
 	},
 
 	fallback: {
-		backgroundColor: "#2C2C2C",
+		backgroundColor: "#E8E8E8", // slightly darker fallback
 		borderRadius: 8,
 		justifyContent: "center",
 		alignItems: "center",
 	},
 
 	fallbackText: {
-		fontSize: 9,
-		color: "#888",
+		fontSize: 10,
+		color: "#888888",
 		textAlign: "center",
 	},
 });
