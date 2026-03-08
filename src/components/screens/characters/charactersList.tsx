@@ -5,11 +5,10 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
 import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import EmptyState from "../../ui/EmptyState";
 import ErrorState from "../../ui/ErrorState";
-import ScreenLoader from "../../ui/ScreenLoader";
+import LoadingScreen from "../../ui/LoadingScreen";
 import FilterCatalog from "../../utils/filter/character/filterCatalog";
 import SearchFilterBar from "../../utils/filter/character/searchFilterBar";
 import FilterList from "./filterList";
@@ -33,6 +32,7 @@ export default function CharactersList() {
 		isLoading,
 		isRefreshing,
 		refetch,
+		retry,
 	} = useCharacters();
 
 	useEffect(() => {
@@ -59,15 +59,13 @@ export default function CharactersList() {
 		return result;
 	}, [details, groupByType, input, selectedType]);
 
-	if (isLoading) return <ScreenLoader />;
-
-	if (error) return <ErrorState message={error} onRetry={refetch} />;
-	if (!details.length)
-		return (
-			<SafeAreaView style={styles.safeArea}>
-				<EmptyState message="No characters found" onRetry={refetch} />
-			</SafeAreaView>
-		);
+	if (isLoading) return <LoadingScreen />;
+	if (error) {
+		return <ErrorState message={error} onRetry={retry} />;
+	}
+	if (!details.length) {
+		return <EmptyState message="No characters found" onRetry={retry} />;
+	}
 
 	const ListComponent = selectedType ? FilterList : SearchList;
 
@@ -79,7 +77,7 @@ export default function CharactersList() {
 				</View>
 
 				<View
-					style={{ height: 1, backgroundColor: "#334155", marginVertical: 12 }}
+					style={{ height: 1, backgroundColor: "#E0E0E0", marginVertical: 12 }}
 				/>
 
 				<View style={styles.list}>

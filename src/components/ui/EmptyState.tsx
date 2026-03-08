@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		paddingHorizontal: 20,
-		backgroundColor: "#0F172A",
 	},
 	message: {
 		fontSize: 20,

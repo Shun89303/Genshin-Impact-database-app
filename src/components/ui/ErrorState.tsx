@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		paddingHorizontal: 20,
-		backgroundColor: "#0F172A",
 	},
 	errorText: {
 		fontSize: 20,

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: "700",
 		textAlign: "center",
-		color: "#FFFFFF",
+		color: "#111111", // dark text for readability
 	},
 
 	grid: {
@@ -67,22 +67,25 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: 48,
 		borderRadius: 12,
-		backgroundColor: "#1E293B",
+		backgroundColor: "#F5F5F5", // light neutral white
 		justifyContent: "center",
 		alignItems: "center",
+		borderWidth: 1,
+		borderColor: "#E0E0E0", // subtle light gray border
 	},
 
 	activeOption: {
-		backgroundColor: "#2563EB",
+		backgroundColor: "#D1D5DB", // soft gray for active state
+		borderColor: "#B0B0B0", // slightly darker border to indicate active
 	},
 
 	optionText: {
-		color: "#CBD5E1",
+		color: "#555555", // medium gray text
 		fontWeight: "600",
 	},
 
 	activeText: {
-		color: "#FFFFFF",
+		color: "#111111", // dark text for contrast
 	},
 
 	pressed: {

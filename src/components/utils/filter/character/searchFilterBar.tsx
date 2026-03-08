@@ -37,14 +37,16 @@ const styles = StyleSheet.create({
 	inputWrapper: {
 		flex: 1,
 		height: 48,
-		backgroundColor: "#0F172A",
+		backgroundColor: "#F5F5F5", // light neutral white
 		borderRadius: 12,
 		paddingHorizontal: 16,
 		justifyContent: "center",
+		borderWidth: 1,
+		borderColor: "#E0E0E0", // subtle visible border
 	},
 
 	input: {
-		color: "#FFFFFF",
+		color: "#111111", // dark text for readability
 		fontSize: 16,
 	},
 
@@ -52,13 +54,13 @@ const styles = StyleSheet.create({
 		height: 48,
 		paddingHorizontal: 20,
 		borderRadius: 12,
-		backgroundColor: "#2563EB",
+		backgroundColor: "#D1D5DB", // soft gray button
 		justifyContent: "center",
 		alignItems: "center",
 	},
 
 	buttonText: {
-		color: "#FFFFFF",
+		color: "#111111", // dark text for contrast
 		fontWeight: "600",
 		fontSize: 14,
 	},

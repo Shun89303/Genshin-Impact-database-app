@@ -3,8 +3,9 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingHorizontal: 16,
+		// paddingHorizontal: 16,
 		paddingTop: 8,
+		backgroundColor: "#F8F8F8", // light neutral white background
 	},
 
 	contentContainer: {
@@ -14,12 +15,16 @@ const styles = StyleSheet.create({
 
 	groupContainer: {
 		gap: 12,
+		borderRadius: 12,
+		borderWidth: 1,
+		borderColor: "#E0E0E0", // subtle light gray border
+		padding: 8,
 	},
 
 	groupTitle: {
 		fontSize: 20,
 		fontWeight: "700",
-		color: "#FFFFFF",
+		color: "#111111", // dark text for readability
 	},
 
 	horizontalList: {
@@ -29,6 +34,11 @@ const styles = StyleSheet.create({
 
 	characterWrapper: {
 		marginRight: 12,
+		backgroundColor: "#FFFFFF", // slightly off-white card for items
+		// borderRadius: 12,
+		// borderWidth: 1,
+		// borderColor: "#E0E0E0", // subtle light gray border
+		// padding: 8,
 	},
 });
 

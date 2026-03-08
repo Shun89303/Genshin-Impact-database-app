@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
 	image: {
 		width: "100%",
 		height: "100%",
+		borderWidth: 1,
+		borderRadius: 14,
+		borderColor: "#E0E0E0", // subtle visible border
 	},
 
 	loaderOverlay: {
