@@ -1,10 +1,10 @@
 import ElementsList from "@/src/components/screens/resources/elements/elementsList";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function ElementsScreen() {
 	return (
-		<SafeAreaView>
+		<View style={{ flex: 1 }}>
 			<ElementsList />
-		</SafeAreaView>
+		</View>
 	);
 }

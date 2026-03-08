@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import {
 	getElementDetails,
-	getElementImageTypes,
 	getElementsIds,
 } from "../services/elements.services";
 import { Normalized } from "../types/element";
@@ -11,7 +10,6 @@ interface ElementsState {
 	details: Normalized[];
 	error: string | null;
 	fetchElementsIds: () => Promise<void>;
-	fetchElementImageTypes: (id: string) => Promise<string[]>;
 	fetchAllDetails: () => Promise<void>;
 }
 
@@ -27,14 +25,6 @@ export const useElementsStore = create<ElementsState>((set, get) => ({
 			set({ ids });
 		} catch (error: any) {
 			set({ error: error.message });
-		}
-	},
-	fetchElementImageTypes: async (id) => {
-		try {
-			return await getElementImageTypes(id);
-		} catch (error: any) {
-			set({ error: error.message });
-			return null;
 		}
 	},
 	fetchAllDetails: async () => {

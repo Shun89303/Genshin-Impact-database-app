@@ -3,75 +3,59 @@ import styles from "@/src/components/styles.modules";
 import { BASE_URL } from "@/src/config/env";
 import { useElementsStore } from "@/src/store/useElementsStore";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-	ActivityIndicator,
-	Pressable,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function ElementImage({ id, size = 100 }: any) {
 	const { error } = useElementsStore();
 	const [loading, setLoading] = useState(true);
 	const [imageError, setImageError] = useState(false);
-	const router = useRouter();
-	const elements = endpoints.elements;
-	const icon = endpoints.icon;
+	const { elements, icon } = endpoints;
 
 	const imageUri = `${BASE_URL}${elements}/${id}${icon}`;
 
 	if (error) {
 		return (
 			<View style={styles.simpleContainer}>
-				<Text>{error}</Text>
+				<Text style={localStyles.errorText}>{error}</Text>
 			</View>
 		);
 	}
 
 	return (
-		<Pressable
-			onPress={() =>
-				router.navigate({
-					pathname: "/resources/elements/[id]",
-					params: { id },
-				})
-			}
-			style={localStyles.pressable}
-		>
-			<View style={{ width: size, height: size }}>
-				{loading && !imageError && (
-					<ActivityIndicator
-						style={localStyles.loader}
-						size="small"
-						color="#FFFFFF"
-					/>
-				)}
+		<View style={[localStyles.container, { width: size, height: size }]}>
+			{loading && !imageError && (
+				<ActivityIndicator
+					style={localStyles.loader}
+					size="small"
+					color="#FFFFFF"
+				/>
+			)}
 
-				{!imageError ? (
-					<Image
-						source={{ uri: imageUri }}
-						style={[localStyles.image, { width: size, height: size }]}
-						cachePolicy="memory-disk"
-						onLoad={() => setLoading(false)}
-						onError={() => setImageError(true)}
-					/>
-				) : (
-					<View style={localStyles.fallback}>
-						<Text style={localStyles.fallbackText}>No Image</Text>
-					</View>
-				)}
-			</View>
-		</Pressable>
+			{!imageError ? (
+				<Image
+					source={{ uri: imageUri }}
+					style={[localStyles.image, { width: size, height: size }]}
+					cachePolicy="memory-disk"
+					onLoad={() => setLoading(false)}
+					onError={() => setImageError(true)}
+				/>
+			) : (
+				<View style={localStyles.fallback}>
+					<Text style={localStyles.fallbackText}>No Image</Text>
+				</View>
+			)}
+		</View>
 	);
 }
 
 const localStyles = StyleSheet.create({
-	pressable: {
+	container: {
 		borderRadius: 12,
 		overflow: "hidden",
+		backgroundColor: "#000000ff",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 
 	image: {
@@ -93,8 +77,16 @@ const localStyles = StyleSheet.create({
 	},
 
 	fallbackText: {
-		color: "#AAAAAA",
+		color: "#BBBBBB",
 		fontSize: 12,
 		fontWeight: "600",
+	},
+
+	errorText: {
+		color: "#FF6B6B",
+		fontSize: 12,
+		fontWeight: "600",
+		textAlign: "center",
+		padding: 4,
 	},
 });

@@ -3,7 +3,6 @@ import { endpoints } from "../api/endpoints";
 import { ApiIds, ApiObject } from "../types/element";
 
 const elements = endpoints.elements;
-const list = endpoints.list;
 
 // will return an ARRAY of over 80 Element id strings
 export function getElementsIds(): Promise<ApiIds> {
@@ -13,9 +12,4 @@ export function getElementsIds(): Promise<ApiIds> {
 // will return a huge OBJECT containing all the details of a Element
 export function getElementDetails(id: string): Promise<ApiObject> {
 	return apiClient(`${elements}/${id}`);
-}
-
-// will return a small ARRAY containing the types of images the api offers for the selected Element
-export function getElementImageTypes(id: string) {
-	return apiClient(`${elements}/${id}${list}`);
 }

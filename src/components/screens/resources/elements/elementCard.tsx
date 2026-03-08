@@ -1,6 +1,8 @@
 import { Normalized } from "@/src/types/element";
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import ElementImage from "./elementImage";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function ElementCard({ name, reactions, id }: Normalized) {
 	return (
@@ -20,7 +22,7 @@ export default function ElementCard({ name, reactions, id }: Normalized) {
 					<View style={styles.elementsContainer}>
 						{reaction.elements.map((element) => (
 							<View key={element} style={styles.elementItem}>
-								<Text style={styles.sectionValue}>{element}</Text>
+								<Text style={styles.elementText}>{element}</Text>
 							</View>
 						))}
 					</View>
@@ -35,58 +37,77 @@ export default function ElementCard({ name, reactions, id }: Normalized) {
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#1E1E1E",
-		padding: 16,
+		backgroundColor: "#F8F8F8", // soft white
+		padding: 18,
 		borderRadius: 16,
-		marginBottom: 16,
-		shadowColor: "#000",
+		marginBottom: 18,
+		borderWidth: 1, // add border
+		borderColor: "#DDDDDD", // neutral gray border
+		shadowColor: "#00000020",
 		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.3,
+		shadowOpacity: 0.2,
 		shadowRadius: 6,
-		elevation: 6,
+		elevation: 4,
+		width: "95%",
+		maxWidth: SCREEN_WIDTH - 32,
+		alignSelf: "center",
 	},
 
 	title: {
 		textAlign: "center",
-		fontSize: 20,
+		fontSize: 22,
 		fontWeight: "700",
-		color: "#FFFFFF",
-		marginBottom: 12,
+		color: "#333333",
+		marginBottom: 16,
 	},
 
 	imageContainer: {
 		alignItems: "center",
-		marginBottom: 16,
+		marginBottom: 20,
 	},
 
 	reactionCard: {
-		backgroundColor: "#2A2A2A",
-		padding: 12,
-		borderRadius: 12,
-		marginBottom: 12,
+		backgroundColor: "#FFFFFF",
+		padding: 14,
+		borderRadius: 14,
+		marginBottom: 14,
+		borderWidth: 1,
+		borderColor: "#DDDDDD",
 	},
 
 	sectionLabel: {
 		fontSize: 12,
 		fontWeight: "600",
-		color: "#AAAAAA",
+		color: "#888888",
 		marginBottom: 4,
 		textTransform: "uppercase",
 		letterSpacing: 0.5,
 	},
 
 	sectionValue: {
-		fontSize: 14,
-		color: "#E0E0E0",
-		marginBottom: 8,
+		fontSize: 15,
+		color: "#444444",
+		marginBottom: 10,
 	},
 
 	elementsContainer: {
-		paddingLeft: 8,
-		marginBottom: 8,
+		flexDirection: "row",
+		flexWrap: "wrap",
+		marginBottom: 10,
 	},
 
 	elementItem: {
-		marginBottom: 4,
+		backgroundColor: "#EEEEEE",
+		borderRadius: 8,
+		paddingVertical: 4,
+		paddingHorizontal: 8,
+		marginRight: 6,
+		marginBottom: 6,
+	},
+
+	elementText: {
+		color: "#333333",
+		fontSize: 13,
+		fontWeight: "500",
 	},
 });
