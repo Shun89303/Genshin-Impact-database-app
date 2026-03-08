@@ -5,11 +5,11 @@ const styles = StyleSheet.create({
 		width: 100,
 		borderRadius: 14,
 		overflow: "hidden",
-		backgroundColor: "#1E293B",
+		backgroundColor: "#F8FAFC",
 	},
 
 	pressed: {
-		opacity: 0.7,
+		opacity: 0.9,
 		transform: [{ scale: 0.98 }],
 	},
 
@@ -18,7 +18,10 @@ const styles = StyleSheet.create({
 		aspectRatio: 0.5,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#0F172A",
+		backgroundColor: "#FFFFFF",
+		borderWidth: 1,
+		borderColor: "#E6ECF3", // soft light border
+		borderRadius: 14, // match card radius
 	},
 
 	image: {
@@ -37,11 +40,11 @@ const styles = StyleSheet.create({
 		height: "100%",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#334155",
+		backgroundColor: "#E6ECF3",
 	},
 
 	unavailableText: {
-		color: "#CBD5E1",
+		color: "#64748B",
 		fontSize: 12,
 		textAlign: "center",
 	},
@@ -54,6 +57,7 @@ const styles = StyleSheet.create({
 	},
 
 	errorText: {
+		color: "#475569",
 		fontSize: 12,
 		textAlign: "center",
 	},

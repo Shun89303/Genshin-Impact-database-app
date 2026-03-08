@@ -1,14 +1,20 @@
 import { endpoints } from "@/src/api/endpoints";
+import Divider from "@/src/components/common/Divider";
 import { BASE_URL } from "@/src/config/env";
 import { Character } from "@/src/types/character";
 import React, { useState } from "react";
-import { Dimensions, RefreshControl, ScrollView, View } from "react-native";
+import {
+	Dimensions,
+	RefreshControl,
+	ScrollView,
+	StyleSheet,
+	View,
+} from "react-native";
 import CharacterConstellations from "./characterConstellations";
 import CharacterGallery from "./characterGallery";
 import CharacterOverview from "./characterOverview";
 import CharacterTabs, { Tab } from "./characterTabs";
 import ExpandableHorizontalList from "./expandableHorizontalList";
-import styles from "./styles/characterDetails.styles";
 
 export default function CharacterDetails({
 	character,
@@ -20,7 +26,6 @@ export default function CharacterDetails({
 	onRefresh: () => void;
 }) {
 	const [activeTab, setActiveTab] = useState<Tab>("Overview");
-
 	const screenWidth = Dimensions.get("window").width;
 	const { characters } = endpoints;
 
@@ -51,11 +56,11 @@ export default function CharacterDetails({
 	return (
 		<View style={styles.container}>
 			{/* Tab Header */}
-			<View style={{ flexShrink: 0 }}>
+			<View style={styles.tabsWrapper}>
 				<CharacterTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 			</View>
 
-			<View style={{ height: 1, backgroundColor: "#334155" }} />
+			<Divider />
 
 			<ScrollView
 				style={styles.scrollContainer}
@@ -118,3 +123,25 @@ export default function CharacterDetails({
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#F8FAFC",
+	},
+
+	tabsWrapper: {
+		paddingTop: 12,
+		paddingHorizontal: 12,
+	},
+
+	scrollContainer: {
+		flex: 1,
+	},
+
+	scrollContent: {
+		paddingVertical: 16,
+		paddingHorizontal: 12,
+		gap: 24, // consistent spacing between sections
+	},
+});

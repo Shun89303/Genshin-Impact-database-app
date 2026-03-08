@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		paddingVertical: 12,
 		paddingHorizontal: 8,
-		backgroundColor: "#0F172A",
 		alignItems: "center",
 	},
 	tabButton: {
@@ -13,7 +12,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 14,
 		borderRadius: 8,
 		marginRight: 8,
-		backgroundColor: "#1E293B",
 		alignSelf: "center",
 	},
 	activeTabButton: {

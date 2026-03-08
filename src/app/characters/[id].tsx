@@ -1,7 +1,7 @@
+import ScreenLoader from "@/src/components/common/ScreenLoader";
 import CharacterDetails from "@/src/components/screens/characters/details/characterDetails";
 import { useCharacters } from "@/src/hooks/useCharacters";
 import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
 
 export default function CharacterDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
@@ -10,11 +10,7 @@ export default function CharacterDetailsScreen() {
 	const character = detailsById[id];
 
 	if (isLoading || !character) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<Text>Loading character...</Text>
-			</View>
-		);
+		return <ScreenLoader />;
 	}
 
 	return (

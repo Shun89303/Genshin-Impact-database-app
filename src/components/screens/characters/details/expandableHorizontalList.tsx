@@ -1,3 +1,4 @@
+import FallbackImage from "@/src/components/common/FallbackImage";
 import { PassiveTalent, SkillTalent } from "@/src/types/character";
 import { useState } from "react";
 import {
@@ -5,11 +6,10 @@ import {
 	Modal,
 	Pressable,
 	ScrollView,
+	StyleSheet,
 	Text,
 	View,
 } from "react-native";
-import CharacterImageFallback from "./characterImageFallback";
-import styles from "./styles/expandableHorizontalList.styles";
 
 type TalentItem = {
 	name: string;
@@ -34,7 +34,6 @@ export default function ExpandableHorizontalList({
 	const [selectedIndex, setSelectedIndex] = useState<number>(0);
 	const screenWidth = Dimensions.get("window").width;
 
-	// Map to common TalentItem type
 	const talents: TalentItem[] = data.map((item, idx) => ({
 		name: item.name,
 		description: item.description,
@@ -51,7 +50,6 @@ export default function ExpandableHorizontalList({
 	return (
 		<>
 			<Text style={styles.tipText}>Tap an image to view details</Text>
-			{/* Vertical scrollable list */}
 			<ScrollView
 				contentContainerStyle={styles.listContainer}
 				showsVerticalScrollIndicator={false}
@@ -67,9 +65,12 @@ export default function ExpandableHorizontalList({
 						]}
 					>
 						<View style={styles.imageWrapper}>
-							<CharacterImageFallback
+							<FallbackImage
 								uri={item.imageUri}
-								style={{ width: imageSize, height: imageSize }}
+								style={{
+									width: imageSize,
+									height: imageSize,
+								}}
 							/>
 						</View>
 						<Text style={styles.name}>{item.name}</Text>
@@ -77,7 +78,6 @@ export default function ExpandableHorizontalList({
 				))}
 			</ScrollView>
 
-			{/* Modal showing only selected talent */}
 			<Modal
 				visible={modalVisible}
 				transparent
@@ -86,7 +86,7 @@ export default function ExpandableHorizontalList({
 			>
 				<Pressable style={styles.modalBackground} onPress={closeModal}>
 					<View style={[styles.modalCard, { width: screenWidth - 32 }]}>
-						<CharacterImageFallback
+						<FallbackImage
 							uri={talents[selectedIndex]?.imageUri}
 							style={styles.modalImage}
 						/>
@@ -100,3 +100,85 @@ export default function ExpandableHorizontalList({
 		</>
 	);
 }
+
+const styles = StyleSheet.create({
+	tipText: {
+		fontSize: 12,
+		color: "#64748B",
+		marginBottom: 8,
+		textAlign: "center",
+	},
+	listContainer: {
+		paddingHorizontal: 16,
+		paddingVertical: 10,
+		gap: 16,
+		alignItems: "center",
+	},
+
+	card: {
+		borderRadius: 14,
+		backgroundColor: "#FFFFFF", // soft white card
+		borderWidth: 1,
+		borderColor: "#E6ECF3",
+		paddingVertical: 14,
+		paddingHorizontal: 12,
+		alignItems: "center",
+		gap: 10,
+	},
+
+	imageWrapper: {
+		backgroundColor: "#F8FAFC", // light neutral background for image
+		borderRadius: 10,
+	},
+
+	name: {
+		fontSize: 15,
+		fontWeight: "600",
+		color: "#1E293B", // dark text for readability
+		textAlign: "center",
+	},
+
+	pressed: {
+		opacity: 0.85,
+		transform: [{ scale: 0.97 }],
+	},
+
+	modalBackground: {
+		flex: 1,
+		backgroundColor: "rgba(0,0,0,0.5)", // lighter overlay
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 16,
+	},
+
+	modalCard: {
+		borderRadius: 14,
+		backgroundColor: "#FFFFFF", // white modal card
+		borderWidth: 1,
+		borderColor: "#E6ECF3",
+		padding: 20,
+		alignItems: "center",
+	},
+
+	modalImage: {
+		width: "50%",
+		aspectRatio: 1,
+		borderRadius: 12,
+		marginBottom: 16,
+		backgroundColor: "#F8FAFC",
+	},
+
+	modalName: {
+		fontSize: 18,
+		fontWeight: "bold",
+		color: "#1E293B",
+		textAlign: "center",
+		marginBottom: 8,
+	},
+
+	modalDescription: {
+		fontSize: 14,
+		color: "#475569",
+		textAlign: "center",
+	},
+});
