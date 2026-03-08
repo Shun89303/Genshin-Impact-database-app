@@ -5,6 +5,7 @@ import { Weapon } from "../types/weapon";
 
 interface WeaponsState {
 	error: string | null;
+	setError: (e: string) => void;
 	ids: string[];
 	input: string;
 	details: Weapon[];
@@ -21,6 +22,7 @@ interface WeaponsState {
 
 export const useWeaponsStore = create<WeaponsState>((set, get) => ({
 	error: null,
+	setError: (e) => set({ error: e }),
 	ids: [],
 	input: "",
 	details: [],
@@ -39,23 +41,19 @@ export const useWeaponsStore = create<WeaponsState>((set, get) => ({
 		}
 	},
 	fetchAllDetails: async () => {
-		try {
-			set({ error: null });
-			let { ids, fetchWeaponsIds, details } = get();
-			if (!ids.length) {
-				await fetchWeaponsIds();
-				ids = get().ids;
-			}
-			if (details.length) {
-				return;
-			}
-			const fetchedDetails = await Promise.all(
-				ids.map((id) => getWeaponDetails(id))
-			);
-			set({ details: fetchedDetails });
-		} catch (error: any) {
-			set({ error: error.message });
+		set({ error: null });
+		let { ids, fetchWeaponsIds, details } = get();
+		if (!ids.length) {
+			await fetchWeaponsIds();
+			ids = get().ids;
 		}
+		if (details.length) {
+			return;
+		}
+		const fetchedDetails = await Promise.all(
+			ids.map((id) => getWeaponDetails(id))
+		);
+		set({ details: fetchedDetails });
 	},
 	groupByType: (weapons, type) => {
 		const options = FILTER_CATEGORIES[type];

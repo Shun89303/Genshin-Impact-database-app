@@ -1,6 +1,9 @@
+import { endpoints } from "@/src/api/endpoints";
+import { BASE_URL } from "@/src/config/env";
 import { Weapon } from "@/src/types/weapon";
+import { useRouter } from "expo-router";
 import { FlatList, View } from "react-native";
-import WeaponImage from "./weaponImage";
+import PressableImage from "../../common/PressableImage";
 
 export default function SearchList({
 	finalData,
@@ -11,6 +14,7 @@ export default function SearchList({
 	refreshing: boolean;
 	onRefresh: any;
 }) {
+	const router = useRouter();
 	return (
 		<View style={{ flex: 1, alignItems: "center" }}>
 			<FlatList
@@ -24,7 +28,20 @@ export default function SearchList({
 				contentContainerStyle={{ paddingBottom: 20 }}
 				renderItem={({ item }) => (
 					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
-						<WeaponImage id={item.id} />
+						<PressableImage
+							uri={`${BASE_URL}${endpoints.weapons}/${item.id}${endpoints.icon}`}
+							onPress={() =>
+								router.navigate({
+									pathname: "/weapons/[id]",
+									params: { id: item.id },
+								})
+							}
+							aspectRatio={1}
+							cardStyle={{
+								borderWidth: 1,
+								borderColor: "#e9e9e9ff",
+							}}
+						/>
 					</View>
 				)}
 			/>

@@ -5,9 +5,12 @@ export function useWeapons() {
 	const fetchAllDetails = useWeaponsStore((s) => s.fetchAllDetails);
 	const details = useWeaponsStore((s) => s.details);
 	const error = useWeaponsStore((s) => s.error);
+	const setError = useWeaponsStore((s) => s.setError);
 	const ids = useWeaponsStore((state) => state.ids);
 	const input = useWeaponsStore((state) => state.input);
+	const setInput = useWeaponsStore((state) => state.setInput);
 	const selectedType = useWeaponsStore((state) => state.selectedType);
+	const setSelectedType = useWeaponsStore((state) => state.setSelectedType);
 	const groupByType = useWeaponsStore((state) => state.groupByType);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -39,11 +42,14 @@ export function useWeapons() {
 
 	return {
 		ids,
+		setInput,
 		input,
+		setSelectedType,
 		selectedType,
 		groupByType,
 		details,
 		error,
+		setError,
 		isLoading,
 		isRefreshing,
 		refetch: () => fetchData(true),

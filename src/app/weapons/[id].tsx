@@ -1,5 +1,5 @@
+import ScreenLoader from "@/src/components/common/ScreenLoader";
 import WeaponDetails from "@/src/components/screens/weapons/details/weaponDetails";
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import { useWeapons } from "@/src/hooks/useWeapons";
 import { useLocalSearchParams } from "expo-router";
 

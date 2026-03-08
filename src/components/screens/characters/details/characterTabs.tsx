@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#F1F5F9",
 		justifyContent: "center",
 		alignItems: "center",
+		borderWidth: 1,
+		borderColor: "#b2b2b2ff",
 	},
 
 	activeTabButton: {

@@ -1,6 +1,9 @@
+import { endpoints } from "@/src/api/endpoints";
+import { BASE_URL } from "@/src/config/env";
 import { Weapon } from "@/src/types/weapon";
+import { useRouter } from "expo-router";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import WeaponImage from "./weaponImage";
+import PressableImage from "../../common/PressableImage";
 
 export default function FilterList({
 	finalData,
@@ -11,6 +14,7 @@ export default function FilterList({
 	refreshing: boolean;
 	onRefresh: any;
 }) {
+	const router = useRouter();
 	return (
 		<View style={styles.container}>
 			<FlatList
@@ -29,7 +33,22 @@ export default function FilterList({
 							horizontal
 							data={item.data}
 							keyExtractor={(wea) => wea.id}
-							renderItem={({ item }) => <WeaponImage id={item.id} />}
+							renderItem={({ item }) => (
+								<PressableImage
+									uri={`${BASE_URL}${endpoints.weapons}/${item.id}${endpoints.icon}`}
+									onPress={() =>
+										router.navigate({
+											pathname: "/weapons/[id]",
+											params: { id: item.id },
+										})
+									}
+									aspectRatio={1}
+									cardStyle={{
+										borderWidth: 1,
+										borderColor: "#e9e9e9ff",
+									}}
+								/>
+							)}
 							contentContainerStyle={styles.horizontalList}
 							showsHorizontalScrollIndicator={false}
 						/>
@@ -43,26 +62,32 @@ export default function FilterList({
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#0F172A", // matches Weapons screen background
 	},
 
 	listContent: {
 		paddingVertical: 12,
+		gap: 16,
 	},
 
 	section: {
 		paddingVertical: 20,
 		paddingHorizontal: 16,
+		borderWidth: 1,
+		borderRadius: 12, // rounded corners
+		borderColor: "#E6ECF3", // soft light border
+		padding: 12, // add inner spacing
+		backgroundColor: "#F8FAFC", // soft background
 	},
 
 	sectionTitle: {
 		fontWeight: "700",
 		fontSize: 20,
-		color: "#F9FAFB",
+		color: "#000000ff",
 		marginBottom: 12,
 	},
 
 	horizontalList: {
 		gap: 12,
+		paddingVertical: 8,
 	},
 });

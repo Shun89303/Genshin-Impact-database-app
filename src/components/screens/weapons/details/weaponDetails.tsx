@@ -1,11 +1,11 @@
 import { endpoints } from "@/src/api/endpoints";
+import Divider from "@/src/components/common/Divider";
+import FallbackImage from "@/src/components/common/FallbackImage";
 import { BASE_URL } from "@/src/config/env";
 import { Weapon } from "@/src/types/weapon";
 import React, { useState } from "react";
-import { RefreshControl, ScrollView, View } from "react-native";
-import styles from "./styles/weaponDetails.styles";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import WeaponBasicInfo from "./weaponBasicInfo";
-import WeaponImageFallback from "./weaponImageFallback";
 import WeaponStats from "./weaponStats";
 import WeaponTabs, { WeaponTab } from "./weaponTabs";
 
@@ -27,15 +27,14 @@ export default function WeaponDetails({
 		<View style={styles.container}>
 			{/* Weapon Icon */}
 			<View style={styles.imageContainer}>
-				<WeaponImageFallback
+				<FallbackImage
 					uri={weaponImageUrl}
-					style={{ width: 140, height: 140 }}
+					style={styles.weaponImage}
+					borderColor="#a7a7a7ff"
 				/>
 			</View>
 
-			<View
-				style={{ height: 1, backgroundColor: "#334155", marginVertical: 12 }}
-			/>
+			<Divider />
 
 			{/* Tab Header */}
 			<View style={styles.tabHeader}>
@@ -60,3 +59,35 @@ export default function WeaponDetails({
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "#F8FAFC",
+	},
+
+	imageContainer: {
+		alignItems: "center",
+		marginTop: 24,
+	},
+
+	weaponImage: {
+		width: 150,
+		height: 150,
+		borderRadius: 16,
+	},
+
+	tabHeader: {
+		flexShrink: 0,
+		marginBottom: 20,
+	},
+
+	scrollContainer: {
+		flex: 1,
+		paddingHorizontal: 16,
+	},
+
+	scrollContent: {
+		paddingBottom: 40,
+	},
+});
