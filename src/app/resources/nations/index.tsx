@@ -1,10 +1,10 @@
 import NationsList from "@/src/components/screens/resources/nations/nationsList";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function NationsScreen() {
 	return (
-		<SafeAreaView>
+		<View style={{ flex: 1 }}>
 			<NationsList />
-		</SafeAreaView>
+		</View>
 	);
 }
