@@ -24,7 +24,6 @@ export default function MaterialCard({
 
 			<View style={styles.section}>
 				<Text style={styles.sectionLabel}>Used By</Text>
-
 				<FlatList
 					data={characters}
 					keyExtractor={(item) => item}
@@ -44,46 +43,50 @@ export default function MaterialCard({
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#1E1E1E",
+		backgroundColor: "#FFFFFF",
 		padding: 16,
 		borderRadius: 16,
 		marginBottom: 16,
+		borderWidth: 1,
+		borderColor: "#E0E0E0",
 		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.3,
-		shadowRadius: 6,
-		elevation: 6,
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		elevation: 3,
 	},
 
 	title: {
 		textAlign: "center",
 		fontSize: 18,
-		fontWeight: "600",
-		color: "#FFFFFF",
+		fontWeight: "700",
+		color: "#111111",
 		marginBottom: 12,
 	},
 
 	imageContainer: {
 		alignItems: "center",
 		marginBottom: 16,
+		borderRadius: 12,
+		overflow: "hidden",
 	},
 
 	section: {
-		marginBottom: 14,
+		marginBottom: 12,
 	},
 
 	sectionLabel: {
-		fontSize: 14,
+		fontSize: 13,
 		fontWeight: "600",
-		color: "#AAAAAA",
-		marginBottom: 6,
+		color: "#555555",
+		marginBottom: 4,
 		textTransform: "uppercase",
 		letterSpacing: 0.5,
 	},
 
 	sourceText: {
 		fontSize: 14,
-		color: "#E0E0E0",
+		color: "#333333",
 		lineHeight: 20,
 	},
 
@@ -92,6 +95,8 @@ const styles = StyleSheet.create({
 	},
 
 	characterItem: {
-		marginRight: 10,
+		marginRight: 12,
+		borderRadius: 8,
+		overflow: "hidden",
 	},
 });
