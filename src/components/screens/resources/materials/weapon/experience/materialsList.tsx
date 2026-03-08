@@ -10,8 +10,7 @@ import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import MaterialCard from "./materialCard";
 
 export default function MaterialsList() {
-	const materials = endpoints.materials;
-	const weaponExperience = endpoints.weaponExperience;
+	const { materials, weaponExperience } = endpoints;
 
 	const { details, error, isLoading, isRefreshing, refetch } =
 		useExperienceWeaponMaterials();

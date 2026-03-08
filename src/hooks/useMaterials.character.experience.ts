@@ -2,13 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useCharacterExperienceMaterialsStore } from "../store/useCharacterExperienceStore";
 
 export function useExperienceMaterials() {
-	const fetchMaterialIds = useCharacterExperienceMaterialsStore(
-		(s) => s.fetchMaterialIds
-	);
-	const materialIds = useCharacterExperienceMaterialsStore(
-		(s) => s.materialIds
+	const fetchAllDetails = useCharacterExperienceMaterialsStore(
+		(s) => s.fetchAllDetails
 	);
 	const error = useCharacterExperienceMaterialsStore((s) => s.error);
+	const details = useCharacterExperienceMaterialsStore((s) => s.details);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -22,13 +20,13 @@ export function useExperienceMaterials() {
 					setIsLoading(true);
 				}
 
-				await fetchMaterialIds();
+				await fetchAllDetails();
 			} finally {
 				setIsLoading(false);
 				setIsRefreshing(false);
 			}
 		},
-		[fetchMaterialIds]
+		[fetchAllDetails]
 	);
 
 	useEffect(() => {
@@ -36,7 +34,7 @@ export function useExperienceMaterials() {
 	}, [fetchData]);
 
 	return {
-		materialIds,
+		details,
 		error,
 		isLoading,
 		isRefreshing,

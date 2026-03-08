@@ -14,8 +14,6 @@ export default function DetailsStack() {
 
 			<Stack.Screen name="talent/book/[id]" />
 
-			<Stack.Screen name="character/experience/[id]" />
-
 			<Stack.Screen name="boss/[id]" />
 		</Stack>
 	);
