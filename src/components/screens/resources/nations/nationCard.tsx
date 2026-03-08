@@ -37,22 +37,24 @@ export default function NationCard({
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#1E1E1E",
+		backgroundColor: "#F5F5F5", // slightly dark white
 		padding: 16,
 		borderRadius: 16,
 		marginBottom: 16,
+		borderWidth: 1,
+		borderColor: "#E0E0E0", // neutral border
 		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.3,
-		shadowRadius: 6,
-		elevation: 6,
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		elevation: 2,
 	},
 
 	title: {
 		textAlign: "center",
 		fontSize: 20,
 		fontWeight: "700",
-		color: "#FFFFFF",
+		color: "#333333",
 		marginBottom: 12,
 	},
 
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
 	label: {
 		fontSize: 14,
 		fontWeight: "600",
-		color: "#AAAAAA",
+		color: "#666666",
 		marginBottom: 4,
 		textTransform: "uppercase",
 		letterSpacing: 0.5,
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
 
 	value: {
 		fontSize: 14,
-		color: "#E0E0E0",
+		color: "#333333",
 		lineHeight: 20,
 	},
 });

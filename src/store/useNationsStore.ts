@@ -1,9 +1,5 @@
 import { create } from "zustand";
-import {
-	getNationDetails,
-	getNationImageTypes,
-	getNationsIds,
-} from "../services/nations.services";
+import { getNationDetails, getNationsIds } from "../services/nations.services";
 import { Normalized } from "../types/nation";
 
 interface NationsState {
@@ -11,7 +7,6 @@ interface NationsState {
 	details: Normalized[];
 	error: string | null;
 	fetchNationsIds: () => Promise<void>;
-	fetchNationImageTypes: (id: string) => Promise<string[]>;
 	fetchAllDetails: () => Promise<void>;
 }
 
@@ -27,14 +22,6 @@ export const useNationsStore = create<NationsState>((set, get) => ({
 			set({ ids });
 		} catch (error: any) {
 			set({ error: error.message });
-		}
-	},
-	fetchNationImageTypes: async (id) => {
-		try {
-			return await getNationImageTypes(id);
-		} catch (error: any) {
-			set({ error: error.message });
-			return null;
 		}
 	},
 	fetchAllDetails: async () => {
