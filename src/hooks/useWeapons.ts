@@ -5,7 +5,6 @@ export function useWeapons() {
 	const fetchAllDetails = useWeaponsStore((s) => s.fetchAllDetails);
 	const details = useWeaponsStore((s) => s.details);
 	const error = useWeaponsStore((s) => s.error);
-	const setError = useWeaponsStore((s) => s.setError);
 	const ids = useWeaponsStore((state) => state.ids);
 	const input = useWeaponsStore((state) => state.input);
 	const setInput = useWeaponsStore((state) => state.setInput);
@@ -49,7 +48,6 @@ export function useWeapons() {
 		groupByType,
 		details,
 		error,
-		setError,
 		isLoading,
 		isRefreshing,
 		refetch: () => fetchData(true),

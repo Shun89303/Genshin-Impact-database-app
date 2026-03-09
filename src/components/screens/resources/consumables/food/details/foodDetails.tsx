@@ -1,4 +1,6 @@
 import { endpoints } from "@/src/api/endpoints";
+import Divider from "@/src/components/common/Divider";
+import FallbackImage from "@/src/components/common/FallbackImage";
 import { BASE_URL } from "@/src/config/env";
 import { NormalizedFood } from "@/src/types/food";
 import React from "react";
@@ -9,7 +11,6 @@ import {
 	Text,
 	View,
 } from "react-native";
-import FoodImageFallback from "./foodImageFallback";
 
 export default function FoodDetails({
 	food,
@@ -40,11 +41,14 @@ export default function FoodDetails({
 
 	return (
 		<View style={styles.container}>
-			<FoodImageFallback
+			<FallbackImage
 				uri={buildImageUrl(food.id)}
+				// style={{ width: 150, height: 240, borderRadius: 16 }}
 				style={styles.mainImage}
 			/>
+			<Divider />
 			<ScrollView
+				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.content}
 				refreshControl={
 					<RefreshControl
@@ -86,7 +90,7 @@ export default function FoodDetails({
 						>
 							{food.recipe.map((recipe) => (
 								<View key={recipe.item} style={styles.recipeCard}>
-									<FoodImageFallback
+									<FallbackImage
 										uri={`${BASE_URL}${materials}${cookingIngredients}/${formatForEndpoint(
 											recipe.item
 										)}`}
@@ -107,6 +111,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#f8f8f8",
+		paddingHorizontal: 16,
 	},
 	content: {
 		padding: 16,
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
 		height: 120,
 		borderRadius: 12,
 		alignSelf: "center",
-		marginBottom: 16,
+		marginTop: 16,
 	},
 	infoSection: {
 		backgroundColor: "#fff",

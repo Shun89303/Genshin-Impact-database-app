@@ -21,6 +21,7 @@ export default function SearchList({
 				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
+				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.listContent}
 				renderItem={({ item }) => <FoodCard food={item} />}
 			/>

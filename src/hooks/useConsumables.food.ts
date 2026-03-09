@@ -6,7 +6,9 @@ export function useFoodConsumables() {
 	const details = useFoodStore((s) => s.details);
 	const error = useFoodStore((s) => s.error);
 	const input = useFoodStore((s) => s.input);
+	const setInput = useFoodStore((s) => s.setInput);
 	const selectedType = useFoodStore((s) => s.selectedType);
+	const setSelectedType = useFoodStore((s) => s.setSelectedType);
 	const groupByType = useFoodStore((s) => s.groupByType);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +38,9 @@ export function useFoodConsumables() {
 
 	return {
 		input,
+		setInput,
 		selectedType,
+		setSelectedType,
 		groupByType,
 		details,
 		error,

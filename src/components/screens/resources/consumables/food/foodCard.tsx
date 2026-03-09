@@ -1,11 +1,26 @@
+import { endpoints } from "@/src/api/endpoints";
+import PressableImage from "@/src/components/common/PressableImage";
+import { BASE_URL } from "@/src/config/env";
 import { NormalizedFood } from "@/src/types/food";
+import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
-import FoodImage from "./foodImage";
 
 export default function FoodCard({ food }: { food: NormalizedFood }) {
+	const { consumables, food: foodEP } = endpoints;
+	const router = useRouter();
+
 	return (
 		<View style={styles.card}>
-			<FoodImage id={food.id} />
+			<PressableImage
+				uri={`${BASE_URL}${consumables}${foodEP}/${food.id}`}
+				onPress={() =>
+					router.navigate({
+						pathname: "/resources/consumables/foods/[id]",
+						params: { id: food.id },
+					})
+				}
+				aspectRatio={1}
+			/>
 
 			<View style={styles.info}>
 				<Text style={styles.label}>Rarity</Text>
@@ -20,7 +35,7 @@ export default function FoodCard({ food }: { food: NormalizedFood }) {
 
 const styles = StyleSheet.create({
 	card: {
-		width: 160,
+		width: 150,
 		backgroundColor: "#fff",
 		borderRadius: 12,
 		padding: 12,
