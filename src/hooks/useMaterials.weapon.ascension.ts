@@ -8,8 +8,12 @@ export function useAscensionWeaponMaterials() {
 	const details = useWeaponAscensionMaterialsStore((s) => s.details);
 	const error = useWeaponAscensionMaterialsStore((s) => s.error);
 	const input = useWeaponAscensionMaterialsStore((state) => state.input);
+	const setInput = useWeaponAscensionMaterialsStore((state) => state.setInput);
 	const selectedType = useWeaponAscensionMaterialsStore(
 		(state) => state.selectedType
+	);
+	const setSelectedType = useWeaponAscensionMaterialsStore(
+		(state) => state.setSelectedType
 	);
 	const groupByType = useWeaponAscensionMaterialsStore(
 		(state) => state.groupByType
@@ -42,7 +46,9 @@ export function useAscensionWeaponMaterials() {
 
 	return {
 		input,
+		setInput,
 		selectedType,
+		setSelectedType,
 		groupByType,
 		details,
 		error,

@@ -1,6 +1,9 @@
+import { endpoints } from "@/src/api/endpoints";
+import PressableImage from "@/src/components/common/PressableImage";
+import { BASE_URL } from "@/src/config/env";
 import { ApiItem } from "@/src/types/weapon.ascension.material";
+import { useRouter } from "expo-router";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import MaterialsImage from "./materialsImage";
 
 type Props = {
 	materialName: string;
@@ -15,6 +18,9 @@ export default function MaterialCard({
 	availability,
 	source,
 }: Props) {
+	const { materials, weaponAscension } = endpoints;
+	const router = useRouter();
+
 	return (
 		<View style={styles.card}>
 			<Text style={styles.title}>{materialName}</Text>
@@ -28,7 +34,18 @@ export default function MaterialCard({
 					contentContainerStyle={styles.itemsRow}
 					renderItem={({ item }) => (
 						<View style={styles.item}>
-							<MaterialsImage id={item.id} />
+							<PressableImage
+								uri={`${BASE_URL}${materials}${weaponAscension}/${item.id}`}
+								onPress={() =>
+									router.navigate({
+										pathname:
+											"/resources/materials/details/weapon/ascension/[id]",
+										params: { id: item.id },
+									})
+								}
+								aspectRatio={1}
+								width={55}
+							/>
 							<Text style={styles.rarity}>{"★".repeat(item.rarity)}</Text>
 						</View>
 					)}
@@ -49,6 +66,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		padding: 16,
 		marginBottom: 16,
+		borderWidth: 1,
+		borderColor: "#334155",
 		borderRadius: 12,
 		alignItems: "center",
 		shadowColor: "#000",
@@ -74,7 +93,7 @@ const styles = StyleSheet.create({
 
 	item: {
 		alignItems: "center",
-		marginRight: 12,
+		marginRight: 6,
 	},
 
 	rarity: {
