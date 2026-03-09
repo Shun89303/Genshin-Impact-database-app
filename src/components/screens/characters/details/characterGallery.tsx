@@ -1,16 +1,10 @@
 import { endpoints } from "@/src/api/endpoints";
 import FallbackImage from "@/src/components/common/FallbackImage";
+import TouchDetails from "@/src/components/common/TouchDetails";
 import { BASE_URL } from "@/src/config/env";
 import { Character } from "@/src/types/character";
 import { useState } from "react";
-import {
-	Modal,
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 export default function CharacterGallery({
 	character,
@@ -37,7 +31,7 @@ export default function CharacterGallery({
 
 	return (
 		<>
-			<Text style={styles.tipText}>Tap an image to enlarge</Text>
+			<TouchDetails />
 			<ScrollView
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.container}

@@ -7,6 +7,7 @@ export function useBosses() {
 	const details = useBossesStore((s) => s.details);
 	const error = useBossesStore((s) => s.error);
 	const input = useBossesStore((s) => s.input);
+	const setInput = useBossesStore((s) => s.setInput);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -39,6 +40,7 @@ export function useBosses() {
 		ids,
 		details,
 		input,
+		setInput,
 		error,
 		isLoading,
 		isRefreshing,

@@ -1,4 +1,5 @@
 import FallbackImage from "@/src/components/common/FallbackImage";
+import TouchDetails from "@/src/components/common/TouchDetails";
 import { Constellation } from "@/src/types/character";
 import { useState } from "react";
 import {
@@ -49,7 +50,7 @@ export default function CharacterConstellations({
 
 	return (
 		<>
-			<Text style={styles.tipText}>Tap a constellation to view details</Text>
+			<TouchDetails />
 
 			<ScrollView
 				contentContainerStyle={styles.listContainer}

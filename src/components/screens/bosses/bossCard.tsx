@@ -1,12 +1,31 @@
+import { endpoints } from "@/src/api/endpoints";
+import { BASE_URL } from "@/src/config/env";
 import { Boss } from "@/src/types/boss";
+import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
-import BossImage from "./bossImage";
+import PressableImage from "../../common/PressableImage";
 
 export default function BossCard({ boss }: { boss: Boss }) {
+	const { boss: bossEP, weeklyBoss, icon } = endpoints;
+	const router = useRouter();
+
 	return (
 		<View style={styles.card}>
 			<View style={styles.imageWrapper}>
-				<BossImage id={boss.id} />
+				<PressableImage
+					uri={`${BASE_URL}${bossEP}${weeklyBoss}/${boss.id}${icon}`}
+					onPress={() =>
+						router.navigate({
+							pathname: "/bosses/[id]",
+							params: { id: boss.id },
+						})
+					}
+					width={150}
+					aspectRatio={1}
+					imageStyle={{
+						borderColor: "#475569",
+					}}
+				/>
 			</View>
 
 			<View style={styles.content}>
@@ -22,7 +41,7 @@ export default function BossCard({ boss }: { boss: Boss }) {
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#0F172A",
+		backgroundColor: "#F8FAFC", // light neutral background
 		borderRadius: 14,
 		padding: 16,
 		marginBottom: 16,
@@ -41,7 +60,7 @@ const styles = StyleSheet.create({
 
 	label: {
 		fontSize: 12,
-		color: "#94A3B8",
+		color: "#1E293B",
 		textTransform: "uppercase",
 		marginTop: 6,
 	},
@@ -49,13 +68,13 @@ const styles = StyleSheet.create({
 	name: {
 		fontSize: 18,
 		fontWeight: "600",
-		color: "#F8FAFC",
+		color: "#64748B",
 		marginBottom: 6,
 	},
 
 	description: {
 		fontSize: 14,
 		lineHeight: 20,
-		color: "#CBD5F5",
+		color: "#475569",
 	},
 });
