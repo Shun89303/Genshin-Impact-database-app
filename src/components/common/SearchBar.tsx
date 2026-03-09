@@ -1,18 +1,24 @@
-import { useBossesStore } from "@/src/store/useBossesStore";
 import { StyleSheet, TextInput, View } from "react-native";
 
-export default function SearchBar() {
-	const input = useBossesStore((state) => state.input);
-	const setInput = useBossesStore((state) => state.setInput);
+type Props = {
+	value: string;
+	onChange: (text: string) => void;
+	placeholder?: string;
+};
 
+export default function SearchBar({
+	value,
+	onChange,
+	placeholder = "Search...",
+}: Props) {
 	return (
 		<View style={styles.container}>
 			<TextInput
 				style={styles.input}
-				placeholder="Search boss name..."
+				placeholder={placeholder}
 				placeholderTextColor="#94A3B8"
-				value={input}
-				onChangeText={setInput}
+				value={value}
+				onChangeText={onChange}
 			/>
 		</View>
 	);
@@ -29,7 +35,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 14,
 		borderRadius: 10,
 		backgroundColor: "#F8FAFC",
-		color: "#334155",
+		color: "#0F172A",
 		fontSize: 14,
 		borderWidth: 1,
 		borderColor: "#334155",

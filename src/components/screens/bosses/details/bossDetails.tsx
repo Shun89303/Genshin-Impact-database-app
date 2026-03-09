@@ -1,4 +1,6 @@
 import { endpoints } from "@/src/api/endpoints";
+import Divider from "@/src/components/common/Divider";
+import FallbackImage from "@/src/components/common/FallbackImage";
 import { BASE_URL } from "@/src/config/env";
 import { Boss } from "@/src/types/boss";
 import React from "react";
@@ -9,7 +11,6 @@ import {
 	Text,
 	View,
 } from "react-native";
-import BossImageFallback from "./bossImageFallback";
 
 export default function BossDetails({
 	boss,
@@ -44,9 +45,15 @@ export default function BossDetails({
 		<View style={styles.container}>
 			{/* Boss Portrait */}
 			<View style={styles.portraitWrapper}>
-				<BossImageFallback uri={bossImageUrl} style={styles.portrait} />
+				<FallbackImage
+					uri={bossImageUrl}
+					style={styles.portrait}
+					borderColor="#475569"
+				/>
 				<Text style={styles.bossName}>{boss.name}</Text>
 			</View>
+
+			<Divider />
 
 			<ScrollView
 				style={{ flex: 1 }}
@@ -66,11 +73,12 @@ export default function BossDetails({
 				<View style={styles.dropsContainer}>
 					{boss.drops.map((drop) => (
 						<View key={drop.name} style={styles.dropRow}>
-							<BossImageFallback
+							<FallbackImage
 								uri={`${BASE_URL}${bossEndpoint}${weeklyBoss}/${
 									boss.id
 								}/${toSlug(drop.name)}`}
 								style={styles.dropImage}
+								borderColor="#334155"
 							/>
 							<View style={styles.dropInfo}>
 								<Text style={styles.label}>Name</Text>
@@ -86,7 +94,7 @@ export default function BossDetails({
 					))}
 				</View>
 
-				<View style={styles.divider} />
+				<Divider />
 
 				{/* Artifacts */}
 				<Text style={styles.sectionTitle}>Artifacts</Text>
@@ -95,11 +103,12 @@ export default function BossDetails({
 					<View style={styles.artifactRow}>
 						{boss.artifacts.slice(0, 3).map((art) => (
 							<View key={art.name} style={styles.artifactCard}>
-								<BossImageFallback
+								<FallbackImage
 									uri={`${BASE_URL}${artifacts}/${toSlug(
 										art.name
 									)}${circletOfLogos}`}
 									style={styles.artifactImage}
+									borderColor="#334155"
 								/>
 								<Text style={styles.artifactName}>{art.name}</Text>
 							</View>
@@ -110,11 +119,12 @@ export default function BossDetails({
 					<View style={[styles.artifactRow, styles.centerRow]}>
 						{boss.artifacts.slice(3).map((art) => (
 							<View key={art.name} style={styles.artifactCard}>
-								<BossImageFallback
+								<FallbackImage
 									uri={`${BASE_URL}${artifacts}/${toSlug(
 										art.name
 									)}${circletOfLogos}`}
 									style={styles.artifactImage}
+									borderColor="#334155"
 								/>
 								<Text style={styles.artifactName}>{art.name}</Text>
 							</View>
@@ -130,7 +140,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingHorizontal: 16,
-		backgroundColor: "#0F172A",
+		backgroundColor: "#F8FAFC",
 	},
 
 	portraitWrapper: {
@@ -147,13 +157,13 @@ const styles = StyleSheet.create({
 	bossName: {
 		fontSize: 20,
 		fontWeight: "700",
-		color: "#F8FAFC",
+		color: "#1E293B",
 	},
 
 	sectionTitle: {
 		fontSize: 16,
 		fontWeight: "600",
-		color: "#F8FAFC",
+		color: "#1E293B",
 		marginVertical: 12,
 	},
 
@@ -163,7 +173,7 @@ const styles = StyleSheet.create({
 
 	dropRow: {
 		flexDirection: "row",
-		backgroundColor: "#1E293B",
+		backgroundColor: "#F8FAFC", // light neutral background
 		borderRadius: 12,
 		padding: 12,
 		borderWidth: 1,
@@ -185,18 +195,19 @@ const styles = StyleSheet.create({
 
 	label: {
 		fontSize: 11,
-		color: "#94A3B8",
+		fontWeight: "600",
+		color: "#1E293B",
 		textTransform: "uppercase",
 	},
 
 	value: {
 		fontSize: 14,
-		color: "#E2E8F0",
+		color: "#64748B",
 	},
 
 	source: {
 		fontSize: 13,
-		color: "#CBD5F5",
+		color: "#64748B",
 	},
 
 	divider: {
@@ -219,7 +230,7 @@ const styles = StyleSheet.create({
 	artifactCard: {
 		width: 100,
 		alignItems: "center",
-		backgroundColor: "#1E293B",
+		backgroundColor: "#F8FAFC", // light neutral background
 		padding: 10,
 		borderRadius: 10,
 		borderWidth: 1,
@@ -234,7 +245,7 @@ const styles = StyleSheet.create({
 
 	artifactName: {
 		fontSize: 12,
-		color: "#E2E8F0",
+		color: "#1E293B",
 		textAlign: "center",
 	},
 });

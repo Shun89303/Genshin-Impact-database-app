@@ -12,6 +12,7 @@ import ErrorState from "../../common/ErrorState";
 import FilterCatalog from "../../common/FilterCatalog";
 import ScreenLoader from "../../common/ScreenLoader";
 import SearchFilterBar from "../../common/SearchFilterBar";
+import TouchDetails from "../../common/TouchDetails";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 import styles from "./styles/charactersList.styles";
@@ -90,6 +91,8 @@ export default function CharactersList() {
 				</View>
 
 				<Divider />
+
+				<TouchDetails />
 
 				<View style={styles.list}>
 					<ListComponent

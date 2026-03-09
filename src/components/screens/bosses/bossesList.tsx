@@ -3,20 +3,28 @@ import { BASE_URL } from "@/src/config/env";
 import { useBosses } from "@/src/hooks/useBosses";
 import { Image } from "expo-image";
 import { useEffect, useMemo } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import EmptyState from "../../ui/EmptyState";
-import ErrorState from "../../ui/ErrorState";
-import ScreenLoader from "../../ui/ScreenLoader";
-import SearchBar from "../../utils/filter/boss/searchBar";
+import { StyleSheet, View } from "react-native";
+import Divider from "../../common/Divider";
+import EmptyState from "../../common/EmptyState";
+import ErrorState from "../../common/ErrorState";
+import ScreenLoader from "../../common/ScreenLoader";
+import SearchBar from "../../common/SearchBar";
+import TouchDetails from "../../common/TouchDetails";
 import SearchList from "./SearchList";
 
 export default function BossesList() {
-	const boss = endpoints.boss;
-	const weeklyBoss = endpoints.weeklyBoss;
-	const icon = endpoints.icon;
+	const { boss, weeklyBoss, icon } = endpoints;
 
-	const { ids, input, details, error, isLoading, isRefreshing, refetch } =
-		useBosses();
+	const {
+		ids,
+		input,
+		setInput,
+		details,
+		error,
+		isLoading,
+		isRefreshing,
+		refetch,
+	} = useBosses();
 
 	useEffect(() => {
 		if (!ids.length) return;
@@ -44,20 +52,15 @@ export default function BossesList() {
 
 	return (
 		<View style={styles.container}>
-			<SearchBar />
+			<SearchBar
+				value={input}
+				onChange={setInput}
+				placeholder="Search Boss name..."
+			/>
 
-			<View style={styles.divider} />
+			<Divider />
 
-			<Text
-				style={{
-					textAlign: "center",
-					color: "white",
-					paddingBottom: 12,
-					fontWeight: "300",
-				}}
-			>
-				Touch an image to see details
-			</Text>
+			<TouchDetails />
 
 			<SearchList
 				finalData={finalData}
@@ -72,12 +75,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingHorizontal: 16,
-		backgroundColor: "#0F172A",
-	},
-
-	divider: {
-		height: 1,
-		backgroundColor: "#334155",
-		marginVertical: 12,
+		backgroundColor: "#F8FAFC",
 	},
 });

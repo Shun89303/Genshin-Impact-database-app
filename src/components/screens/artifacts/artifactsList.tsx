@@ -12,6 +12,7 @@ import ErrorState from "../../common/ErrorState";
 import FilterCatalog from "../../common/FilterCatalog";
 import ScreenLoader from "../../common/ScreenLoader";
 import SearchFilterBar from "../../common/SearchFilterBar";
+import TouchDetails from "../../common/TouchDetails";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
@@ -83,6 +84,8 @@ export default function ArtifactsList() {
 			</View>
 
 			<Divider />
+
+			<TouchDetails />
 
 			<ListComponent
 				finalData={finalData}

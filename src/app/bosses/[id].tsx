@@ -1,5 +1,5 @@
+import ScreenLoader from "@/src/components/common/ScreenLoader";
 import BossDetails from "@/src/components/screens/bosses/details/bossDetails";
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import { useBosses } from "@/src/hooks/useBosses";
 import { useLocalSearchParams } from "expo-router";
 

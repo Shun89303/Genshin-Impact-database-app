@@ -1,4 +1,5 @@
 import FallbackImage from "@/src/components/common/FallbackImage";
+import TouchDetails from "@/src/components/common/TouchDetails";
 import { PassiveTalent, SkillTalent } from "@/src/types/character";
 import { useState } from "react";
 import {
@@ -49,7 +50,7 @@ export default function ExpandableHorizontalList({
 
 	return (
 		<>
-			<Text style={styles.tipText}>Tap an image to view details</Text>
+			<TouchDetails />
 			<ScrollView
 				contentContainerStyle={styles.listContainer}
 				showsVerticalScrollIndicator={false}
