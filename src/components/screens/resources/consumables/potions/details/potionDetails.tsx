@@ -1,4 +1,6 @@
 import { endpoints } from "@/src/api/endpoints";
+import Divider from "@/src/components/common/Divider";
+import FallbackImage from "@/src/components/common/FallbackImage";
 import { BASE_URL } from "@/src/config/env";
 import { NormalizedPotion } from "@/src/types/potion";
 import React from "react";
@@ -10,7 +12,6 @@ import {
 	View,
 	useColorScheme,
 } from "react-native";
-import PotionImageFallback from "./potionImageFallback";
 
 export default function PotionDetails({
 	potion,
@@ -33,11 +34,14 @@ export default function PotionDetails({
 
 	return (
 		<View style={[styles.container, { backgroundColor: bgColor }]}>
-			<PotionImageFallback
+			<FallbackImage
 				uri={buildImageUrl(potion.id)}
 				style={styles.mainImage}
+				borderColor="#475569"
 			/>
+			<Divider />
 			<ScrollView
+				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.content}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -97,9 +101,11 @@ export default function PotionDetails({
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingHorizontal: 16,
 	},
 	content: {
 		paddingHorizontal: 16,
+		paddingVertical: 16,
 		paddingBottom: 24,
 	},
 	mainImage: {
@@ -107,7 +113,7 @@ const styles = StyleSheet.create({
 		height: 120,
 		borderRadius: 12,
 		alignSelf: "center",
-		marginBottom: 16,
+		marginVertical: 16,
 	},
 	infoSection: {
 		borderRadius: 12,

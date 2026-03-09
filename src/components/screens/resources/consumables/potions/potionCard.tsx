@@ -1,11 +1,29 @@
+import { endpoints } from "@/src/api/endpoints";
+import PressableImage from "@/src/components/common/PressableImage";
+import { BASE_URL } from "@/src/config/env";
 import { NormalizedPotion } from "@/src/types/potion";
+import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
-import PotionImage from "./potionImage";
 
 export default function PotionCard({ potion }: { potion: NormalizedPotion }) {
+	const { consumables, potions } = endpoints;
+	const router = useRouter();
 	return (
 		<View style={styles.card}>
-			<PotionImage id={potion.id} />
+			<PressableImage
+				uri={`${BASE_URL}${consumables}${potions}/${potion.id}`}
+				onPress={() =>
+					router.navigate({
+						pathname: "/resources/consumables/potions/[id]",
+						params: { id: potion.id },
+					})
+				}
+				width={100}
+				aspectRatio={1}
+				cardStyle={{
+					borderColor: "#475569",
+				}}
+			/>
 
 			<View style={styles.info}>
 				<Text style={styles.label}>Rarity</Text>
@@ -22,7 +40,9 @@ const styles = StyleSheet.create({
 	card: {
 		width: 160,
 		backgroundColor: "#fff",
+		borderWidth: 1,
 		borderRadius: 12,
+		borderColor: "#475569",
 		padding: 12,
 		margin: 8,
 		shadowColor: "#000",
