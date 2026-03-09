@@ -1,4 +1,5 @@
 import { endpoints } from "@/src/api/endpoints";
+import FallbackImage from "@/src/components/common/FallbackImage";
 import { BASE_URL } from "@/src/config/env";
 import { Normalized } from "@/src/types/weapon.ascension.material";
 import React from "react";
@@ -11,7 +12,6 @@ import {
 	View,
 	useColorScheme,
 } from "react-native";
-import MaterialImageFallback from "./materialImageFallback";
 
 interface Props {
 	material: Normalized;
@@ -35,6 +35,7 @@ export default function MaterialDetails({
 		<ScrollView
 			style={[styles.container, { backgroundColor: bgColor }]}
 			contentContainerStyle={styles.content}
+			showsVerticalScrollIndicator={false}
 			refreshControl={
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
@@ -43,9 +44,10 @@ export default function MaterialDetails({
 			<View style={styles.gridContainer}>
 				{material.items.map((item) => (
 					<View key={item.id} style={styles.gridItem}>
-						<MaterialImageFallback
+						<FallbackImage
 							uri={buildImageUrl(item.id)}
 							style={styles.mainImage}
+							borderColor="#334155"
 						/>
 
 						<Text style={styles.label}>Rarity</Text>
@@ -80,9 +82,10 @@ export default function MaterialDetails({
 						showsHorizontalScrollIndicator={false}
 						contentContainerStyle={{ gap: 12 }}
 						renderItem={({ item: weaId }) => (
-							<MaterialImageFallback
+							<FallbackImage
 								uri={`${BASE_URL}${weapons}/${weaId}${icon}`}
 								style={styles.weaponImage}
+								borderColor="#334155"
 							/>
 						)}
 					/>

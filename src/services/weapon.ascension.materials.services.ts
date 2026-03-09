@@ -9,7 +9,3 @@ const list = endpoints.list;
 export function getAllWeaponAscensionMaterialsData(): Promise<Api> {
 	return apiClient(`${materials}${weaponAscension}`);
 }
-
-export function getAllWeaponAscensionMaterialImageIds() {
-	return apiClient(`${materials}${weaponAscension}${list}`);
-}

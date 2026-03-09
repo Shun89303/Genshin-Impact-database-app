@@ -1,10 +1,9 @@
+import ScreenLoader from "@/src/components/common/ScreenLoader";
 import MaterialDetails from "@/src/components/screens/resources/materials/weapon/ascension/details/materialDetails";
-import styles from "@/src/components/styles.modules";
 import { useAscensionWeaponMaterials } from "@/src/hooks/useMaterials.weapon.ascension";
 
 import { useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function WeaponAscensionMaterialsDetails() {
 	const { id }: { id: any } = useLocalSearchParams();
@@ -16,22 +15,7 @@ export default function WeaponAscensionMaterialsDetails() {
 	);
 
 	if (isLoading || !matchedItem) {
-		return (
-			<SafeAreaView>
-				<Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
-					Loading Item: {id}
-				</Text>
-				<ActivityIndicator />
-			</SafeAreaView>
-		);
-	}
-
-	if (error) {
-		return (
-			<SafeAreaView style={styles.simpleContainer}>
-				<Text>{error}</Text>
-			</SafeAreaView>
-		);
+		return <ScreenLoader />;
 	}
 
 	return (

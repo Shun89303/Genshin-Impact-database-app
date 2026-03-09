@@ -1,27 +1,30 @@
 import { endpoints } from "@/src/api/endpoints";
-import EmptyState from "@/src/components/ui/EmptyState";
-import ErrorState from "@/src/components/ui/ErrorState";
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
-import FilterCatalog from "@/src/components/utils/filter/wam/filterCatalog";
-import SearchFilterBar from "@/src/components/utils/filter/wam/searchFilterBar";
+import Divider from "@/src/components/common/Divider";
+import EmptyState from "@/src/components/common/EmptyState";
+import ErrorState from "@/src/components/common/ErrorState";
+import FilterCatalog from "@/src/components/common/FilterCatalog";
+import ScreenLoader from "@/src/components/common/ScreenLoader";
+import SearchFilterBar from "@/src/components/common/SearchFilterBar";
+import TouchDetails from "@/src/components/common/TouchDetails";
 import { BASE_URL } from "@/src/config/env";
 import { useAscensionWeaponMaterials } from "@/src/hooks/useMaterials.weapon.ascension";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function MaterialsList() {
-	const materials = endpoints.materials;
-	const weaponAscension = endpoints.weaponAscension;
+	const { materials, weaponAscension } = endpoints;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
 	const {
 		input,
+		setInput,
+		setSelectedType,
 		selectedType,
 		groupByType,
 		details,
@@ -30,6 +33,16 @@ export default function MaterialsList() {
 		isRefreshing,
 		refetch,
 	} = useAscensionWeaponMaterials();
+
+	type option = {
+		label: string;
+		value: "availability" | null;
+	};
+
+	const options: option[] = [
+		{ label: "Availability", value: "availability" },
+		{ label: "None", value: null },
+	];
 
 	// Prefetch images for smoother loading
 	useEffect(() => {
@@ -69,17 +82,13 @@ export default function MaterialsList() {
 
 	return (
 		<View style={styles.container}>
-			<SearchFilterBar sheetRef={sheetRef} />
-			<Text
-				style={{
-					textAlign: "center",
-					color: "black",
-					padding: 6,
-					fontWeight: "300",
-				}}
-			>
-				Touch an image to see details
-			</Text>
+			<SearchFilterBar
+				value={input}
+				onChangeText={setInput}
+				onFilterPress={() => sheetRef.current?.expand()}
+			/>
+			<Divider />
+			<TouchDetails paddingBottom={0} />
 			<ListComponent
 				finalData={finalData}
 				refreshing={isRefreshing}
@@ -94,7 +103,13 @@ export default function MaterialsList() {
 				backgroundStyle={styles.sheetBackground}
 			>
 				<BottomSheetView style={styles.sheetContent}>
-					<FilterCatalog sheetRef={sheetRef} />
+					<FilterCatalog
+						options={options}
+						selectedValue={selectedType}
+						onSelect={(val: "availability" | null) =>
+							setSelectedType(val, sheetRef)
+						}
+					/>
 				</BottomSheetView>
 			</BottomSheet>
 		</View>
@@ -106,7 +121,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#f9fafb", // soft light background
 		paddingHorizontal: 16,
-		paddingTop: 8,
+		paddingTop: 10,
+		gap: 10,
 	},
 
 	sheetHandle: {
