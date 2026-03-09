@@ -7,7 +7,9 @@ export function useArtifacts() {
 	const error = useArtifactsStore((s) => s.error);
 	const ids = useArtifactsStore((state) => state.ids);
 	const input = useArtifactsStore((state) => state.input);
+	const setInput = useArtifactsStore((state) => state.setInput);
 	const selectedType = useArtifactsStore((state) => state.selectedType);
+	const setSelectedType = useArtifactsStore((state) => state.setSelectedType);
 	const groupByType = useArtifactsStore((state) => state.groupByType);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +42,9 @@ export function useArtifacts() {
 	return {
 		ids,
 		input,
+		setInput,
 		selectedType,
+		setSelectedType,
 		groupByType,
 		details,
 		error,
