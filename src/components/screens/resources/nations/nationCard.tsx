@@ -1,6 +1,8 @@
+import { endpoints } from "@/src/api/endpoints";
+import FallbackImage from "@/src/components/common/FallbackImage";
+import { BASE_URL } from "@/src/config/env";
 import { Normalized } from "@/src/types/nation";
 import { StyleSheet, Text, View } from "react-native";
-import NationImage from "./nationImage";
 
 export default function NationCard({
 	name,
@@ -9,12 +11,17 @@ export default function NationCard({
 	controllingEntity,
 	id,
 }: Normalized) {
+	const { nations, icon } = endpoints;
 	return (
 		<View style={styles.card}>
 			<Text style={styles.title}>{name}</Text>
 
 			<View style={styles.imageContainer}>
-				<NationImage id={id} />
+				<FallbackImage
+					uri={`${BASE_URL}${nations}/${id}${icon}`}
+					style={{ width: 150, height: 150, borderRadius: 16 }}
+					backgroundColor="black"
+				/>
 			</View>
 
 			<View style={styles.section}>

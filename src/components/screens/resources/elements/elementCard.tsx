@@ -1,16 +1,23 @@
+import { endpoints } from "@/src/api/endpoints";
+import FallbackImage from "@/src/components/common/FallbackImage";
+import { BASE_URL } from "@/src/config/env";
 import { Normalized } from "@/src/types/element";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
-import ElementImage from "./elementImage";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function ElementCard({ name, reactions, id }: Normalized) {
+	const { elements, icon } = endpoints;
 	return (
 		<View style={styles.card}>
 			<Text style={styles.title}>{name}</Text>
 
 			<View style={styles.imageContainer}>
-				<ElementImage id={id} />
+				<FallbackImage
+					uri={`${BASE_URL}${elements}/${id}${icon}`}
+					style={{ width: 100, height: 100, borderRadius: 16 }}
+					backgroundColor="black"
+				/>
 			</View>
 
 			{reactions.map((reaction) => (

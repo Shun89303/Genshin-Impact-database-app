@@ -1,7 +1,7 @@
 import { endpoints } from "@/src/api/endpoints";
-import EmptyState from "@/src/components/ui/EmptyState";
-import ErrorState from "@/src/components/ui/ErrorState";
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
+import EmptyState from "@/src/components/common/EmptyState";
+import ErrorState from "@/src/components/common/ErrorState";
+import ScreenLoader from "@/src/components/common/ScreenLoader";
 import { BASE_URL } from "@/src/config/env";
 import { useNations } from "@/src/hooks/useNations";
 import { Image } from "expo-image";
