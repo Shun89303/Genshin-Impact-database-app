@@ -1,28 +1,31 @@
 import { endpoints } from "@/src/api/endpoints";
-import EmptyState from "@/src/components/ui/EmptyState";
-import ErrorState from "@/src/components/ui/ErrorState";
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
-import FilterCatalog from "@/src/components/utils/filter/food/filterCatalog";
-import SearchFilterBar from "@/src/components/utils/filter/food/searchFilterBar";
+import Divider from "@/src/components/common/Divider";
+import EmptyState from "@/src/components/common/EmptyState";
+import ErrorState from "@/src/components/common/ErrorState";
+import FilterCatalog from "@/src/components/common/FilterCatalog";
+import ScreenLoader from "@/src/components/common/ScreenLoader";
+import SearchFilterBar from "@/src/components/common/SearchFilterBar";
+import TouchDetails from "@/src/components/common/TouchDetails";
 import { BASE_URL } from "@/src/config/env";
 import { useFoodConsumables } from "@/src/hooks/useConsumables.food";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
 export default function FoodList() {
-	const food = endpoints.food;
-	const consumables = endpoints.consumables;
+	const { food, consumables } = endpoints;
 
 	const sheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["40%"], []);
 
 	const {
 		input,
+		setInput,
 		selectedType,
+		setSelectedType,
 		groupByType,
 		details,
 		error,
@@ -30,6 +33,17 @@ export default function FoodList() {
 		isRefreshing,
 		refetch,
 	} = useFoodConsumables();
+
+	type option = {
+		label: string;
+		value: "type" | "rarity" | null;
+	};
+
+	const options: option[] = [
+		{ label: "Type", value: "type" },
+		{ label: "Rarity", value: "rarity" },
+		{ label: "None", value: null },
+	];
 
 	// Prefetch images for smooth scrolling
 	useEffect(() => {
@@ -63,22 +77,22 @@ export default function FoodList() {
 
 	return (
 		<View style={styles.container}>
-			<SearchFilterBar sheetRef={sheetRef} />
-			<Text
-				style={{
-					textAlign: "center",
-					color: "black",
-					padding: 6,
-					fontWeight: "300",
-				}}
-			>
-				Touch an image to see details
-			</Text>
+			<SearchFilterBar
+				value={input}
+				onChangeText={setInput}
+				onFilterPress={() => sheetRef.current?.expand()}
+			/>
+
+			<Divider />
+
+			<TouchDetails />
+
 			<ListComponent
 				finalData={finalData}
 				refreshing={isRefreshing}
 				onRefresh={refetch}
 			/>
+
 			<BottomSheet
 				ref={sheetRef}
 				snapPoints={snapPoints}
@@ -87,7 +101,13 @@ export default function FoodList() {
 				handleIndicatorStyle={styles.handleIndicator}
 			>
 				<BottomSheetView style={styles.bottomSheet}>
-					<FilterCatalog sheetRef={sheetRef} />
+					<FilterCatalog
+						options={options}
+						selectedValue={selectedType}
+						onSelect={(val: "type" | "rarity" | null) =>
+							setSelectedType(val, sheetRef)
+						}
+					/>
 				</BottomSheetView>
 			</BottomSheet>
 		</View>
@@ -98,6 +118,8 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#f8f8f8", // light neutral background
+		paddingVertical: 10,
+		paddingHorizontal: 16,
 	},
 	bottomSheet: {
 		paddingHorizontal: 16,

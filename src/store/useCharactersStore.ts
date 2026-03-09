@@ -8,7 +8,6 @@ import { Character, CharacterImageAssets } from "../types/character";
 
 interface CharactersState {
 	error: string | null;
-	setError: (e: string) => void;
 	ids: string[];
 	details: Character[];
 	detailsById: Record<string, Character>;
@@ -29,7 +28,6 @@ interface CharactersState {
 
 export const useCharactersStore = create<CharactersState>((set, get) => ({
 	error: null,
-	setError: (e) => set({ error: e }),
 	ids: [],
 	input: "",
 	details: [],

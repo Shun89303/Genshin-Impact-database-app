@@ -1,6 +1,9 @@
+import { endpoints } from "@/src/api/endpoints";
+import PressableImage from "@/src/components/common/PressableImage";
+import { BASE_URL } from "@/src/config/env";
 import { NormalizedFood } from "@/src/types/food";
-import { FlatList, Text, View } from "react-native";
-import FoodImage from "./foodImage";
+import { useRouter } from "expo-router";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 export default function FilterList({
 	finalData,
@@ -11,8 +14,11 @@ export default function FilterList({
 	refreshing: boolean;
 	onRefresh: any;
 }) {
+	const { consumables, food } = endpoints;
+	const router = useRouter();
+
 	return (
-		<View>
+		<View style={styles.container}>
 			<FlatList
 				data={finalData as { label: string; data: NormalizedFood[] }[]}
 				keyExtractor={(item) => item.label}
@@ -21,27 +27,29 @@ export default function FilterList({
 				removeClippedSubviews
 				refreshing={refreshing}
 				onRefresh={onRefresh}
+				contentContainerStyle={styles.contentContainer}
 				renderItem={({ item }) => (
-					<View
-						style={{
-							paddingVertical: 20,
-							paddingHorizontal: 25,
-							gap: 10,
-						}}
-					>
-						<Text
-							style={{
-								fontWeight: "bold",
-								fontSize: 20,
-							}}
-						>
-							{item.label}
-						</Text>
+					<View style={styles.section}>
+						<Text style={styles.title}>{item.label}</Text>
+
 						<FlatList
 							horizontal
 							data={item.data}
 							keyExtractor={(food) => food.id}
-							renderItem={({ item }) => <FoodImage id={item.id} />}
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={styles.horizontalList}
+							renderItem={({ item }) => (
+								<PressableImage
+									uri={`${BASE_URL}${consumables}${food}/${item.id}`}
+									aspectRatio={1}
+									onPress={() =>
+										router.navigate({
+											pathname: "/resources/consumables/foods/[id]",
+											params: { id: item.id },
+										})
+									}
+								/>
+							)}
 						/>
 					</View>
 				)}
@@ -49,3 +57,28 @@ export default function FilterList({
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+
+	contentContainer: {
+		paddingVertical: 20,
+		gap: 28,
+	},
+
+	section: {
+		paddingHorizontal: 20,
+		gap: 12,
+	},
+
+	title: {
+		fontSize: 20,
+		fontWeight: "700",
+	},
+
+	horizontalList: {
+		gap: 12,
+	},
+});

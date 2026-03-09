@@ -5,7 +5,6 @@ import { Weapon } from "../types/weapon";
 
 interface WeaponsState {
 	error: string | null;
-	setError: (e: string) => void;
 	ids: string[];
 	input: string;
 	details: Weapon[];
@@ -22,7 +21,6 @@ interface WeaponsState {
 
 export const useWeaponsStore = create<WeaponsState>((set, get) => ({
 	error: null,
-	setError: (e) => set({ error: e }),
 	ids: [],
 	input: "",
 	details: [],

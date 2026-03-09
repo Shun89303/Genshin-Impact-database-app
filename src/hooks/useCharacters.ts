@@ -6,7 +6,6 @@ export function useCharacters() {
 	const details = useCharactersStore((s) => s.details);
 	const detailsById = useCharactersStore((s) => s.detailsById);
 	const error = useCharactersStore((s) => s.error);
-	const setError = useCharactersStore((s) => s.setError);
 	const ids = useCharactersStore((state) => state.ids);
 	const input = useCharactersStore((state) => state.input);
 	const setInput = useCharactersStore((state) => state.setInput);
@@ -27,8 +26,6 @@ export function useCharacters() {
 				}
 
 				await fetchAllDetails();
-			} catch (err: any) {
-				setError(err.message);
 			} finally {
 				setTimeout(() => {
 					setIsLoading(false);
@@ -36,7 +33,7 @@ export function useCharacters() {
 				}, 1500);
 			}
 		},
-		[fetchAllDetails, setError]
+		[fetchAllDetails]
 	);
 
 	useEffect(() => {
