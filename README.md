@@ -1,50 +1,82 @@
-# Welcome to your Expo app 👋
+Genshin Impact Database (React Native)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+ 
 
-## Get started
+A mobile app built with React Native that serves as a complete database for Genshin Impact—including characters, weapons, bosses, and consumables. Browse, search, and filter in-game data with a smooth, mobile-friendly UI.
 
-1. Install dependencies
+⸻
 
-   ```bash
-   npm install
-   ```
+Features
+	•	Character Gallery – Browse all characters with detailed stats and info.
+	•	Weapon Materials – View weapon ascension and experience materials.
+	•	Boss Info – Search bosses and check their drop materials.
+	•	Food & Consumables – Explore in-game foods and their effects.
+	•	Search & Filter – Quickly find items, bosses, or characters.
+	•	Responsive UI – Optimized for mobile with clean React Native design.
 
-2. Start the app
+⸻
 
-   ```bash
-   npx expo start
-   ```
+Tech Stack
+	•	React Native – Mobile UI
+	•	Expo – App development
+	•	Zustand – State management
+	•	TypeScript – Type safety and structured code
+	•	REST API – Fetch game data
+	•	React Native Styling – Flexible and clean UI design
 
-In the output, you'll find options to open the app in a
+⸻
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+src/
+├─ api/               # API endpoints and fetch logic
+├─ components/        # Reusable UI components
+│  ├─ common/         # Buttons, images, search bars
+│  └─ screens/        # Screen-level components
+├─ store/             # Zustand stores
+├─ types/             # TypeScript type definitions
+└─ config/            # Environment and constants
 
-## Get a fresh project
 
-When you're ready, run:
+⸻
 
-```bash
-npm run reset-project
+Installation
+	1.	Clone the repository:
+
+```
+git clone https://github.com/yourusername/genshin-impact-db.git
+cd genshin-impact-db
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+   2.	Install dependencies:
 
-## Learn more
+```
+npm install
+# or
+yarn install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+   3.	Run the app:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+npx expo start
+```
 
-## Join the community
+⸻
 
-Join our community of developers creating universal apps.
+Building with EAS
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+To build the app for iOS or Android:
+
+```
+eas build --platform ios
+eas build --platform android
+```
+
+(Ensure you have Expo EAS CLI installed and configured)
+
+⸻
+
+License
+
+This project is licensed under the MIT License￼.
