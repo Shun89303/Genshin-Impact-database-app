@@ -17,38 +17,6 @@ export default function MaterialsDrawerLayout() {
 						title: "Weapon",
 					}}
 				/>
-				<Drawer.Screen
-					name="talent/(tabs)"
-					options={{
-						title: "Talent",
-					}}
-				/>
-				<Drawer.Screen
-					name="local/index"
-					options={{
-						title: "Local Specialties",
-						drawerLabel: "Local",
-					}}
-				/>
-				<Drawer.Screen
-					name="cooking/index"
-					options={{
-						title: "Cooking Ingredients",
-						drawerLabel: "Cooking",
-					}}
-				/>
-				<Drawer.Screen
-					name="character/(tabs)"
-					options={{
-						title: "Character",
-					}}
-				/>
-				<Drawer.Screen
-					name="boss/index"
-					options={{
-						title: "Boss",
-					}}
-				/>
 			</Drawer>
 		</SafeAreaProvider>
 	);

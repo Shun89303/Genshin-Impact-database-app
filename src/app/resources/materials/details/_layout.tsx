@@ -11,8 +11,6 @@ export default function DetailsStack() {
 			<Stack.Screen name="index" />
 
 			<Stack.Screen name="weapon/ascension/[id]" />
-
-			<Stack.Screen name="talent/book/[id]" />
 		</Stack>
 	);
 }

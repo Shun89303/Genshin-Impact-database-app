@@ -1,16 +1,23 @@
+import { endpoints } from "@/src/api/endpoints";
+import FallbackImage from "@/src/components/common/FallbackImage";
+import { BASE_URL } from "@/src/config/env";
 import { EnhancementItem } from "@/src/types/weapon.experience.material";
 import { StyleSheet, Text, View } from "react-native";
-import MaterialsImage from "./materialsImage";
 
 export default function MaterialCard({
 	material,
 }: {
 	material: EnhancementItem;
 }) {
+	const { materials, weaponExperience } = endpoints;
+
 	return (
 		<View style={styles.card}>
 			<View style={styles.imageWrapper}>
-				<MaterialsImage id={material.id} />
+				<FallbackImage
+					uri={`${BASE_URL}${materials}${weaponExperience}/${material.id}`}
+					style={{ width: 80, height: 80, borderRadius: 16 }}
+				/>
 			</View>
 
 			<View style={styles.info}>
@@ -38,11 +45,13 @@ export default function MaterialCard({
 const styles = StyleSheet.create({
 	card: {
 		flexDirection: "row",
-		backgroundColor: "#1E293B",
+		backgroundColor: "#F8FAFC",
 		borderRadius: 14,
 		padding: 14,
 		gap: 14,
 		alignItems: "center",
+		borderWidth: 1,
+		borderColor: "#334155",
 	},
 
 	imageWrapper: {
@@ -60,7 +69,7 @@ const styles = StyleSheet.create({
 	name: {
 		fontSize: 16,
 		fontWeight: "600",
-		color: "#F8FAFC",
+		color: "#1E293B",
 		marginBottom: 4,
 	},
 
@@ -70,12 +79,12 @@ const styles = StyleSheet.create({
 	},
 
 	label: {
-		color: "#94A3B8",
+		color: "#64748B",
 		fontSize: 13,
 	},
 
 	value: {
-		color: "#E2E8F0",
+		color: "#475569",
 		fontSize: 13,
 		fontWeight: "500",
 	},

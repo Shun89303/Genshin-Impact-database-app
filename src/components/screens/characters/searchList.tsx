@@ -2,9 +2,8 @@ import { endpoints } from "@/src/api/endpoints";
 import { BASE_URL } from "@/src/config/env";
 import { Character } from "@/src/types/character";
 import { useRouter } from "expo-router";
-import { FlatList, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import PressableImage from "../../common/PressableImage";
-import styles from "./styles/searchList.styles";
 
 export default function SearchList({
 	finalData,
@@ -44,3 +43,23 @@ export default function SearchList({
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+
+	content: {
+		paddingBottom: 24,
+	},
+
+	row: {
+		justifyContent: "space-between",
+		marginBottom: 16,
+	},
+
+	item: {
+		flex: 1,
+		alignItems: "center",
+	},
+});

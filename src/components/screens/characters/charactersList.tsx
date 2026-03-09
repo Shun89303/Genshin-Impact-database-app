@@ -4,7 +4,7 @@ import { useCharacters } from "@/src/hooks/useCharacters";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import Divider from "../../common/Divider";
 import EmptyState from "../../common/EmptyState";
@@ -15,7 +15,6 @@ import SearchFilterBar from "../../common/SearchFilterBar";
 import TouchDetails from "../../common/TouchDetails";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
-import styles from "./styles/charactersList.styles";
 
 export default function CharactersList() {
 	const { characters, card } = endpoints;
@@ -124,3 +123,41 @@ export default function CharactersList() {
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	safeArea: {
+		flex: 1,
+		backgroundColor: "#F8FAFC",
+		paddingVertical: 10,
+	},
+
+	container: {
+		flex: 1,
+		paddingHorizontal: 16,
+	},
+
+	refreshSpinner: {
+		alignItems: "center",
+		marginVertical: 12,
+	},
+
+	list: {
+		flex: 1,
+	},
+
+	sheetBackground: {
+		backgroundColor: "#FFFFFF",
+		borderTopLeftRadius: 24,
+		borderTopRightRadius: 24,
+	},
+
+	sheetIndicator: {
+		backgroundColor: "#D8E1EC",
+		width: 40,
+	},
+
+	sheetContent: {
+		paddingHorizontal: 16,
+		paddingVertical: 10,
+	},
+});
