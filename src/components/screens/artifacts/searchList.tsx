@@ -1,6 +1,9 @@
+import { endpoints } from "@/src/api/endpoints";
+import { BASE_URL } from "@/src/config/env";
 import { Artifact } from "@/src/types/artifact";
+import { useRouter } from "expo-router";
 import { FlatList, View } from "react-native";
-import ArtifactImage from "./artifactImage";
+import PressableImage from "../../common/PressableImage";
 
 export default function SearchList({
 	finalData,
@@ -11,6 +14,8 @@ export default function SearchList({
 	refreshing: boolean;
 	onRefresh: any;
 }) {
+	const { artifacts, circletOfLogos } = endpoints;
+	const router = useRouter();
 	return (
 		<View style={{ alignItems: "center" }}>
 			<FlatList
@@ -23,7 +28,16 @@ export default function SearchList({
 				refreshing={refreshing}
 				renderItem={({ item }) => (
 					<View style={{ justifyContent: "space-evenly", padding: 10 }}>
-						<ArtifactImage id={item.id} />
+						<PressableImage
+							uri={`${BASE_URL}${artifacts}/${item.id}${circletOfLogos}`}
+							onPress={() =>
+								router.navigate({
+									pathname: "/artifacts/[id]",
+									params: { id: item.id },
+								})
+							}
+							aspectRatio={1}
+						/>
 					</View>
 				)}
 			/>

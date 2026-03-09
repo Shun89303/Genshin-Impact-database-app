@@ -1,6 +1,9 @@
+import { endpoints } from "@/src/api/endpoints";
+import { BASE_URL } from "@/src/config/env";
 import { Artifact } from "@/src/types/artifact";
+import { useRouter } from "expo-router";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import ArtifactImage from "./artifactImage";
+import PressableImage from "../../common/PressableImage";
 
 export default function FilterList({
 	finalData,
@@ -11,6 +14,8 @@ export default function FilterList({
 	refreshing: boolean;
 	onRefresh: any;
 }) {
+	const { artifacts, circletOfLogos } = endpoints;
+	const router = useRouter();
 	return (
 		<View style={styles.container}>
 			<FlatList
@@ -29,7 +34,18 @@ export default function FilterList({
 							horizontal
 							data={item.data}
 							keyExtractor={(art) => art.id}
-							renderItem={({ item }) => <ArtifactImage id={item.id} />}
+							renderItem={({ item }) => (
+								<PressableImage
+									uri={`${BASE_URL}${artifacts}/${item.id}${circletOfLogos}`}
+									onPress={() =>
+										router.navigate({
+											pathname: "/artifacts/[id]",
+											params: { id: item.id },
+										})
+									}
+									aspectRatio={1}
+								/>
+							)}
 							contentContainerStyle={styles.horizontalList}
 							showsHorizontalScrollIndicator={false}
 						/>
@@ -43,7 +59,7 @@ export default function FilterList({
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#0F172A", // matches Artifacts screen background
+		backgroundColor: "#F8FAFC",
 	},
 
 	listContent: {
@@ -58,7 +74,7 @@ const styles = StyleSheet.create({
 	sectionTitle: {
 		fontWeight: "700",
 		fontSize: 20,
-		color: "#F9FAFB",
+		color: "#000000ff",
 		marginBottom: 12,
 	},
 

@@ -1,5 +1,5 @@
+import ScreenLoader from "@/src/components/common/ScreenLoader";
 import ArtifactDetails from "@/src/components/screens/artifacts/details/artifactDetails";
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import { useArtifacts } from "@/src/hooks/useArtifacts";
 import { useLocalSearchParams } from "expo-router";
 

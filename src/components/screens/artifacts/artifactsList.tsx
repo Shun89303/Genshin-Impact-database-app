@@ -6,11 +6,12 @@ import { Image } from "expo-image";
 import { useEffect, useMemo, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 
-import EmptyState from "../../ui/EmptyState";
-import ErrorState from "../../ui/ErrorState";
-import ScreenLoader from "../../ui/ScreenLoader";
-import FilterCatalog from "../../utils/filter/artifact/filterCatalog";
-import SearchFilterBar from "../../utils/filter/artifact/searchFilterBar";
+import Divider from "../../common/Divider";
+import EmptyState from "../../common/EmptyState";
+import ErrorState from "../../common/ErrorState";
+import FilterCatalog from "../../common/FilterCatalog";
+import ScreenLoader from "../../common/ScreenLoader";
+import SearchFilterBar from "../../common/SearchFilterBar";
 import FilterList from "./filterList";
 import SearchList from "./searchList";
 
@@ -23,7 +24,9 @@ export default function ArtifactsList() {
 	const {
 		ids,
 		input,
+		setInput,
 		selectedType,
+		setSelectedType,
 		groupByType,
 		details,
 		error,
@@ -32,12 +35,17 @@ export default function ArtifactsList() {
 		refetch,
 	} = useArtifacts();
 
+	type ArtifactFilterType = "max_rarity" | null;
+
+	const options: { label: string; value: ArtifactFilterType }[] = [
+		{ label: "Max Rarity", value: "max_rarity" },
+		{ label: "None", value: null },
+	];
+
 	useEffect(() => {
 		if (!ids.length) return;
 
-		const remainingIds = ids.slice(15);
-
-		remainingIds.forEach((id) => {
+		ids.forEach((id) => {
 			Image.prefetch(`${BASE_URL}${artifacts}/${id}${circletOfLogos}`);
 		});
 	}, [ids, artifacts, circletOfLogos]);
@@ -67,10 +75,14 @@ export default function ArtifactsList() {
 	return (
 		<View style={styles.container}>
 			<View style={styles.searchContainer}>
-				<SearchFilterBar sheetRef={sheetRef} />
+				<SearchFilterBar
+					value={input}
+					onChangeText={setInput}
+					onFilterPress={() => sheetRef.current?.expand()}
+				/>
 			</View>
 
-			<View style={{ height: 1, backgroundColor: "#334155", marginTop: 12 }} />
+			<Divider />
 
 			<ListComponent
 				finalData={finalData}
@@ -87,7 +99,14 @@ export default function ArtifactsList() {
 				handleIndicatorStyle={styles.sheetIndicator}
 			>
 				<BottomSheetView style={styles.sheetContent}>
-					<FilterCatalog sheetRef={sheetRef} />
+					{/* <FilterCatalog sheetRef={sheetRef} /> */}
+					<FilterCatalog
+						options={options}
+						selectedValue={selectedType}
+						onSelect={(val: "max_rarity" | null) =>
+							setSelectedType(val, sheetRef)
+						}
+					/>
 				</BottomSheetView>
 			</BottomSheet>
 		</View>
@@ -97,7 +116,7 @@ export default function ArtifactsList() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#0F172A",
+		backgroundColor: "#F8FAFC",
 	},
 
 	searchContainer: {
@@ -106,7 +125,7 @@ const styles = StyleSheet.create({
 	},
 
 	sheetBackground: {
-		backgroundColor: "#1E293B",
+		backgroundColor: "#F8FAFC",
 	},
 
 	sheetIndicator: {

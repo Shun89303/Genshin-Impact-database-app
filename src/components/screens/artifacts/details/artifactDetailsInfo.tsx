@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
 	name: {
 		fontSize: 22,
 		fontWeight: "bold",
-		color: "white",
+		color: "#1E293B",
 		textAlign: "center",
 		marginBottom: 4,
 	},
 
 	rarity: {
 		fontSize: 14,
-		color: "#94A3B8",
+		color: "#64748B",
 		textAlign: "center",
 		marginBottom: 12,
 	},
@@ -71,13 +71,13 @@ const styles = StyleSheet.create({
 	bonusTitle: {
 		fontSize: 16,
 		fontWeight: "600",
-		color: "#E2E8F0",
+		color: "#475569",
 		marginBottom: 4,
 	},
 
 	bonusText: {
 		fontSize: 14,
-		color: "#CBD5F5",
+		color: "#475569",
 		lineHeight: 20,
 	},
 });
