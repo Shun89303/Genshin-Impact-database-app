@@ -1,7 +1,7 @@
+import ScreenLoader from "@/src/components/common/ScreenLoader";
 import PotionDetails from "@/src/components/screens/resources/consumables/potions/details/potionDetails";
 import { usePotionConsumables } from "@/src/hooks/useConsumables.potion";
 import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
 
 export default function PotionDetailsScreen() {
 	const { id }: { id: any } = useLocalSearchParams();
@@ -10,11 +10,7 @@ export default function PotionDetailsScreen() {
 	const potion = details.find((p) => p.id === id);
 
 	if (isLoading || !potion) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<Text>Loading potion...</Text>
-			</View>
-		);
+		return <ScreenLoader />;
 	}
 
 	return (

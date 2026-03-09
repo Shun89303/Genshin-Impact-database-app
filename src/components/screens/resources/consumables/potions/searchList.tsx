@@ -21,6 +21,7 @@ export default function SearchList({
 				refreshing={refreshing}
 				onRefresh={onRefresh}
 				contentContainerStyle={{ paddingBottom: 20 }}
+				showsVerticalScrollIndicator={false}
 				renderItem={({ item }) => <PotionCard potion={item} />}
 			/>
 		</View>

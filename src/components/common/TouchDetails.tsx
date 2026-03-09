@@ -1,12 +1,12 @@
 import { Text } from "react-native";
 
-export default function TouchDetails() {
+export default function TouchDetails({ paddingBottom = 12 }: any) {
 	return (
 		<Text
 			style={{
 				textAlign: "center",
 				color: "#334155",
-				paddingBottom: 12,
+				paddingBottom: paddingBottom,
 				fontWeight: "300",
 			}}
 		>

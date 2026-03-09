@@ -6,6 +6,7 @@ export function usePotionConsumables() {
 	const details = usePotionStore((s) => s.details);
 	const error = usePotionStore((s) => s.error);
 	const input = usePotionStore((state) => state.input);
+	const setInput = usePotionStore((state) => state.setInput);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -34,6 +35,7 @@ export function usePotionConsumables() {
 
 	return {
 		input,
+		setInput,
 		details,
 		error,
 		isLoading,

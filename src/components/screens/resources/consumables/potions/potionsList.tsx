@@ -1,21 +1,22 @@
 import { endpoints } from "@/src/api/endpoints";
-import EmptyState from "@/src/components/ui/EmptyState";
-import ErrorState from "@/src/components/ui/ErrorState";
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
-import SearchBar from "@/src/components/utils/filter/potion/searchBar";
+import Divider from "@/src/components/common/Divider";
+import EmptyState from "@/src/components/common/EmptyState";
+import ErrorState from "@/src/components/common/ErrorState";
+import ScreenLoader from "@/src/components/common/ScreenLoader";
+import SearchBar from "@/src/components/common/SearchBar";
+import TouchDetails from "@/src/components/common/TouchDetails";
 import { BASE_URL } from "@/src/config/env";
 import { usePotionConsumables } from "@/src/hooks/useConsumables.potion";
 import { Image } from "expo-image";
 import { useEffect, useMemo } from "react";
-import { StyleSheet, Text, View, useColorScheme } from "react-native";
+import { StyleSheet, View, useColorScheme } from "react-native";
 import SearchList from "./searchList";
 
 export default function PotionsList() {
-	const consumables = endpoints.consumables;
-	const potions = endpoints.potions;
+	const { consumables, potions } = endpoints;
 	const colorScheme = useColorScheme();
 
-	const { input, details, error, isLoading, isRefreshing, refetch } =
+	const { input, setInput, details, error, isLoading, isRefreshing, refetch } =
 		usePotionConsumables();
 
 	useEffect(() => {
@@ -51,17 +52,16 @@ export default function PotionsList() {
 				colorScheme === "dark" ? styles.dark : styles.light,
 			]}
 		>
-			<SearchBar />
-			<Text
-				style={{
-					textAlign: "center",
-					color: "white",
-					padding: 6,
-					fontWeight: "300",
-				}}
-			>
-				Touch an image to see details
-			</Text>
+			<SearchBar
+				value={input}
+				onChange={setInput}
+				placeholder="Search Potion name..."
+			/>
+
+			<Divider />
+
+			<TouchDetails paddingBottom={0} />
+
 			<SearchList
 				finalData={finalData}
 				refreshing={isRefreshing}
@@ -74,8 +74,9 @@ export default function PotionsList() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingHorizontal: 16, // side padding
-		paddingTop: 12, // top spacing for search bar
+		paddingHorizontal: 16,
+		gap: 10,
+		paddingVertical: 10,
 	},
 	light: {
 		backgroundColor: "#F9FAFB",
