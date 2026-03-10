@@ -14,7 +14,7 @@
 				"buildType": "apk"
 			},
 			"env": {
-				"API_URL": "https://genshin.jmp.blue"
+				"EXPO_PUBLIC_BASE_URL": "https://genshin.jmp.blue"
 			}
 		},
 		"production": {
@@ -23,7 +23,7 @@
 				"buildType": "apk"
 			},
 			"env": {
-				"API_URL": "https://genshin.jmp.blue"
+				"EXPO_PUBLIC_BASE_URL": "https://genshin.jmp.blue"
 			}
 		}
 	},
