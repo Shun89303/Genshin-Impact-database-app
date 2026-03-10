@@ -1,4 +1,3 @@
-import ScreenLoader from "@/src/components/ui/ScreenLoader";
 import { Image } from "expo-image";
 import { useState } from "react";
 import {
@@ -9,6 +8,7 @@ import {
 	View,
 	ViewStyle,
 } from "react-native";
+import ScreenLoader from "./ScreenLoader";
 
 type FallbackImageProps = {
 	uri: string;

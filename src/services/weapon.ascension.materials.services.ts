@@ -4,7 +4,6 @@ import { Api } from "../types/weapon.ascension.material";
 
 const materials = endpoints.materials;
 const weaponAscension = endpoints.weaponAscension;
-const list = endpoints.list;
 
 export function getAllWeaponAscensionMaterialsData(): Promise<Api> {
 	return apiClient(`${materials}${weaponAscension}`);
