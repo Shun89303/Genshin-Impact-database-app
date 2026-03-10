@@ -7,7 +7,7 @@ import { View } from "react-native";
 
 export default function WeaponAscensionMaterialsDetails() {
 	const { id }: { id: any } = useLocalSearchParams();
-	const { details, isLoading, isRefreshing, refetch, error } =
+	const { details, isLoading, isRefreshing, refetch } =
 		useAscensionWeaponMaterials();
 
 	const matchedItem = details.find((mat) =>
